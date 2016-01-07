@@ -1,0 +1,15 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  
+ $stateProvider.state("store",
+    url: '/warehouses/store'
+    controller: "storeCtrl"
+    templateUrl: "<%= asset_path("warehouses/store.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+  )

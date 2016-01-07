@@ -1,0 +1,56 @@
+.activity
+  .title.mll
+    strong
+      | 活动列表
+    .btn.btn-success.btn-sm.pull-right.mrl [
+      ng-click='changeFormStatus(!showForm)'
+    ]
+      span.fui-plus ng-show='!showForm'
+        | 新建活动
+      span ng-show='showForm'
+        | 收起表单
+
+  table.table.table-bordered.table-hover
+    thead
+      tr
+        th 活动名称
+        th 活动类型
+        th 活动物品
+        th 消费累加
+        th 活动优惠
+        th 优惠叠加
+        th 开始日期
+        th 结束日期
+        /th 活动内容
+        th style='width: 100px;'
+          | 管理
+    tbody
+      tr.animate-slide-up-down[
+        ng-repeat='ac in activities track by $index' 
+        ng-class="{'active': ac.id == activity.id&&showForm}"
+      ]
+        td
+          | {{ac.name}}
+        td
+          | {{ac.showAtype}}
+        td
+          | {{ac.showItemType}}
+        td
+          | {{ac.consumeAddUp}}
+        td
+          | {{ac.showCoupon}}
+        td
+          | {{ac.showAddup}}
+        td
+          | {{ac.startDate}}
+        td 
+          | {{ac.endDate}}
+        /td
+          | {{ac.content.substring(0, 20)}}
+        td
+          a.pointer.mrs[tooltip title='编辑活动' ng-click='editActivity(ac, $index)']
+            span.fui-new
+          a.pointer.mrs[tooltip title='删除活动' ng-click='deleteActivity(ac, $index)']
+            span.fui-trash
+          a.pointer.mrs[tooltip title='结束活动' ng-click='endActivity(ac, $index)']
+            span.fui-power

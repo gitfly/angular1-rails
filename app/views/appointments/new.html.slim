@@ -1,0 +1,12 @@
+.appointments.appointments-new
+  .row
+    .col-xs-12.col-md-12.mbh.mtl.center-block
+      - if (@appointment.atype || params[:atype]).to_i == 0
+        = image_tag('mobile-goto-fetch.png', class: 'img-responsive mtm center-block')
+      - else
+        = image_tag('mobile-express.jpg', class: 'img-responsive mtm center-block')
+
+  .row
+    .row
+      .col-xs-10.col-md-12.col-xs-offset-1
+        == render 'form'

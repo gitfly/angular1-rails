@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 确认操作前请先将修复方案发给顾客，并确认顾客对修复方案没有异议。
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('verify_order')"
+    ng-class="{disabled: order.nextStatus!='verifyOrder'}"
+  ]
+    | 订单确认完成
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='verify_order'"
+  ]
+    | 取消订单确认

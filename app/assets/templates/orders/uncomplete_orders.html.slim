@@ -1,0 +1,235 @@
+.title
+  .pull-left
+    label class="checkbox" for="checkbox_all" ng-if='orderType==0'
+      input.custom-checkbox[
+        type="checkbox" id="checkbox_all" 
+        data-toggle="checkbox" ng-model='selectAll'
+        ng-change='selectAllOrders()'
+      ]
+      span class="icons"
+        span class="icon-unchecked"
+        span class="icon-checked"
+      strong
+        | 全选
+
+  .pull-left
+    strong 
+      span.mrl
+        | 共
+        | {{unpaidCount}}
+        | 个未支付订单
+        span.mll
+          | {{displayOrderTypes()}}
+      span ng-if='orderType==0'
+        | 总计：
+        | {{total | number:2}}
+        | 元
+  .clearfix
+
+/.order[
+  ng-repeat='order in orders track by $index' 
+  ng-init='dropdown=false' ng-class="{'selected': order.selected}"
+/]
+  .pull-left.checkbox
+    label class="checkbox" for="checkbox{{$index}}"
+      input.custom-checkbox[
+        type="checkbox" id="checkbox{{$index}}" 
+        data-toggle="checkbox" ng-model='order.selected'
+        ng-change='orderSelected(order)'
+        ng-disabled='order.paid || orderType==1'
+      ]
+      span.mls class="icons" ng-if='!order.paid'
+        span class="icon-unchecked"
+        span class="icon-checked"
+      .clearfix
+    strong ng-if='order.paid'
+      | 已支付
+    strong.color-red.unpaid ng-if='!order.paid'
+      | 未支付
+
+  .pull-left.order-info
+    .basic-info
+      span.mrl
+        | 订单号：
+        | {{order.number}}
+      span.mrl
+        | 订单状态：
+        strong
+          | {{order.showStatusZh}}
+
+      .btn.btn-info.btn-xs.mrl ng-click='printFlowTable(order)'
+        | 打印流程单
+      .btn.btn-info.btn-xs ng-click='printBarcode(order)'
+        | 打印条形码
+
+      .clearfix
+      span.mrh
+        | 物品类型：
+        | {{order.showItemType}}
+        span.mlm
+          | {{order.showBrand}}
+    .price-info
+      .row
+        .col-md-9.price-left
+          span
+            | 订单原价：
+            strong.mrm
+              | {{order.price}}
+            | 元
+        .col-md-3 ng-if='!order.paid'
+          .dropdown
+            button#dropdownMenu1.btn.btn-primary.btn-xs.dropdown-toggle[
+              type="button" data-toggle="dropdown" aria-expanded="true"
+              ng-click='dropdown = !dropdown'
+            ]
+              | 优惠活动
+              span.caret
+            ul.dropdown-menu[
+              role="menu" aria-labelledby="dropdownMenu1" ng-show='dropdown' ng-mouseleave='dropdown=fase'
+            ]
+              li[
+                role="presentation" ng-repeat='activity in activities'
+                ng-show="activityAvailable(order, activity)"
+                ng-class="{'active': order.activity==activity}"
+              ]
+                a ng-click='selectActivity(order, activity)'
+                  .pull-left style='width: 70%;'
+                    span.pull-left
+                      | {{activity.name}}
+                    span.mrl.pull-left
+                      | {{activity.showCoupon}}
+                    span.mrl.pull-right
+                      | {{activity.showItemType}}
+                    span.mrl.pull-right
+                      | {{activity.showAddup}}
+                    .clearfix
+                  .pull-right style='width: 30%;'
+                    span
+                      | 截止日期为：
+                      | {{activity.endDate}}
+                  .clearfix
+              li[role='presentation']
+                a ng-click='selectActivity(order, undefined)'
+                  | 不参与任何活动
+          .clearfix
+      .clearfix
+      .activity-price
+        .pull-left.mrl
+          span
+            | 活动价格：
+            strong.mrm
+              | {{order.activityPrice || order.price}}
+            | 元
+        .pull-left ng-show='!order.activity'
+          span 暂未参加任何无活动
+        .activity-info.pull-left ng-show='order.activity'
+          span.pull-left
+            | 参与活动：
+          span.pull-left
+            | {{order.activity.name}}
+          span.mrl.pull-left
+            | {{order.activity.showCoupon}}
+          span.mll.color-red.pull-left
+            | {{order.activity.showAddup}}
+        .clearfix
+      .member-price
+        span
+          | 会员价格：
+          strong
+            span.mrm
+              | {{order.memberPrice | number:2}}
+            | 元
+            span.mlm
+              | 折扣
+            span
+              | {{customer.discount*100}}%
+      .compensate.row
+        .col-md-9
+          span
+            | 赔付价格：
+          strong.mrm
+            span.mrm
+              | {{ctypes[order.compensate.ctype]}}
+            span
+              | {{order.compensate.amount}}
+            span ng-if="order.compensate.ctype=='1'"
+              | %
+            span.mlm ng-if="order.compensate.ctype!='1'"
+              | 元
+        .col-md-3.dropdown  ng-if='!order.paid'
+          .btn.btn-default.btn-xs ng-click='order.showCompensate=!order.showCompensate'
+            | 点此赔付
+
+          .btn.btn-danger.btn-xs ng-click='cancelCompensate(order)' ng-if='order.compensate.amount!=0'
+            | 取消赔付
+          .dropdown-menu ng-show='order.showCompensate'
+            form
+              .form-inputs
+                .form-group
+                  .inline-label.pull-left
+                    label
+                      abbr[title="required"]
+                        | *
+                      |  赔付类型
+                  .inline-input.pull-left
+                    select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+                      placeholder="请选择赔付类型" ng-model="order.compensate.ctype" ui-select2
+                      ng-change='compensateCtypeChange(order)'
+                    ]
+                      option[value=""]
+                      - Compensate::CType.each do |k, v|
+                        option[value=k]
+                          = v
+                  .clearfix
+
+                .form-group
+                  .inline-label.pull-left
+                    label
+                      abbr[title="required"]
+                        | *
+                      span ng-if='order.compensate.ctype==1'
+                        |  赔付折扣
+                      span ng-if='order.compensate.ctype!=1'
+                        |  赔付金额
+                  .inline-input.pull-left
+                    input.form-control[
+                      ng-model="order.compensate.amount" 
+                      placeholder="{{order.compensate.ctype == 1 ? '请填写赔付折扣例如八折写80, 七五折写75' : '请填写赔付金额'}}"
+                    ]
+                  .clearfix
+
+                .form-group
+                  .inline-label.pull-left
+                    label
+                      abbr[title="required"]
+                        | *
+                      |  赔付原因
+                  .inline-input.pull-left
+                    textarea.form-control[ng-model="order.compensate.reason" placeholder="请填写赔付原因"]
+                  .clearfix
+                .clearfix
+              .form-actions.text-center
+                .btn.btn-default.mrh ng-click='order.showCompensate=false'
+                  | 取消
+                .btn.btn-success.mlh ng-click='submitCompensate(order)'
+                  | 确定
+        .clearfix
+      .final-proce
+        span.color-red
+          | 最终价格：
+          strong.mrm
+            | {{order.finalPrice | number:2}}
+          | 元
+  .clearfix
+.sumup.mll.mtl.title
+  strong 
+    span.mrh
+      | 共
+      | {{count}}
+      | 个未支付订单
+      span.mlh
+        | {{displayOrderTypes()}}
+    span
+      | 总计：
+      | {{total | number:2}}
+      | 元

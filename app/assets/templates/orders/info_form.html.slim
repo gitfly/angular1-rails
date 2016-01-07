@@ -1,0 +1,97 @@
+.row.form-group
+  custom-select.col-md-2[
+    datas=Item::Type.values required label='false'
+    attribute='item.showType' name='itemType' placeholder="物品类型"
+  ]
+  simple-radio-buttons.col-md-2[
+    options="{'女款': '女款', '男款': '男款'}" required
+    attribute='item.style' name='itemStyle' label='false'
+  ]
+  simple-radio-buttons.col-md-2[
+    options="{'不加急': false, '加急': true}" required
+    attribute='order.urgent' name='orderUrgent' label='false'
+  ]
+  custom-select.col-md-3[
+    options-url='items/brands' required
+    attribute='item.brand' name='itemBrand' query-key='brand'
+  ]
+  custom-select.col-md-3[
+    options-url='items/versions?brand={{item.brand}}'
+    attribute='item.version' name='itemVersion' query-key='version'
+  ]
+  .clearfix
+  custom-select.col-md-3[
+    attribute='item.color' name='itemColor' required
+    query-key='color' options-url='items/colors'
+  ]
+  custom-select.col-md-3[
+    attribute='order.part' name='orderPart'
+    datas=Settings.order.parts multiple
+  ]
+  custom-select.col-md-3[
+    attribute='order.attachment' name='orderAttachment'
+    datas=Settings.order.attachments multiple
+  ]
+  simple-input.col-md-3[
+    attribute='order.source' name='orderSource'
+  ]
+  .clearfix
+  custom-select.col-md-6.narrow-label.select-service[
+    multiple=true query-key='name' options-url='services/types' placeholder="服务项"
+    attribute='order.serviceName' name='orderService' required label='false' price='order.price'
+  ]
+  simple-input.col-md-3[
+    attribute='order.startWorkDate' required
+    name='orderStartWorkDate' date-picker
+  ]
+  simple-input.col-md-3[
+    attribute='order.finishDate' required
+    name='orderFinishDate' date-picker
+  ]
+  .clearfix
+  .inline-input.col-md-2
+    .row
+      .col-md-4.pls.prs
+        label
+          | 原价
+          abbr[title='required']
+            | *:
+      .col-md-8 style='padding-left: 0px;'
+        input.form-control[
+          placeholder="原价"
+          ng-model='order.price'
+          ng-click="hideAll()"
+          required min=0
+          disabled
+          name='orderPrice'
+          style='color: #34495e'
+        ]
+    .clearfix
+
+  simple-input.col-md-2.narrow-label[
+    attribute='order.discount' name='orderDiscount' required
+  ]
+  .inline-input.col-md-2
+    input.form-control[
+      ng-disabled='true'
+      value='折扣价: {{order.price * order.discount}}元'
+      style='color: #34495e'
+    ]
+  simple-input.col-md-3.narrow-label[
+    attribute='order.buyDate' name='orderBuyDate'
+  ]
+  simple-input.col-md-3.narrow-label[
+    attribute='order.gift' name='orderGift'
+  ]
+  .clearfix
+  simple-input.textarea.col-md-6.narrow-label[
+    attribute='order.request' name='orderRequest' textarea
+    label='false' placeholder="请填写顾客需求"
+  ]
+  simple-input.textarea.col-md-6.narrow-label[
+    attribute='order.diagnose' textarea name='orderDiagnose'
+    label='false' placeholder="请填写顾问诊断"
+  ]
+
+h1 style='display:none'
+  | 1111111

@@ -1,0 +1,18 @@
+.form-inputs
+  .form-group.string.required.customer_name.row
+    .inline-label.col-lg-2.prx
+      label
+        |  删除原因
+        abbr[title="required"]
+          | *
+      
+    .inline-input.col-lg-10.plx
+      textarea.string.form-control[
+        ng-model="reason" 
+        placeholder="输入删除原因"
+        name="reason"
+        ng-change="setReason(reason)"
+        required
+      ]
+      .error-message ng-show='delForm.reason.$invalid && delForm.reason.$dirty'
+        | 删除原因不能为空

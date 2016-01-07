@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认开始派送
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('effect_photo')"
+    ng-class="{disabled: order.nextStatus!='effectPhoto'}"
+  ]
+   | 确认开始派送
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='effect_photo'"
+  ]
+    | 取消确认开始派送

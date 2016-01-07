@@ -1,0 +1,27 @@
+.show-order.full-height.full-width
+  .left-block.block.full-height ng-include="'#{asset_path('orders/basic_info.html.slim')}'"
+  .right-block.block.full-height
+    .bs-callout.bs-callout-danger style='padding: 10px 20px'
+      .title style='padding: 0px'
+        span
+          | 操作日志
+    .order-logs
+      .logs
+        .bs-callout.bs-callout-primary.log ng-repeat='log in logs'
+          .title
+            span
+              strong
+                | {{log.userName}}&nbsp&nbsp于
+              | {{log.showTime}}&nbsp&nbsp
+              | {{log.showType}}
+
+          .row.order-change ng-repeat='(k, v) in log.changedValues'
+            .col-lg-12
+              span
+                | {{k}}：
+              span.gray
+                | {{v[0]||""}}
+                strong style='font-size: 16px'
+                  | &nbsp&nbsp➜&nbsp&nbsp
+                | {{v[1]||"空"}}
+  .clearfix

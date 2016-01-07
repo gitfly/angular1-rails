@@ -1,0 +1,43 @@
+h4.title
+  | 【包拯好了】
+  = @customer.call_name
+  = "的#{@item.color}#{@item.brand}#{@item.show_type}拯好了"
+
+.photo-list
+  - @template.photos.where(header: true).each do |p|
+    .photo
+      = image_tag(p.photo.url, class: 'img-responsive')
+p
+  = @template.header
+
+br
+
+/Justina Rath VMM你的MBWL万宝龙MontBlanc钱包
+
+p
+  = @customer.call_name
+  | 你的
+  = "#{@item.color}#{@item.brand}#{@item.show_type}"
+  | 拯好了！包大人喊你回来看【包拯好了】
+
+.photo-list
+  - @photos.each do |p|
+    .photo
+      = image_tag(p.photo.url(:medium), class: 'img-responsive')
+      .text
+        = p.symptoms.where(stype: true).map(&:desc).join().gsub(/\n/, '<br/>').html_safe 
+
+p
+  | 订单编码
+  = @order.number
+  | ，如查询宝贝状态请报编码联系客服呦！
+
+br
+
+p
+  = @template.footer
+
+.photo-list
+  - @template.photos.where(header: false).each do |p|
+    .photo
+      = image_tag(p.photo.url, class: 'img-responsive')

@@ -1,0 +1,73 @@
+.effect-photos ng-if="photos.length"
+  .photos.center-block
+    .photo ng-repeat='photo in photos track by $index' ng-if='photo.used'
+      .before-pic.pull-left
+        a.pull-right
+          img.pointer ng-src="{{photo.originalUrl}}"
+        .clearfix
+      .after-pic.pointer.pull-left[
+        ng-model="afterPhotos[$index]" ng-file-select 
+        ng-file-change="upload(afterPhotos[$index], photo, $index)"
+        ng-mouseover='showTip($index, true)' ng-mouseleave='showTip($index, false)'
+        ng-class="{'show-tip': afterPhotos[$index].show}"
+      ]
+        div ng-if="afterPhotos[$index]"
+          img.pointer ng-src="{{afterPhotos[$index].originalUrl}}" ng-if='afterPhotos[$index]'
+          .tipinfo ng-if='afterPhotos[$index].show'
+            button.btn.btn-success
+              | 点击更改修复效果照片
+          .clearfix
+        div.text-center ng-if='!afterPhotos[$index]'
+          button.btn.btn-success style="margin-top: 110px;"
+            | 点击上传修复效果照片
+      .clearfix
+
+div.text-center.pth.mth.pbh.mbh ng-if='!photos.length'
+  a.color-red.pointer ui-sref='orders.show.photos' 
+    strong
+      | 请先上传修复照片
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/.symptoms.mtl ng-repeat='symptom in photo.symptoms track by $index'
+  span.symptom.pointer.animate-zoom-out ng-repeat='sym in symptom.symptoms track by $index'
+    span.label.label-info ng-click='changeSelectedOptions(photo, symptom, sym, $index)'
+      | {{sym}}
+    span.fui-arrow-right[ng-if='!($index+1 == symptom.symptoms.length && !photo.options.length)'] 
+
+  /a.fui-trash.mll.color-red[
+    ng-click="deleteSymptom(symptom, photo, $index)"
+    ng-show='photo.symptoms[0].id'
+  /]
+    | {{option.name}}
+/p ng-bind-html="pageHtml(symptom.desc)"
+
+/button.btn.btn-success.btn-xs.mrl ng-click="addNewSymptom(photo, photo.symptoms.length)"
+  span.fui-plus
+  | 添加新的标签序列
+/button.btn.btn-primary.btn-xs[
+  ng-file-select ng-model="files"
+  ng-file-change="generatImageUrl(files, photo)"
+  ng-multiple='true'
+/]
+  span.fui-upload.mrm
+  | 上传修复效果照片
+
+/button.btn.btn-danger.btn-xs.mll[
+  ng-if='photo.childPhotos.length'
+  ng-click='deletePhotos(photo, photo.childPhotos)'
+/]
+  span.fui-trash.mrm
+  | 删除修复效果照片

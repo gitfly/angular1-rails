@@ -1,0 +1,32 @@
+.modal-header.pts.pbs
+  button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='cancel()']
+  .modal-title
+    strong.mrh
+      | 打印条码 ({{barcodesCount}}个)
+
+.modal-body#barcodes
+  form.row ng-submit="getBarcodes()" name='form'
+    input.form-control.pull-left.barcode-count[
+      placeholder="请输入条码个数" ng-model='barcodesCount' 
+      autofocus name='barcodesCount' min=1 max=100 required type='number'
+    ]
+    button.btn.btn-success.generate-barcodes.pull-left
+      | 重新生产条码
+    .clearfix
+    div.pull-right.pts
+      small
+        | 在上面的输入框输入所要打印的条码的个数, 默认为10个, 然后点击回车生成条码
+
+  .row.mtl ng-if='barcodes.length'
+    .row
+      .pointer.col-xs-6.col-md-3.pbs ng-repeat="barcode in barcodes"
+        a.thumbnail
+          img ng-src="{{barcode.thumbBarcodeUrl}}" style='height:50px'
+          strong
+            | {{barcode.number}}
+
+.modal-footer
+  a.btn.btn-default.btn-wide.pull-left ng-click='cancel()'
+    | 取消
+  a.btn.btn-primary.btn-wide ng-click='print()' ng-disabled='form.$invalid || !barcodes.length'
+    | 打印

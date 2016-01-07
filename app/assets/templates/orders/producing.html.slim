@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认订单进入生产流程
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('producing')"
+    ng-class="{disabled: order.nextStatus!='producing'}"
+  ]
+    | 开始生产确认
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='producing'"
+  ]
+    | 取消开始生产确认

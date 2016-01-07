@@ -1,0 +1,35 @@
+#rework-orders
+  .orders
+    .order ng-repeat='order in workerReworks'
+      .pull-left.mrl
+        span 
+          | {{order.number}}
+      .pull-left
+        strong
+          | {{order.showColor}}
+        strong
+          | {{order.showStyle}}
+        strong
+          | {{order.showBrand}}
+        strong 
+          | {{order.showItemType}}
+      .clearfix
+      .technologies
+        .technology ng-repeat='tech in order.technologies' ng-if='tech.qualityTesting.qualified'
+          .pull-left style='width: 150px;'
+            span
+              | 返工工艺：
+              | {{tech.showTtype}}
+          .pull-left style='width: 240px;'
+            span.mrl
+              | 师傅：
+              | {{tech.userName}}
+            span.mrl
+              | 时间：
+              | {{tech.duration}} 分钟
+          .pull-left
+            span
+            span
+              | 返工原因：
+              | {{tech.qualityTesting.remark}}
+          .clearfix

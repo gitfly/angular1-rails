@@ -1,0 +1,14 @@
+.login
+  .header
+    | 忘记密码
+  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :email, required: false, autofocus: true, label: false, placeholder: "邮箱"
+    .form-actions
+      = f.button :submit, "发送重置密码邮件", class: 'btn btn-success btn-lg btn-block'
+  .other-links.center-block
+    - if controller_name != 'sessions'
+      = link_to "登陆网站", new_session_path(resource_name)
+    - if devise_mapping.registerable? && controller_name != 'registrations'
+      = link_to "注册新用户", new_registration_path(resource_name)

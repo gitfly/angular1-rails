@@ -1,0 +1,36 @@
+.left-block.block.full-height ng-include="'#{asset_path('orders/basic_info.html.slim')}'"
+.right-block.block.full-height
+  .bs-callout.bs-callout-danger style='padding: 10px 20px'
+    .title style='padding: 0px'
+      span
+        | 操作日志
+      a.pull-right.pointer.reload-log[
+        tooltip data-toggle="tooltip" title="点击刷新日志"
+        data-placement="left" ng-click="loadMoreLogs()"
+      ]
+        i.icon.ion-android-refresh
+  .order-logs
+    .logs
+      .bs-callout.bs-callout-primary.log[
+        ng-repeat='log in logs' 
+        ng-class="{'bs-callout-info': log.showType==='更新', 'bs-callout-warning': log.showType==='更改状态', 'bs-callout-success': log.showType==='参加活动'}"
+      ]
+        .title
+          span
+            strong.mrl
+              | {{log.userName}}
+            span.mrl
+              | 于{{log.showTime}}&nbsp&nbsp
+            | {{log.showType}}
+
+        .row.order-change ng-repeat='(k, v) in log.changedValues'
+          .col-lg-12
+            strong style='color:#000'
+              | {{k}}：
+            span
+              span.gray
+                | {{v[0]||"空"}}
+              strong style='font-size: 16px;color: #000'
+                | &nbsp&nbsp➜&nbsp&nbsp
+              | {{v[1]||"空"}}
+.clearfix

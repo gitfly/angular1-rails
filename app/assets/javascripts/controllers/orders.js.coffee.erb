@@ -1,0 +1,236 @@
+//= require_tree ./orders
+
+app = window.app
+
+app.controller "OrdersCtrl", (
+  $scope,
+  $http,
+  $sce,
+  Order,
+  OrderStatus,
+  $state,
+  Printer,
+  dialogs,
+  $stateParams,
+  Rails,
+  $timeout,
+  Orders
+) ->
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                                local functions definitions
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+
+  # query orders from remote and display them in a table
+  getOrders = ->
+    unless $scope.needRequestOrders == false
+      Order.query($scope.params).then ((results) ->
+        $scope.setOrders(results)
+        $scope.scrollToTop()
+      ), (error) ->
+        return
+    else
+      $scope.requestOrdersChange(true)
+
+  getOrdersCounts = ->
+    unless $scope.needRequestOrders == false
+      Order.$get(
+        "/api/v1/orders/list_counts",  $scope.params
+      ).then ((results) ->
+        $scope.setOrdersCounts(results)
+      ), (error) ->
+        return
+
+  setDateScopeZh = () ->
+    index = _.indexOf($scope.dateScopesEn, $scope.params.dateScope)
+    $scope.dateScopeZh = "#{$scope.dateScopesZh[index]}"
+
+  formatDate = (date) ->
+    moment(date).format('YY-MM-DD')
+
+  setShowQueryOptions = ->
+    $scope.showQueryOptions = !!(
+      $scope.params.queryStr && $scope.params.queryStr.length
+    )
+
+  setOrderDescs = ->
+    $scope.orderDescs ||= {}
+    $scope.orderDescs[$scope.params.orderBy] = !!$scope.params.orderDesc
+    if $scope.params.orderDesc == 'false'
+      $scope.orderDescs[$scope.params.orderBy] = false
+
+  $scope.changeUrlParams = (state=$state.current, object={})->
+    angular.extend($scope.params, object)
+    $state.transitionTo(state, $scope.params, {
+      reload: true, inherit: false, notify: false
+    })
+
+  $scope.setParams = (object) ->
+    angular.extend($scope.params, object)
+
+  setDateText = ->
+    startDate = $scope.params.startDate
+    endDate = $scope.params.endDate
+    $scope.dateRange = { startDate: startDate, endDate: endDate }
+
+    if (angular.isUndefined(startDate) && angular.isUndefined(endDate))
+      setDateScopeZh()
+    else if startDate && endDate
+      if (startDate == endDate)
+        $scope.dateScopeZh = "#{moment(startDate).format('YY年MM月DD日')} 当天"
+      else
+        $scope.dateScopeZh = "#{formatDate(startDate)} 到 #{formatDate(endDate)}"
+    else
+      $scope.dateScopeZh = "#{moment(startDate||endDate).format('YY年MM月DD日')} 当天"
+    
+
+
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                               $scope functions definitions
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+
+  $scope.setDateScope = (ds, index) ->
+    $scope.params.dateScope = ds
+    $scope.dateRange = {}
+    $scope.params.startDate = undefined
+    $scope.params.endDate = undefined
+    $scope.showDateOptions = false
+    $scope.params.page = 1
+    $scope.params.offset = 0
+    if $state.current.name == 'orders'
+      $scope.changeUrlParams()
+    else
+      $scope.showOrder($scope.currentOrder)
+
+  $scope.setDateRange = (startDate, endDate) ->
+    $scope.showDateOptions = false
+    $scope.params.dateScope = 'all'
+    $scope.params.startDate = startDate
+    $scope.params.endDate = endDate
+    $scope.params.page = 1
+    $scope.params.offset = 0
+    if angular.isUndefined(startDate)
+      $scope.params.startDate = endDate
+    if angular.isUndefined(endDate)
+      $scope.params.endDate = startDate
+    if $state.current.name == 'orders'
+      $scope.changeUrlParams()
+    else
+      $scope.showOrder($scope.currentOrder)
+
+  $scope.scrollToActiveItem = () ->
+    $scope.scrollToByClass('order-item active', {offset: 400, duration: 800})
+    return ''
+
+  # used for pagination directive
+  $scope.getPageData = (params)->
+    angular.extend($scope.params, params)
+    $scope.changeUrlParams()
+
+  $scope.dateOptionsChange = (val) ->
+    $scope.showDateOptions = val
+
+  $scope.queryStrChange = (queryStr) ->
+    $scope.params.page = 1
+    $scope.params.offset = 0
+    $scope.params.queryStr = queryStr
+    $scope.params.type = "全部"
+    $scope.params.dateScope = 'all'
+    $scope.changeUrlParams()
+
+  $scope.clearParams = (paramName) ->
+    $scope.params[paramName] = undefined
+    $scope.changeUrlParams()
+
+  # get order list order by column
+  $scope.orderByAttribute = (attribute) ->
+    if $scope.params.orderBy == attribute
+      $scope.params.orderDesc = !$scope.params.orderDesc
+    else
+      $scope.params.orderDesc = true
+      $scope.params.orderBy = attribute
+    $scope.changeUrlParams()
+
+  $scope.showOrderDetails = (val=true)->
+    $scope.orderDetails = val
+
+  $scope.showOrHideOrder = (order) ->
+    if (order.id != $scope.currentOrder.id) || (order.id == $scope.currentOrder.id && !$scope.orderDetails)
+      $scope.showOrder(order)
+    else
+      $scope.hideOrder()
+
+  $scope.hideOrder = ->
+    $scope.requestOrdersChange(false)
+    $scope.params.orderId = undefined
+    $scope.showOrderDetails(false)
+    $scope.changeUrlParams('orders')
+    $scope.setLastState($state.current.name)
+
+  $scope.showOrder = (order) ->
+    if order && order.id
+      $scope.showOrderDetails(true)
+      $scope.requestOrdersChange(false)
+      if $state.current.name == 'orders'
+        stateName = $scope.lastStateName
+        $scope.setCurrentOrderId(order.id)
+        $timeout(->
+          $state.go(stateName, angular.extend($scope.params, {orderId: order.id}))
+        , 300)
+      else
+        stateName = $state.current.name
+        $state.go(stateName, angular.extend($scope.params, {orderId: order.id}))
+
+  $scope.showNextOrder = ->
+    $scope.showOrder($scope.orders.nextById($scope.currentOrder.id))
+
+  $scope.showPreOrder = ->
+    $scope.showOrder($scope.orders.preById($scope.currentOrder.id))
+
+  $scope.editOrder = (order) ->
+    if order.pre
+      type = 'pre'
+    else
+      if order.paid
+        type = 'paid'
+      else
+        type = 'unpaid'
+
+    $state.go('payOrder', {
+      orderForm: true
+      orderType: type
+      orderId: order.id
+      customerId: order.customerId
+    })
+
+
+
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                               controller event handle code
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+
+  $scope.$watch('params', (newValue, oldValue) ->
+    getOrders()
+    setDateText()
+    setOrderDescs()
+    getOrdersCounts()
+    setShowQueryOptions()
+    $scope.queryStr = newValue.queryStr
+  , true)
+
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                                initialization codes
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  
+  $scope.counts = {}
+  $scope.perPage = 30
+  $scope.queryStr = ''
+  $scope.dateRange = {}
+  $scope.pageParams = {}
+  # used for pagination directive
+  $scope.orderDetails = false
+  $scope.showDateOptions = false
+  $scope.showQueryOptions = false
+  $scope.dateScopesZh = ["今天", "昨天", "本周", "本月", "全部"]
+  $scope.dateScopesEn = ["today", "yesterday", "this_week", "this_month", "all"]
+  $scope.zhStatuses = Rails.zhOrderStatuses
+  $scope.params = angular.extend({}, $state.params)

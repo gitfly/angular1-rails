@@ -1,0 +1,20 @@
+/.modal.order-settlement ng-if='editCustomerForm'
+  .modal-dialog
+    .modal-content
+      .modal-header.pts.pbs
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showEditCustomer(false)']
+        .modal-title
+          span.mrh style='font-size: 14px;'
+            | 编辑用户信息
+
+      form#new_customer.new_customer[
+        novalidate="novalidate" accept-charset="UTF-8" 
+        method="post" name='customerForm'
+      ]
+        .modal-body
+          customer-form customer='customer'
+        .modal-footer style='padding-right: 48px;'
+          a.btn.btn-default.btn-wide ng-click='showEditCustomer(false)'
+            | 取消
+          a.btn.btn-primary.btn-wide ng-click='updateCustomer(customer)' ng-disabled='customerForm.$invalid'
+            | 确认

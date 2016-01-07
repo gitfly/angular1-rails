@@ -1,0 +1,90 @@
+.reconciliation
+  .filters
+    div  style='font-size: 18px;margin-top: 10px;' 
+    .mbl
+      
+
+      button.btn.btn-hg.btn-primary ng-if="should_finished"
+        | 应完成个数：{{should_finished}}   
+      button.btn.btn-hg.btn-primary ng-if="overdues"
+        | 超期个数：{{overdues.length}}   
+      button.btn.btn-hg.btn-primary ng-if="should_finished"
+        | 超期率：{{((overdues.length/should_finished)*100).toFixed(2)}}%
+  
+     
+    .pull-right
+
+      button.btn.btn-info.pull-right.mll.plh.prh[
+        ng-click='selectByDate(from)'
+      ]
+        span.fui-search
+        | 筛选
+      input.form-control.start_date.pull-right[
+        placeholder="超期日期" date-picker
+        ng-model='from'
+      ]
+
+    .clearfix
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1500px;font-size: 10px;' 
+    thead
+      tr
+        th 订单号
+        th 超期原因
+        th 用户名
+        th 物品信息
+        th 开单日期
+        th 应完工日期
+        th 预计完工日期
+        th 超期次数
+
+    tbody
+      tr.fade-in ng-repeat='overdue in overdues'
+        td
+          | {{overdue.orderNumber}}
+        td
+          | {{overdue.reason}}        
+        td
+          | {{overdue.customerName}} 
+        td
+          | {{overdue.itemType}}  
+        td
+          | {{overdue.orderCreatedAt}}
+        td
+          | {{overdue.originalDate}}
+        td
+          | {{overdue.expectedDate}} 
+        td
+          | {{overdue.overdueTimes}}   
+
+css:
+   .select2-drop .select2-results .select2-result-selectable {
+     font-size: 12px;
+   }
+   .body-container .reconciliation .filters .pull-left .inline-input .select2-container a{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .inline-input{
+     width: 1000px;
+   }
+   .select2-choice{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .mbl button{
+   font-size: 12px;
+   padding:5px 20px 5px 20px;
+
+   margin-left:5px;
+   }
+   .mbl{
+   width:1000px;
+   } 
+   .select{
+    min-width:0px
+   }              

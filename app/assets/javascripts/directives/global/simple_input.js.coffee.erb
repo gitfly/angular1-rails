@@ -1,0 +1,72 @@
+app = angular.module("simpleInput", [])
+
+app.directive 'simpleInput', ->
+  restrict: "EA"
+  replace: true
+  require: '^form'
+  scope: {
+    name: '@'
+    datas: '&'
+    label: '@'
+    errorMsg: '@'
+    queryKey: '@'
+    attribute: '='
+    optionsUrl: '@'
+    queryParams: '='
+    placeholder: '@'
+  },
+
+  templateUrl: (elem, attrs) ->
+    if attrs.hasOwnProperty('textarea')
+      "<%= asset_path('directives/simple_textarea.html.slim')%>"
+    else
+      "<%= asset_path('directives/simple_input.html.slim')%>"
+
+  link: ($scope, $element, $attrs, formCtrl) ->
+    $scope.form = formCtrl
+    $scope.multiple = $attrs.hasOwnProperty('multiple')
+    $scope.required = !angular.isUndefined($attrs.required)
+    $scope.textarea = !angular.isUndefined($attrs.textarea)
+    $scope.modelName = $attrs.attribute.split('.')[0]
+    $scope.attributeName = $attrs.attribute.split('.')[1]
+    input = $element.find('input')
+
+    if $attrs.hasOwnProperty('datePicker')
+      input.datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        dateFormat: 'yy-mm-dd',
+        yearRange: '-1:+1'
+      }).prev('.input-group-btn').on 'click', (e) ->
+        e && e.preventDefault()
+        input.focus()
+
+      input.datepicker('widget').css({
+        'margin-left': -input.prev('.input-group-btn').find('.btn').outerWidth() + 3
+      })
+      input.focus ->
+        input.parents('.input-group:first').addClass('active')
+      input.blur ->
+        input.parents('.input-group:first').removeClass('active')
+
+    if $scope.label == 'false'
+      $scope.showLabel = false
+
+    if angular.isUndefined($scope.label)
+      modelData = $scope.simpleFormModel[$scope.modelName]
+      if modelData
+        data = modelData[$scope.attributeName]
+        if data
+          $scope.showLabel = data.label
+      $scope.showLabel ||= $scope.attributeName
+    else
+      $scope.showLabel = $scope.label
+
+    $scope.showPlaceholder = $scope.placeholder || "请填写#{$scope.showLabel}"
+
+  controller: ($scope, $element, GlobalObject, listFilter, SimpleFormModel) ->
+    $scope.simpleFormModel = SimpleFormModel
+    $scope.inputFocused = ->
+      $scope.$emit('inputFocused')
+    $scope.inputBlured = ->
+      $scope.$emit('inputBlured')

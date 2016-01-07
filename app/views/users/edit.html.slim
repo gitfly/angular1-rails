@@ -1,0 +1,38 @@
+.main-content ng-controller="UsersController as users"
+  #sidebar
+    ul.nav.nav-list.nav-list-vivid
+      li
+        = link_to '#'
+          div
+            span.fui-windows.glyph
+            span.text 历史订单
+      li.active
+        = link_to user_path(current_user)
+          div
+            span.fui-user.glyph
+            span.text 个人信息
+      li
+        = link_to '#'
+          div
+            span.fui-photo.glyph
+            span.text 上传头像
+      li
+        = link_to edit_user_password_path
+          div
+            span.fui-lock.glyph
+            span.text 修改密码
+      li ng-click='value=!value'
+        = link_to '#'
+          div
+            span.fui-mail.glyph
+            span.text 邮件通知
+  #content ng-init='value=true'
+    .user-info-block.well.center-block[ng-view]
+       = simple_form_for(@user, url: user_path(@user)) do |f|
+         .form-inputs
+           /= f.error_notification
+           = f.input :name
+           = f.input :email
+         .form-actions
+           = f.button :submit
+  #sidebar-resizer resizer="vertical" resizer-width="2" resizer-left="#sidebar" resizer-right="#content" resizer-max="400"

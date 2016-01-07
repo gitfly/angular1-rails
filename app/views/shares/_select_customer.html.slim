@@ -1,0 +1,47 @@
+.modal.select-customer ng-if='selectCustomer'
+  .modal-dialog
+    .modal-content
+      .modal-header.pts.pbs
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showSelectCustomer(false)']
+        .modal-title
+          span.mrh style='font-size: 14px;'
+            | 选择已有用户或者创建新用户
+
+      form#new_customer.new_customer[
+        novalidate="novalidate" accept-charset="UTF-8" 
+        method="post" name='customerForm'
+      ]
+        .modal-body
+          div
+            input.form-control[
+              placeholder='输入微信号或者电话号码选择用户'
+              ng-model='searchStr'
+              ng-keypress="searchStrChange($event)"
+              ng-change="searchCustomerStringChange(searchStr)"
+            ]
+            ul.dropdown-menu.selectCustomerOptions ng-show='showCustomerList'
+              li.animate-fade-left-right ng-repeat='cust in customers track by $index' ng-class="{'active': $index==0}"
+                a.row.plx.prx ng-click='customerSelected(cust)'
+                  .col-lg-3
+                    | {{cust.name}}
+                  .col-lg-3
+                    | {{cust.phone}}
+                  .col-lg-3
+                    | {{cust.weixin}}
+                  .col-lg-3
+                    | {{cust.weixinNickname}}
+                .clearfix
+              li ng-class="{'active': !customers.length}"
+                a ng-click='createNewCustomer()'
+                  span.fui-plus
+                  | 创建新用户
+
+          div.ptl ng-show='createForm'
+            = render 'shares/customer_form'
+            /div ng-include="'#{asset_path('customers/form.html.slim')}'"
+
+        .modal-footer style='padding-right: 48px;'
+          a.btn.btn-default.btn-wide ng-click='showSelectCustomer(false)'
+            | 取消
+          a.btn.btn-primary.btn-wide ng-click='submitCustomer(customer)' ng-disabled='customerForm.$invalid || !customerFormCanSubmit'
+            | 确认

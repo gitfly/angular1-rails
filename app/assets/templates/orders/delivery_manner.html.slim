@@ -1,0 +1,162 @@
+.pointer.well.info-block ng-dblclick="showDeliveryManner(!editDeliveryManner)" style='min-height: 74.5px;'
+  p
+    span.mrl
+      | 送货方式：
+      | {{deliveryManners[order.deliveryManner]}}
+
+    span ng-if="order.deliveryManner == 1"
+      span.mrl
+        | 朋友信息:
+      span
+        | {{friend.name}}
+        | ({{friend.phone}})
+
+    span.mll ng-if='order.deliveryDate&&order.deliveryManner>=2'
+      span.mrs
+        | {{order.deliveryDate}} 
+      span
+        | {{order.deliveryHourStart}}
+      span.mls.mrs ng-if="order.deliveryHourStart&&order.deliveryHourEnd&&order.deliveryManner>=2"
+        | 到
+      span
+        | {{order.deliveryHourEnd}}
+    a.pull-right.pointer ng-click="showDeliveryManner(!editDeliveryManner)"
+      span 
+        | {{editDeliveryMannerText(editDeliveryManner)}}
+        
+  p ng-if='order.deliveryManner<2 && !editDeliveryManner'
+    span.gray
+      | 提示：双击该区域可以编辑送货方式和地址信息
+  p ng-if='order.deliveryManner>=2'
+    span
+      | 地址：
+      span.mrs
+        | {{deliveryAddress.province}}
+      span.mrs
+        | {{deliveryAddress.city}}
+      span.mrs
+        | {{deliveryAddress.district}}
+      span
+        | {{deliveryAddress.details}}
+    span
+      | 收件人：
+      span
+        | {{deliveryAddress.name}}({{deliveryAddress.phone}})
+
+  div.mbs ng-show='editDeliveryManner'
+    span.mrs
+      | 选择取货方式：
+    button.btn.btn-xs.btn-default.btn-manner.mrs[
+      ng-repeat='(k, v) in deliveryManners track by $index' 
+      ng-class="{'btn-danger': k==order.deliveryManner}"
+      ng-click="setManner(k, 'deliveryManner')"
+    ]
+      | {{v}}
+    .form-inputs.small-input ng-if='order.deliveryManner == 1'
+      .form-group.row.mbl.mtl
+        .inline-input.col-md-6
+          input.form-control[
+            ng-model="friend.name" 
+            placeholder="朋友姓名" 
+            type="text" name="addressFriendName"
+          ]
+
+        .inline-input.col-md-6
+          input.form-control[
+            type="text" ng-model='friend.phone' 
+            placeholder="朋友电话"
+          ]
+
+    .form-inputs.small-input ng-if='order.deliveryManner>=2'
+      .form-group.row.mbl.mtl
+        .inline-input.col-md-6
+          input.form-control[
+            ng-model="deliveryAddress.name" 
+            placeholder="收件人姓名" 
+            type="text" name="addressFetchDate"
+          ]
+
+        .inline-input.col-md-6
+          input.form-control.col-md-5[
+            type="text" ng-model='deliveryAddress.phone' 
+            placeholder="收件人电话"
+          ]
+      .form-group.row.mbl.mtl
+        .inline-input.col-md-4
+          input.form-control[
+            ng-model="order.deliveryDate" 
+            placeholder="送货日期" 
+            ng-change='deliveryDateChange(order.deliveryDate)'
+            type="text" name="addressdeliveryDate"
+            date-picker
+            required
+          ]
+
+        .inline-input.col-md-3.plx.prx
+          input.form-control.col-md-5[
+            type="text" ng-model='order.deliveryHourStart' 
+            placeholder="几点"
+            time-picker
+          ]
+        .col-md-1.pts.plx.prx style='width: 18px;'
+          span
+            | 到
+        .inline-input.col-md-3.plx.prx
+          input.form-control.col-md-5[
+            type="text" ng-model='order.deliveryHourEnd' 
+            placeholder="几点"
+            time-picker
+          ]
+          
+        .col-lg-12.ptl ng-if='order.deliveryDate'
+          strong
+            | {{order.deliveryDate}} 当天已有{{deliveryOrderCount}}个订单需要取送
+      .form-group.row.mbl
+        .inline-input.col-md-2.prx
+          input.form-control[
+            ng-model="deliveryAddress.province" 
+            placeholder="省" type="text" name="address_province"
+          ]
+        .inline-input.col-md-2.plx.prx
+          input.form-control.col-md-2[
+            ng-model="deliveryAddress.city" 
+            placeholder="市" type="text" name="address_city"
+          ]
+        .inline-input.col-md-2.plx.prx
+          input.form-control.col-md-2[
+            ng-model="deliveryAddress.district" 
+            placeholder="区" type="text" name="address_district"
+          ]
+        .inline-input.col-md-6.plx
+          input.form-control.col-md-6[
+            ng-model="deliveryAddress.details" 
+            placeholder="详细地址" required 
+            type="text" name="address_details"
+          ]
+
+      .row style='margin-top: -10px;'
+        .col-lg-12
+          label.pointer.radio[
+            ng-repeat='add in addresses track by $index' 
+            ng-click="selectAddress(add, 'deliveryAddress')"
+            ng-if='add.showAddress.length'
+          ]
+            input.custom-radio[
+              type="radio" name="group1" 
+              value="1" data-toggle="radio"
+            ]
+            span.icons
+              span.icon-unchecked
+              span.icon-checked
+            | 历史地址{{$index+1}}：
+            span
+              | {{add.showAddress}}
+          label.pointer.radio ng-click="selectAddress(undefined, 'deliveryAddress')"
+            input.custom-radio[
+              type="radio" name="group1" 
+              value="1" data-toggle="radio"
+            ]
+              span class="icons"
+                span class="icon-unchecked"
+                span class="icon-checked"
+              | 使用新地址

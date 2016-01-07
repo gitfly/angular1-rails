@@ -1,0 +1,19 @@
+.modal-header.pts.pbs
+  button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showDelete(false)']
+  .modal-title
+    span.mrh style='font-size: 14px;'
+      | 删除订单
+
+form[
+  novalidate="novalidate" accept-charset="UTF-8" 
+  method="post" name="delForm"
+]
+  .modal-body
+   div.ptl
+      div ng-include="'#{asset_path('orders/delete_reason.html.slim')}'"
+
+  .modal-footer style='padding-right: 48px;'
+    a.btn.btn-default.btn-wide ng-click='cancel()'
+      | 取消
+    a.btn.btn-primary.btn-wide ng-click='delete()' ng-disabled='delForm.$invalid'
+      | 确认

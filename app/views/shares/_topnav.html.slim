@@ -1,0 +1,44 @@
+.nav.navbar.navbar-fixed-top.navbar-default.navbar-sm.top-nav-bar.large role="navigation" ng-controller='NavbarCtrl'
+  #navbar-collapse-01.collapse.navbar-collapse
+    .dropdown#new-object.pull-left
+      button.btn.btn-warning.dropdown-toggle[
+        type='button' data-toggle='dropdown' 
+        aria-expanded="true" 
+        ng-click="createOrder()"
+      ]
+        span.fui-plus
+        | 新建订单
+        span.glyphicon.glyphicon-menu-
+      button.btn.btn-warning.dropdown-toggle[
+        type='button' data-toggle='dropdown' 
+        aria-expanded="true" 
+        ng-click="printBarcodes()"
+      ]
+        i.ion-printer
+        | 打印条码
+        span.glyphicon.glyphicon-menu-down  
+    - if current_user
+      .dropdown.pull-right.navbar-dropdown ng-click="click(!dropdownMenu)"
+        .navbar-avatar
+          = user_link(current_user, size: '44x44')
+          span.mlx= current_user.name
+          span.caret
+        ul.dropdown-menu.fade-in-right-big role="menu" ng-show="dropdownMenu"
+          li= link_to user_path(current_user) do
+            div
+              span.fui-user.glyph
+              span.text  个人信息
+          li= link_to edit_user_path(current_user) do
+            div
+              span.fui-gear.glyph
+              span.text  账号设置
+          li
+            = link_to '#'
+              div
+                span.fui-windows.glyph
+                span.text 历史订单
+          li.divider
+          li= link_to sign_out_path do
+            div
+              span.fui-power.glyph
+              span.text  退出该账号

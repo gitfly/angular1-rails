@@ -1,0 +1,10 @@
+app = angular.module("flatRadio", [])
+
+app.directive 'flatRadio', () ->
+  restrict: "AE"
+  replace: true
+  controller: '@'
+  name: 'controllerName'
+  templateUrl: (elem, attrs) ->
+    return attrs.templateUrl || "<%= asset_path('radio.html.slim')%>"
+  link: ($scope, elem, attrs) ->

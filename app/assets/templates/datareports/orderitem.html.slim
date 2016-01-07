@@ -1,0 +1,152 @@
+.reconciliation
+  .filters
+    div  style='font-size: 18px;margin-top: 10px;'
+    .mbl
+      button.btn.btn-hg.btn-primary 
+        | 总订单：{{ordersCount}} 单
+      button.btn.btn-hg.btn-primary ng-if="pre_count"
+        | 预订单：{{pre_count}} 单
+      button.btn.btn-hg.btn-primary ng-if="formal_count"
+        | 已开单：{{formal_count}} 单  
+
+
+
+    .pull-left
+      .mbl 
+        select.form-control.select.select-default.select-block.select-font.ng-pristine.ng-valid.select2-offscreen[placeholder="请选择物品种类" ng-model="item_type" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+          option[value=""]
+            | 请选择物品种类
+          - Item::Type.each do |k, v|
+            option[value=k]
+              = v
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[placeholder="请选择活动名称" ng-model="activity_id" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+          option[value=""]
+            | 请选择活动名称
+          option[ng-repeat="acvitvity in activities" value="{{acvitvity.id}}"]
+            | {{acvitvity.name}}
+
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+          placeholder="是否会员" ng-model="is_member"
+          ui-select2
+        ]
+          option[value=""]
+            | 是否会员
+          option[value=0]
+            | 否
+          option[value=1]
+            | 是
+     
+    .pull-right
+      a.btn.btn-success.pull-right.mll.plh.prh[ 
+        ng-href="/api/v1/datareports/orderitems/export?from={{from}}&to={{to}}"
+        ]
+        | 导出
+
+      button.btn.btn-info.pull-right.mll.plh.prh[
+        ng-click='selectByDate(from, to)'
+      ]
+        span.fui-search
+        | 筛选
+      input.form-control.end_date.pull-right.mll[
+        placeholder="结束日期" date-picker
+        ng-model='to'
+      ]
+      input.form-control.start_date.pull-right[
+        placeholder="开始日期" date-picker
+        ng-model='from'
+      ]
+
+    .btn-group.pull-right.mrh role="group" aria-label="buttons"
+      button.active.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('today')"
+      ]
+        | 今天
+      button.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('week')"
+      ]
+        | 本周
+      button.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('month')"
+      ]
+        | 本月
+
+    .clearfix
+
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1500px;font-size: 10px;' 
+
+    thead
+      tr
+        th 开单日期
+        th 订单编号
+        th 物品类型
+        th 服务类型
+        th 品牌
+        th 顾客姓名
+        th 订单状态
+        th 原价
+        th 活动名称
+        th 结算金额
+        th 折扣额度
+        th 结算方式
+        th 结账时间
+    tbody
+      tr.fade-in ng-repeat='order in orders'
+        td
+          | {{order.showCreatedAt}}
+        td
+          | {{order.number}}        
+        td
+          | {{order.showItemType}} 
+        td
+          | {{order.service}}  
+        td
+          | {{order.showBrand}}
+        td
+          | {{order.name}}
+        td
+          | {{order.showStatusZh}} 
+        td
+          | {{order.price}} 
+        td
+          | {{order.activityName}} 
+        td
+          | {{order.finalPrice}} 
+        td
+          | {{order.finalDiscount}}         
+        td
+          | {{order.paymentMethod}}      
+        td
+          | {{order.consumeDate}}
+
+
+
+css:
+   .select2-drop .select2-results .select2-result-selectable {
+     font-size: 12px;
+   }
+   .body-container .reconciliation .filters .pull-left .inline-input .select2-container a{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .inline-input{
+     width: 1000px;
+   }
+   .select2-choice{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .mbl button{
+   font-size: 12px;
+   padding:5px 20px 5px 20px;
+
+   margin-left:5px;
+   }
+   .mbl{
+   width:1000px;
+   }
+

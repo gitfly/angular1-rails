@@ -1,0 +1,35 @@
+/- @user = User.first
+
+/.user-info-block.well.center-block
+  /.left.pull-left.avatar
+    = user_avatar(@user, size: '120x120')
+  .right.pull-left.user-info
+    .name
+      = @user.name
+      = @user.show_gender
+      = link_to content_tag(:span, '', class: 'glyphicon glyphicon-edit'), edit_user_path(@user)
+    .contact
+      .email
+        span.desc 邮箱
+        span.content= @user.email
+      .phone
+        span.desc 电话
+        span.content= @user.phone
+      .weixin
+        span.desc 微信
+        span.content= @user.weixin
+  .clearfix
+
+  form#edit_admin_1.simple_form.edit_admin.ng-pristine.ng-valid[novalidate="novalidate" action="/users/1" accept-charset="UTF-8" method="post"]
+    input[name="utf8" type="hidden" value="✓"]
+    input[type="hidden" name="_method" value="patch"]
+    input[type="hidden" name="authenticity_token" value="Dz2q1AcETilZ0gxUEGTykx0tbJF8fZrcguLm6vgNQ8p3+DxB1yfIVSA39B0Yw37WJnqztj87Amg3qLxECLyS2A=="]
+    .form-inputs
+      .form-group.string.optional.admin_name
+        .col-sm-12.inline-input
+          input#admin_name.string.optional.form-control[maxlength="255" size="255" type="text" value="左永辉" name="admin[name]"]
+      .form-group.email.optional.admin_email
+        .col-sm-12.inline-input
+          input#admin_email.string.email.optional.form-control.form-control[maxlength="255" type="email" size="255" value="zuozuo@zuozuo.com" name="admin[email]"]
+    .form-actions
+    input.btn.btn-lg.btn-warning[type="submit" name="commit" value="更新"]

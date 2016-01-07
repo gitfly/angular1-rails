@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Addressable type:
+  = @address.addressable_type
+p
+  strong Country:
+  = @address.country
+p
+  strong Province:
+  = @address.province
+p
+  strong City:
+  = @address.city
+p
+  strong District:
+  = @address.district
+p
+  strong Details:
+  = @address.details
+
+= link_to 'Edit', edit_address_path(@address)
+'|
+= link_to 'Back', addresses_path

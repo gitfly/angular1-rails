@@ -1,0 +1,67 @@
+.solutionist-symptoms
+  .col-md-1
+  .panel.panel-primary.pull-left.col-md-8
+    .panel-heading
+      .panel-title.pull-left
+        | 症状库
+      .pull-right.mlh
+        .btn.btn-warning.btn-sm ng-click='createItem()'
+          span.fui-plus
+          | 添加
+        .btn.btn-danger.btn-sm ng-click='deleteItems(itemIdsToDelete)'
+          span.fui-trash
+          | 删除
+      .pull-right
+        input.form-control placeholder='搜索'
+      .clearfix
+    ul.breadcrumb.item-list
+      li
+        a ng-click='backToTop()'
+          | 根目录
+      li ng-repeat='l in list track by $index'
+        a ng-click='selectListItem(l, $index)'
+          | {{l.name}}
+    .panel-body.row
+      .col-xs-3.col-md-2[
+        ng-repeat="item in items track by $index" 
+      ]
+        a.thumbnail[
+          ng-click='selectItem(item)'
+          ng-right-click='editItem(item)'
+        ]
+          span[
+            ng-show='!item.edit'
+            ng-dblclick='selectItem(item)'
+          ]
+            | {{item.name}}
+          input[
+            focus-on-shown
+            ng-if='item.edit'  
+            ng-model='item.name'
+            ng-keydown='inputKeyPress(item, $index, $event)'
+            ng-blur='inputBlur(item, $index)'
+            ng-change='itemNameChange(item)'
+          ]
+        .delete.pointer ng-click='checkItem(item)'
+          span.fui-check ng-show='item.checked'
+            
+      .col-xs-3.col-md-2
+        a.thumbnail.create[
+          ng-click='createItem()'
+          tooltip title="点击添加"
+        ]
+          span.fui-plus
+
+  .pull-left.hints.col-md-3
+    p
+      strong
+        | 使用提示：
+    li
+      strong
+        | 鼠标右键单击文字编辑
+    li
+      strong
+        | 鼠标单击上部灰色部分进入下一级菜单
+    li
+      strong
+        | 鼠标单击下部深色部分选中，然后点击删除按钮删除

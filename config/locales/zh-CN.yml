@@ -1,0 +1,244 @@
+zh-cn:
+  order:
+    attributes:
+      status: 状态
+      part: 部件
+    status:  
+      all: 所有状态
+      order_created: 已开单
+      store_acknowledge_receipt: 门店已收货
+      sent_to_factory: 已送去修复中心
+      factory_received: 修复中心已接收 
+      adviser_sorted_out: 顾问完成分拣(待诊断)
+      diagnosed: 顾问完成诊断  
+      photo_uploaded: 拍照完成    
+      blue_print_created: 修复方案生成
+      blue_print_sent: 修复方案已发送
+      blue_print_verified: 修复方案已确认
+      attach_into_storage: 附件已入库
+      repairing: 修复中(修复组接收)
+      repaired: 修复已完成
+      blue_print_tested: 方案质检已通过
+      effect_photo_uploaded: 效果照片已上传
+      effect_result_sent: 效果方案已发送顾客
+      effect_result_created: 效果方案已发送顾问
+      effect_result_confirmed: 效果方案已确认
+      repaired_into_storage: 修复完成已入库
+      packaged: 包装完成
+      delivery_manner_confirmed: 已确认送货方式
+      waiting_for_customer_receipt: 等待顾客收货
+      customer_receipt_confirmed: 顾客已收货(订单结束)
+
+  order_log:
+    handle: 
+      Create: "创建"
+      Update: "更新"
+      Delete: "删除"
+      Activity: "参加活动"
+      StatusChange: "更改状态"
+
+
+  activity: 
+    item_type:
+      All: 全部物品
+      Bag: 包
+      Shoes: 皮鞋
+      Belt: 皮带
+      Wallet: 钱包
+      HandBag: 手提包
+      SingleShoulderBag: 单肩包
+      BackPack: 双肩包
+
+  activerecord: 
+    errors:
+      models:
+        graduate:
+          attributes:
+            password:
+              too_short: 您输入的密码太短了
+        user:
+          attributes:
+            name:
+              blank: 不能为空
+            password:
+              too_short: 密码太短了
+              confirmation: 两次密码输入不一致
+            email:
+              blank: 请填写Email地址
+            phone:
+              blank: 请填写联系电话
+              improbable_phone: 电话号码格式不正确
+        order:
+          attributes:
+            discount: 
+              inclusion: 必须在 0.0 到 1.0 之间
+
+      messages:
+        inclusion: "不包含于列表中"
+        exclusion: "是保留关键字"
+        invalid: "%{attribute}是无效的"
+        invalid_format: "%{attribute}格式不正确。"
+        invalid_name_format: "%{attribute}只能使用中文、英文、数字、空格或下划线"
+        confirmation: "两次密码输入不一致"
+        accepted: "必须是可被接收的"
+        empty: "%{attribute}不能为空"
+        blank: "%{attribute}不能为空"
+        too_long: "您输入的字符过多（最长为 %{count} 个字符）"
+        too_short: "您输入的字符太少（最短为 %{count} 个字符）"
+        wrong_length: "您输入的字符长度不满足要求（必须为 %{count} 个字符）"
+        not_a_number: "请输入数字"
+        not_an_integer: "请输入整数"
+        greater_than: "请输入大于 %{count} 的数"
+        greater_than_or_equal_to: "请输入大于或等于 %{count} 的数"
+        equal_to: "等于 %{count}"
+        from_to_valid: 开始时间不能大于结束时间
+        less_than: "请输入小于 %{count} 的数"
+        less_than_or_equal_to: "请输入小于或等于 %{count} 的数"
+        odd: "请输入奇数"
+        even: "请输入偶数"
+        taken: "%{attribute}已经被使用"
+        record_invalid: "校验失败: %{errors}"
+        tag_limit: "最多为%{count}"
+      template: # ~ 2.3.5 backward compatible
+        header:
+          one: "有 1 个错误发生导致「%{model}」无法被保存"
+          other: "有 %{count} 个错误发生导致「%{model}」无法被保存"
+        body: "如下字段出现错误："
+      full_messages:
+        format: "%{attribute} %{message}"
+
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b%d日"
+      long: "%Y年%b%d日"
+    day_names:
+      - 星期日
+      - 星期一
+      - 星期二
+      - 星期三
+      - 星期四
+      - 星期五
+      - 星期六
+    abbr_day_names:
+      - 日
+      - 一
+      - 二
+      - 三
+      - 四
+      - 五
+      - 六
+    month_names:
+      - ~
+      - 一月
+      - 二月
+      - 三月
+      - 四月
+      - 五月
+      - 六月
+      - 七月
+      - 八月
+      - 九月
+      - 十月
+      - 十一月
+      - 十二月
+    abbr_month_names:
+      - ~
+      - 1月
+      - 2月
+      - 3月
+      - 4月
+      - 5月
+      - 6月
+      - 7月
+      - 8月
+      - 9月
+      - 10月
+      - 11月
+      - 12月
+    order:
+      - :year
+      - :month
+      - :day
+
+  meta:
+    posted_by: 发送人
+    time_ago: '%{time} 之前'
+    time_ago_by: '%{time} 之前，发送人'
+  time:
+    formats:
+      default: "%Y年%b%d日 %A %H:%M:%S %Z"
+      short: "%b%d日 %H:%M"
+      long: "%Y年%b%d日 %H:%M"
+    am: "上午"
+    pm: "下午"
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "半分钟"
+      less_than_x_seconds:
+        one: "不到一秒"
+        other: "不到 %{count} 秒"
+      x_seconds:
+        one: "一秒"
+        other: "%{count} 秒"
+      less_than_x_minutes:
+        one: "不到一分钟"
+        other: "不到 %{count} 分钟"
+      x_minutes:
+        one: "一分钟"
+        other: "%{count} 分钟"
+      about_x_hours:
+        one: "大约一小时"
+        other: "大约 %{count} 小时"
+      x_days:
+        one: "一天"
+        other: "%{count} 天"
+      about_x_months:
+        one: "大约一个月"
+        other: "大约 %{count} 个月"
+      x_months:
+        one: "一个月"
+        other: "%{count} 个月"
+      about_x_years:
+        one: "大约一年"
+        other: "大约 %{count} 年"
+      over_x_years:
+        one: "一年多"
+        other: "%{count} 年多"
+      almost_x_years:
+        one:   "接近一年"
+        other: "接近 %{count} 年"
+    prompts:
+      year:   "年"
+      month:  "月"
+      day:    "日"
+      hour:   "时"
+      minute: "分"
+      second: "秒"
+
+  ckeditor:
+    page_title: 'CKEditor 文件管理'
+    confirm_delete: '删除文件?'
+    buttons:
+      cancel: '取消'
+      upload: '上传'
+      delete: '删除'
+      next: '下一个'
+
+  will_paginate:
+    previous_label: "上一页"
+    next_label: "下一页"
+    page_gap: "&hellip;"
+
+    page_entries_info:
+      single_page:
+        zero:  "没有找到 %{model}"
+        one:   "展示 1个 %{model}"
+        other: "展示所有 %{count}个%{model}"
+      single_page_html:
+        zero:  "没有找到 %{model}"
+        one:   "展示 1个 %{model}"
+        other: "展示所有 %{count}个%{model}"
+      multi_page: "Displaying %{model} %{from} - %{to} of %{count} in total"
+      multi_page_html: "Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"

@@ -1,0 +1,34 @@
+
+div
+  .pull-left#order-status-bar
+    ul.nav.nav-list.nav-list-vivid
+      li[
+        ng-repeat="role in roles track by $index"
+      ]
+        a 
+          | {{role[0]}}
+          
+  .pull-left.order-list
+    div ng-include="'#{asset_path('users/top_block.html.slim')}'" 
+    div ng-include="'#{asset_path('users/list.html.slim')}'"
+    
+    #edit-user.slide-in-right.well ng-show='showUserDetails'
+
+      span.fui-cross.close.pull-left ng-click='hideUserDetails()'
+
+      .customer-info.well
+        .basic-info.row
+          .col-md-2
+          .col-md-2	  
+          .col-md-5
+             h1
+              |{{cuUser.name}} 
+          .col-md-3
+          .clearfix
+        .clearfix
+      div style="padding-left:40px;" ng-include="'#{asset_path('users/user_info.html.slim')}'"
+      
+div ng-include="'#{asset_path('users/new_modal.html.slim')}'" ng-if="showCreateUser"      
+
+
+

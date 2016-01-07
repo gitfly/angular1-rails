@@ -1,0 +1,35 @@
+div
+  #customer-info
+    .pull-left.avatar
+      img ng-src="{{currentCustomer.avatarUrl}}"
+    .pull-left.info
+      .name
+        | {{currentCustomer.name}}
+      .phone
+        | 电话：{{currentCustomer.phone}}
+      .weixin
+        | 微信：{{currentCustomer.weixin}}
+    .member.pull-left
+      .is-member ng-show='currentCustomer.isMember'
+        .balance
+          span.mrl
+            | {{currentCustomer.showDiscount}}会员
+          span
+            | 账户余额：{{currentCustomer.balance}}
+        .btn-block
+          .btn.btn-success ng-show='!showRechargeForm' ng-click='rechargeClicked(true)'
+            | 充值
+          .btn.btn-default ng-show='showRechargeForm' ng-click='rechargeClicked(false)'
+            | 取消充值
+      .not-member ng-show='!currentCustomer.isMember'
+        div
+          span 非会员
+        .btn-block
+          .btn.btn-success ng-show='!showRechargeForm' ng-click='rechargeClicked(true)'
+            | 充值成为会员
+          .btn.btn-default ng-show='showRechargeForm' ng-click='rechargeClicked(false)'
+            | 取消充值
+    .clearfix
+
+  = render :partial => 'orders/recharge_form'
+  = render :partial => 'orders/consumption_form'

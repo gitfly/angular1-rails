@@ -1,0 +1,232 @@
+.small-input.form-inputs ng-show="createForm"
+  .form-group.string.required.customer_name.row
+    .inline-label.col-lg-2.prx
+      label
+        |  真实姓名
+        abbr[title="required"]
+          | *
+    .inline-input.col-lg-4.plx
+      input#customer_name.string.form-control[
+        ng-model="customer.name" 
+        placeholder="请输入真实姓名"
+        name="customerName"
+        ng-change="checkCanSubmit(customerForm)"
+        required
+      ]
+      .error-message ng-show='customerForm.customerName.$invalid && customerForm.customerName.$dirty'
+        | 客户姓名不能为空
+
+    .inline-label.col-lg-2.prx
+      label
+        |  电话号码
+        abbr[title="required"]
+          | *
+    .inline-input.col-lg-4.plx
+      input#customer_phone.form-control[
+        ng-model="customer.phone" placeholder="电话号码"
+        name="customerPhone"
+        ng-change="isPhoneExist(customer.phone, customerForm)"
+        ng-pattern='/^\d{11}$/'
+        required
+      ]
+      .error-message ng-show='customerForm.customerPhone.$invalid && customerForm.customerPhone.$dirty'
+        | 请输入有效的客户电话, 客户电话不能为空
+      .error-message ng-show='phoneExist'
+        | 电话号码已被注册，请核实！
+  .form-group.customer_weixin.row
+    .inline-label.col-lg-2.prx
+      label
+        | 微信号码:
+        abbr[title="required"]
+          | *
+    .inline-input.col-md-4.plx
+      input#customer_weixin.form-control[
+        ng-model="customer.weixin" 
+        placeholder="请输入微信号码" 
+        ng-change="isWeiXinExist(customer.weixin,customerForm)"
+        type="text" name="customerWeixin"
+        required
+      ]
+      .error-message ng-show='customerForm.customerWeixin.$invalid && customerForm.customerWeixin.$dirty'
+        | 微信号码不能为空
+      .error-message ng-show='weixinExist'
+        | 微信号码已被注册，请核实！
+    .inline-label.col-lg-2.prx
+      label
+        | 微信昵称:
+    .inline-input.col-lg-4.plx
+      input#customer_weixin_nickname.form-control[
+        ng-model="customer.weixinNickname" 
+        placeholder="请输入微信昵称" 
+        type="text" 
+        name="customer[weixin_nickname]" 
+      ]
+
+  .form-group.row
+    .inline-label.col-lg-2.prx
+      label.string.required
+        | 客服手机:
+        abbr[title="required"]
+          | *
+    .inline-input.col-lg-4.plx
+      input#customer_servicenumber.form-control[
+        placeholder="请输入客服手机编号"
+        ng-model='customer.serviceNumber'
+        ng-change="checkCanSubmit(customerForm)"
+        name="customerServicenumber"
+        required
+      ]
+
+    .inline-label.col-lg-2.prx
+      label
+        |  常用邮箱:
+    .inline-input.col-lg-4.plx
+      input#customer_email.form-control[
+        ng-model="customer.email" 
+        placeholder="常用邮箱" type="email" 
+        name="customerEmail" 
+        ng-change="checkCanSubmit(customerForm)"
+      ]
+
+  .form-group.row
+    .inline-label.col-lg-2.prx
+      label
+        |  客户职业:
+    .inline-input.col-lg-4.plx
+      input#customer_job.form-control[
+        ng-model="customer.job" 
+        placeholder="客户职业" 
+        type="string" name="customer[job]" 
+      ]
+
+    .inline-label.col-lg-2.prx
+      label
+        | 顾客性别:
+    .inline-input.col-lg-4.plx#customer-gender
+        button.btn.btn-default.btn-xs.mrx[
+          ng-class="{'btn-danger': customer.gender==false}" 
+          ng-click="customer.gender=false"
+        ]
+          | 女
+        button.btn.btn-default.btn-xs[
+          ng-class="{'btn-danger': customer.gender==true}" 
+          ng-click="customer.gender=true"
+        ]
+          | 男
+
+  .form-group.row#customer-sensitivity
+    .inline-label.col-lg-2.prx
+      label.string.required
+        | 用户标签:
+    .inline-input.col-lg-4.plx
+      input.form-control[
+        placeholder="请输入用户标签, 逗号分割多个标签"
+        ng-model='customer.tags'
+      ]
+
+    .inline-label.col-lg-2.prx
+      label.string.required
+        | 用户敏感度:
+    .inline-input.col-lg-4.plx
+        button.btn.btn-default.btn-xs.mrs[
+          ng-class="{'btn-danger': customer.sensitivity==0}" 
+          ng-click="customer.sensitivity=0"
+        ]
+          | 中
+        button.btn.btn-default.btn-xs.mrs[
+          ng-class="{'btn-danger': customer.sensitivity==1}"
+          ng-click="customer.sensitivity=1"
+        ]
+          | 高
+        button.btn.btn-default.btn-xs[
+          ng-class="{'btn-danger': customer.sensitivity==2}"
+          ng-click="customer.sensitivity=2"
+        ]
+          | 特
+
+  .clearfix
+
+  .form-group.row
+    .inline-label.col-lg-2.prx
+      label.string.required
+        | 客户来源:
+    .inline-input.col-lg-4.plx
+      input.form-control[
+        placeholder="客户来源"
+        ng-click='showCustomerSource(true)'
+        ng-model='customer.showSource'
+      ]
+      ul.dropdown-menu.row.animate-zoom-out.display-block#customer-source-list[
+        role="menu" aria-labelledby="dropdownMenu1" ng-if='customerSource'
+      ]
+        a.pull-right.pointer.hide-all[
+         ng-click='showCustomerSource(false)'
+        ]
+          strong.fui-cross
+
+        - Customer::Source.each do |v, name|
+          .pull-left.mrl.mbl
+            button.btn.btn-default[
+              ng-click="selectCustomerSource('#{v}', '#{name}', customer)"
+            ]
+              = name
+
+    .inline-label.col-lg-2.prx
+      label
+        | 顾客生日:
+    .inline-input.col-lg-4.plx
+      input#customer_birthday.form-control[
+        ng-model="customer.birthday" 
+        placeholder="请输入顾客生日" 
+        type="text" name="customer[birthday]"
+        date-picker
+      ]
+
+  .referrer ng-if='customer.source == 2'
+    .form-group.row
+      .inline-label.col-lg-2.prx
+        label.string.required[for="referrer_name"]
+          |  推荐人姓名:
+      .inline-input.col-lg-4.plx
+        input#referrer_name.form-control[
+          ng-model="customer.referrer.name" 
+          placeholder="请输入真实姓名"
+          name="referrerName"
+        ]
+        .error-message ng-show='customerForm.referrerName.$invalid && customerForm.referrerName.$dirty'
+          | 推荐人姓名不能为空
+
+      .inline-label.col-lg-2.prx
+        label
+          |  推荐人电话:
+      .inline-input.col-lg-4.plx
+        input#referrer_phone.form-control[
+          ng-model="customer.referrer.phone" 
+          placeholder="推荐人电话号码"
+          name="referrerPhone"
+          ng-pattern='/^\d{11}$/'
+        ]
+        .error-message ng-show='customerForm.referrerPhone.$invalid && customerForm.referrerPhone.$dirty'
+          | 推荐人电话不能为空
+
+    .form-group.row
+      .inline-label.col-lg-2.prx
+        label.email.required[for="referrer_weixin"]
+          | 微信号码:
+      .inline-input.col-lg-4.plx
+        input#referrer_weixin.form-control[
+          ng-model="customer.referrer.weixin" 
+          placeholder="请输入微信号码" type="string"
+          name="referrer[weixin]" 
+        ]
+
+      .inline-label.col-lg-2.prx
+        label
+          | 微信昵称:
+      .inline-input.col-lg-4.plx
+        input#referrer_weixin_nickname.form-control[
+          ng-model="customer.referrer.weixinNickname" 
+          placeholder="请输入微信昵称" type="text" 
+          name="referrer[weixin_nickname]" 
+        ]
+.clearfix

@@ -1,0 +1,31 @@
+.form-group.row.simple-input.order-delivery-address
+  .inline-label.col-sm-3 ng-if='showLabel'
+    label.pull-right for="{{name}}" style='padding-top: 7px;'
+      | {{showLabel||placeholder||'送货地址'}}
+      abbr[title="required"] 
+        | *:
+  .inline-input ng-class="{'col-md-12': !showLabel, 'col-sm-9': showLabel}"
+    .row.address-group
+      select.form-control.select.select-default.select-block[
+        placeholder="请选择省" required
+        ng-options="o as o for o in provinces" ng-model="address.province"
+      ]
+        option value=''
+          | -- 请选择省 --
+
+      select.form-control.select.select-default.select-block[
+        placeholder="请选择市"  ng-model="address.city"
+        ng-options="o as o for o in cities" ng-disabled='cities.length==1'
+      ]
+        option value=''
+          | -- 请选择市 --
+
+      select.form-control.select.select-default.select-block[
+        placeholder="请选择区" ng-model="address.district"
+        ng-options="o as o for o in districts" required name='addressDistrict'
+        ng-disabled='!address.city && cities.length!=1'
+      ]
+        option value=''
+          | -- 请选择区 --
+    /.error-message ng-show='form[deliveryAddressDetails].$invalid && form[addressDistrict].$dirty'
+      | {{errorMsg || (showPlaceholder+"不能为空")}}

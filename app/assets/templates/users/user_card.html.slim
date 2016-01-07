@@ -1,0 +1,19 @@
+- @user = User.first
+.left.pull-left.avatar
+  = user_avatar(@user, size: '120x120')
+.right.pull-left.user-info
+  .name
+    = @user.name
+    = @user.show_gender
+    = link_to content_tag(:span, '', class: 'glyphicon glyphicon-edit'), edit_user_path(@user)
+  .contact
+    .email
+      span.desc 邮箱
+      span.content= @user.email
+    .phone
+      span.desc 电话
+      span.content= @user.phone
+    .weixin
+      span.desc 微信
+      span.content= @user.weixin
+.clearfix

@@ -1,0 +1,221 @@
+div
+  .customer-info
+    .pull-left.avatar
+      img ng-src='{{customer.avatarUrl}}'
+    .pull-left.info
+      .name 
+        | {{customer.name}}
+      .phone
+        span 电话：
+        | {{customer.phone}}
+      .weixin
+        span 微信：
+        | {{customer.weixin}}
+      .weixin_nickname
+        span 微信昵称：
+        | {{customer.weixin_nickname}}
+    .pull-left.account.mll
+      .member-info ng-if='customer.isMember'
+        .info
+          span.mrl
+            | {{customer.showDiscount}}
+            | 会员
+          span
+            | 账户余额：
+            | {{customer.balance}}
+      .not-member ng-if='!customer.isMember'
+        .info
+          span
+            | 非会员
+      .gender
+        span 性别：
+        span 
+          | {{customer.showGender}}
+      .birthday
+        span 生日：
+        span 
+          | {{customer.birthday}}
+      .email
+        span 邮箱：
+        | {{customer.email}}
+    .clearfix
+  .product-info
+    div.block
+      .left.pull-left.line
+        span.title
+          | 订单号：
+        span.content
+          | {{order.number}}
+      .right.pull-left.line
+        span.title
+          | 订单状态：
+        span.content
+          | {{order.showStatus}}
+      .clearfix
+      .left.pull-left.line
+        span.title
+          | 订单类型：
+        span.content.urgent
+          | {{order.showUrgent}}
+      .right.pull-left.line
+      .clearfix
+      .left.pull-left.line
+        .title
+          | 开单日期：
+        .content
+          | {{order.showCreatedAt}}
+      .right.pull-left.line
+        span.title
+          | 完成日期：
+        span.content
+          | {{order.finishDate}}
+      .clearfix
+    .block
+      .line.pull-left.left
+        span.mrh
+          span.title
+            | 物品种类：
+          span.content
+            | {{item.showType}}
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 所属品牌：
+          span.content
+            | {{item.brand}}
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 物品款式：
+          span.content
+            | {{item.style}}
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 物品颜色：
+          span.content
+            | {{item.color}}
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 购买时间：
+          span.content
+            | {{order.buyDate}}
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 物品来源：
+          span.content
+            | {{order.source}}
+      .clearfix
+    .block
+      /.line.pull-left.left
+        span.mrh 
+          span.title
+            | 服务：
+          span.content
+            | {{order.showService}}
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 原价：
+          span.content
+            | {{order.price}} 元
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 折扣：
+          span.content
+            | {{order.discount}}折
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 最终价格：
+          span.content
+            | {{order.realPrice}} 元
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 支付状态：
+          span.content.urgent
+            | {{order.showPaid}}
+      .line.pull-left.right
+        span.mrh
+          a.btn.btn-success.btn-xs ui-sref='payOrder({customerId: customer.id})' target='_blank'
+            | 付款
+      .clearfix
+    .block
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 取货方式：
+          span.content
+            | {{order.showPickupManner}}
+      .right.pull-left.line ng-if='order.pickupManner==2'
+        span.mrh 
+          span.title
+            | 取货时间：
+          span.content
+            | {{order.showPickupDate}}
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 送货方式：
+          span.content
+            | {{order.showDeliveryManner}}
+      .right.pull-left.line ng-if='order.deliveryManner==2'
+        span.mrh 
+          span.title
+            | 送货时间：
+          span.content
+            | {{order.showDeliveryDate}}
+      .clearfix
+      div ng-if='order.deliveryManner==1'
+        .line.pull-left.left
+          span.mrh 
+            span.title
+              | 朋友姓名：
+            span.content
+              | {{friend.name}}
+        .right.pull-left.line
+          span.mrh 
+            span.title
+              | 朋友电话：
+            span.content
+              | {{friend.phone}}
+        .clearfix
+      div  ng-if='order.deliveryManner==2 || order.pickupManner==2'
+        span.mrh 
+          span.title
+            | 顾客地址：
+          span.content
+            | {{address.showAddress}}
+      .clearfix
+    .block
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 附件：
+          span.content
+            | {{order.showAttachment}}
+      .right.pull-left.line
+        span.mrh 
+          span.title
+            | 配件：
+          span.content
+            | {{order.showPart}}
+      .clearfix
+      .line.pull-left.left
+        span.mrh 
+          span.title
+            | 赠品：
+          span.content
+            | {{order.gift}}
+      .clearfix
+    /.block
+      .barcode ng-bind-html="barcode"

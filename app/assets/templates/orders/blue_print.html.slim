@@ -1,0 +1,76 @@
+div
+  a.pull-left.btn.btn-info.btn-xs href='/orders/{{order.id}}/solutionist' target='_blank'
+    | 点击预览方案
+  button.pull-right.btn.btn-success.btn-xs[click-to-select target='.diagnose']
+    | 点击选中方案
+  .clearfix
+
+.diagnose[dblclick-to-select]
+  h6.title.text-center.mbl
+    strong
+      | 【包怎么拯】
+      | {{order.callName}}
+      | {{order.itemTitle}}
+      |怎么拯
+      
+  .photos
+    .photo.pbh ng-repeat='photo in order.beforeTemplate.photos' ng-if='photo.header'
+      a ng-if='photo.header'
+        img ng-src="{{photo.originalUrl}}"
+
+  p
+    | {{order.beforeTemplate.header}}
+
+  p
+    | {{order.callName}}你的{{order.itemTitle}}怎么拯？
+  p 
+    | 交给包大人你就放心吧～
+
+    
+  .photos
+    .photo.pbh ng-repeat='photo in photos' ng-if='photo.used'
+      a
+        img ng-src="{{photo.originalUrl}}"
+
+      .symptoms.mtl ng-repeat='symptom in photo.symptoms track by $index'
+        p ng-bind-html="pageHtml(symptom.desc)"
+  p
+    span
+      | 以上就是针对
+    span
+      | {{order.callName}}{{order.itemTitle}}独家定制的护理方案，请同学过目，
+    span
+      | 如果OK，包拯即将展开拯救行动，尽快让宝贝重回同学手中哦~~
+  .clearfix
+
+  p 
+    | 订单编码
+    strong
+      | {{order.number}}
+    | ，如查询订单状态请报编码联系客服呦！
+
+  p
+    | {{order.beforeTemplate.footer}}
+
+  .photos
+    .photo.pbh ng-repeat='photo in order.beforeTemplate.photos' ng-if='!photo.header'
+      a ng-if='!photo.header'
+        img ng-src="{{photo.originalUrl}}"
+
+  .confirm-block.text-center.mbh
+    button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+      ng-click="confirmStatusFor('blue_print')"
+      ng-class="{disabled: order.nextStatus!='bluePrint'}"
+    ]
+      | 确认方案完成
+    button.btn.btn-danger.animate-zoom-out.btn-lg[
+      ng-click="cancelCurrentStatus()"
+      ng-if="order.showStatus=='blue_print'"
+    ]
+      | 取消确认方案完成
+
+.mth
+  a.pull-left.btn.btn-info.btn-xs href='/orders/{{order.id}}/solutionist' target='_blank'
+    | 点击预览方案
+  button.pull-right.btn.btn-success.btn-xs[click-to-select target='.diagnose']
+    | 点击选中方案

@@ -1,0 +1,31 @@
+app = angular.module("deliveryDateInput", [])
+
+app.directive 'deliveryDateInput', ->
+  restrict: "EA"
+  replace: true
+  require: '^form'
+  scope: {
+    order: '='
+    label: '@'
+  },
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('directives/delivery_date_input.html.slim')%>"
+  link: ($scope, $element, $attrs, formCtrl) ->
+    $scope.form = formCtrl
+    if angular.isUndefined($scope.label)
+      modelData = $scope.simpleFormModel[$scope.modelName]
+      if modelData
+        data = modelData[$scope.attributeName]
+        if data
+          $scope.showLabel = data.label
+      $scope.showLabel ||= $scope.attributeName
+    else
+      $scope.showLabel = $scope.label
+    if $scope.label == 'false'
+      $scope.showLabel = false
+
+  controller: ($scope, $element, Order, SimpleFormModel) ->
+    $scope.simpleFormModel = SimpleFormModel
+    $scope.formatDeliveryDateDetail = ->
+      $scope.order.deliveryDateDetail =
+        "#{$scope.order.deliveryHourStart||''}-#{$scope.order.deliveryHourEnd||''}"

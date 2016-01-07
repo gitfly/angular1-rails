@@ -1,0 +1,72 @@
+@import 'less/flat-ui-pro';
+
+.modal {
+  z-index: 1100 !important;
+  .modal-dialog {
+    .modal-content{
+      border: 2px solid @brand-info;
+      .modal-header {
+        background: @brand-info;
+        color: #fff;
+        button.close {
+          color: #fff;
+          opacity: .7;  
+          margin-top: 0px;
+					margin-right: -10px;
+          &:hover {
+            opacity: 1.0;
+          }
+        }
+      }
+      .modal-body {
+        label, span, input, p {
+          font-size: 13px;
+        }
+        .form-group.small {
+          .select2-container {
+            .select2-choice {
+              width: 80.5%;  
+            }
+          }
+        }  
+      }
+    }
+  }
+}
+
+.modal.ng-hide-remove {
+  animation: bounceInUp .3s;
+}
+
+.modal.ng-leave {
+  animation: slideOutUp .8s;
+}
+.modal.ng-enter {
+  animation: slideInUp .3s;
+}
+
+.modal.ng-hide-add {
+  animation: fadeOutDown .8s;
+}
+.modal {
+  .modal-dialog {
+    .modal-content {
+      border: 0px;
+      .border-bottom-radius(6px);
+      .border-top-radius(6px);
+    }
+    .modal-header {
+      border-top: 2px solid @brand-info;
+      .border-top-radius(6px);
+    }
+  }
+}
+
+.modal-dialog.modal-lg {
+  .modal-content {
+    width: 900px;
+  }  
+}
+.modal-backdrop {
+  z-index: 1100 !important;
+}

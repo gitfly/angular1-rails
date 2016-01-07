@@ -1,0 +1,21 @@
+.bottom-menu
+  .container
+    .row
+      .col-md-2.col-sm-2
+        = image_tag 'logo-brand.png', size: '96x45', style: 'margin-top: -10px;opacity: 0.6'
+      .col-md-8.col-sm-8
+        ul.bottom-menu-list
+          li= link_to '关于我们', '#'
+          li= link_to '联系我们', '#'
+          li= link_to '服务条款', '#'
+          li= link_to '隐私条款', '#'
+          li= link_to '加入我们', '#'
+      .col-md-2.col-sm-2 ng-init="wechat=false"
+        /.bottom-menu-iconic-list
+          /.left.pull-right
+            li ng-mouseover='wechat=true' ng-mouseleave='wechat=false'
+              = link_to image_tag('wechat_icon.png'), '#'
+          /.right.pull-right
+            li= link_to image_tag('weibo_icon.png'), 'http://www.weibo.com/u/3304382227', target: '_blank', title: '点击关注包拯官方微博', class: 'has-tooltip'
+      /.wechat-qrcode.animate-pulse ng-if="wechat"
+        = image_tag 'qrcode.png', size: '150x150'

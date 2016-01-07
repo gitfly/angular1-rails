@@ -1,0 +1,76 @@
+app = angular.module("itemTypeInput", [])
+
+app.directive 'itemTypeInput', () ->
+  restrict: "A"
+  replace: true
+  scope: {
+    item: '='
+  },
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('directives/item_type_input.html.slim')%>"
+  link: ($scope, $element, $attrs) ->
+    $scope.itemTypeShown = false
+
+    $scope.itemTypesZh = [
+      "手提包",
+      "单肩包",
+      "双肩包",
+      "钥匙包",
+      "化妆包",
+      "钱包",
+      "卡包",
+      "肩带",
+      "鞋子",
+      "短靴",
+      "长靴",
+      "皮带",
+      "皮衣",
+      "帽子",
+      "皮草",
+      "手表带",
+      "皮手套",
+      "皮马甲",
+      "行李箱",
+      "手机套",
+      "过膝长靴",
+    ]
+
+    $scope.itemTypesEn = [
+      "HandBag",
+      "SingleShoulderBag",
+      "BackPack",
+      "KeyCase",
+      "CosmeticBag",
+      "Wallet",
+      "CardBag",
+      "ShoulderTape",
+      "Shoes",
+      "AnkleBoot",
+      "ThighBoot",
+      "Belt",
+      "FurClothing",
+      "Hat",
+      "Fur"
+      "WatchBand",
+      "FurGlove",
+      "Pimajia",
+      "SuitCase",
+      "PhoneCase"
+      "KneeBoot",
+    ]
+
+  controller: ($scope, $element) ->
+    $scope.showItemType = (val) ->
+      $scope.itemTypeShown = val
+
+    $scope.itemSelected = (items='', item='') ->
+      unless $.isArray(items)
+        elems = items.split("， ")
+      else
+        elems = items
+      return _.indexOf(elems, item) != -1
+
+    $scope.selectItemType = (item, index) ->
+      item.type = $scope.itemTypesEn[index]
+      item.showType = $scope.itemTypesZh[index]
+      $scope.itemTypeShown = false

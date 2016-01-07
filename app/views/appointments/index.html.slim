@@ -1,0 +1,23 @@
+h1 Listing appointments
+
+table
+  thead
+    tr
+      th Customer
+      th Date
+      th
+      th
+      th
+
+  tbody
+    - @appointments.each do |appointment|
+      tr
+        td = appointment.customer_id
+        td = appointment.date
+        td = link_to 'Show', appointment
+        td = link_to 'Edit', edit_appointment_path(appointment)
+        td = link_to 'Destroy', appointment, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Appointment', new_appointment_path

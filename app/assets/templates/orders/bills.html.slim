@@ -1,0 +1,136 @@
+= stylesheet_link_tag 'printer', media: "all"
+
+.print-block
+  .company-info
+    img ng-src="#{asset_path('bill-header.png')}" style='width: 100%;'
+  .customer-info 
+    .pull-left.info
+      div
+        span 
+          | 用户姓名：
+        strong
+          | {{customer.name}}
+      div
+        span
+          | 开单日期：
+        strong
+          | {{order.showCreatedAt}}
+      div
+        span
+          | 送货方式：
+        strong
+          | {{order.showDeliveryManner}}
+    .pull-left.info.center-block
+      div
+        span 
+          | 用户电话：
+        strong
+          | {{customer.phone}}
+      div
+        span 
+          | 用户类型：
+        strong
+          | {{customer.customerType}}
+      div
+        strong
+          | 地址：
+        span
+          | {{order.deliveryAddress.showAddress}}
+    .pull-left.info
+      div
+        span 
+          | 用户微信：
+        strong
+          | {{customer.weixin}}
+      div
+        span 
+          | 用户余额：
+        strong
+          | {{customer.balance}}元
+    .clearfix
+
+  .order-info
+    div style='border-bottom: 1px solid #333;'
+      p style='font-size: 20px;'
+        strong
+          | 订单详情
+    table.table
+      tr
+        td.text-left
+          | 订单号
+        td.text-center
+          | 物品描述
+        td.text-center 服务项目
+        td.text-center
+          div style='width: 30px;'
+            span 原价
+        td.text-center 活动信息   
+        td.text-right
+          div style='width: 30px;'
+            span 终价
+
+      tr ng-repeat='o in orders' ng-if='o.selected' style='margin-top: 20px;'
+        td.text-left
+          strong
+            | {{o.number}}
+        td.text-center
+          strong.mr5
+            | {{o.showColor}}
+          strong.mr5
+            | {{o.showStyle}}
+          strong.mr5
+            | {{o.showBrand}}
+          strong 
+            | {{o.showItemType}}
+        td.text-center
+          strong
+            | {{o.showService}}
+        td.text-center
+          div style='width: 30px;'
+            strong
+              | {{o.price}}
+
+        td.text-left
+          strong
+            | {{o.activity.name.substring(0, 13)}}
+
+        td.text-right
+          div style='width: 30px;'
+            strong
+              | {{o.finalPrice}}
+
+  .amount-count
+    .pull-left style='width: 50px;'
+      strong
+        | 小计
+    .pull-right.text-right style='width: 100px;'
+      | {{finalTotal | number:2}} 元
+    .clearfix
+  div.amount style='width: 100%;'
+    .pull-left.info
+      div
+        strong
+          | 订单总价：{{originalTotal}}元
+      div
+        strong
+          | 已付款：{{paidTotal}}元
+    .pull-left.info style='padding-left: 60px;'
+      div
+        strong
+          | 折扣优惠：{{finalTotal/originalTotal*100 | number:2}}%
+      div
+        strong
+          | 付款方式：
+          span ng-if='paymentMethods.length'
+            | {{paymentMethods}}
+          span ng-if='!paymentMethods.length'
+            | 无
+    .pull-right.text-right.info
+      div
+        strong
+          | 合计：
+          | {{finalTotal | number:2}}元
+      div
+        strong
+          | 应付款：
+          | {{(finalTotal-paidTotal) | number:2}}元

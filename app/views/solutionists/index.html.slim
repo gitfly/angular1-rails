@@ -1,0 +1,19 @@
+h1 Listing solutionists
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @solutionists.each do |solutionist|
+      tr
+        td = link_to 'Show', solutionist
+        td = link_to 'Edit', edit_solutionist_path(solutionist)
+        td = link_to 'Destroy', solutionist, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Solutionist', new_solutionist_path

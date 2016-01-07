@@ -1,0 +1,25 @@
+.modal#create-new-order ng-show='showCreateForm' ng-if='createFormExists'
+  .modal-dialog
+    .modal-content ng-controller='CreateOrder'
+      .modal-header
+        button.rotate_90def.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='changeCreateFormStatus(false)']
+        .modal-title.text-center
+          | 开单
+      .modal-body
+        = render 'orders/form', order: Order.new
+        div.step-block ng-show='newOrderStep==3'
+          = render 'orders/consumption'
+          
+
+        div.step-block ng-show='newOrderStep==4'
+          h5 冲值
+
+      .modal-footer
+        a.prev-step.step.btn.btn-default.btn-lg.pull-left.btn-wide ng-click='goToPrevStep()'
+          | 上一步
+        a.next-step.step.btn.btn-info.btn-lg.pull-right.btn-wide ng-click='goToNextStep()' ng-disabled='newOrderStep>=3'
+          | 下一步
+        /a.btn.btn-default.btn-wide ng-click='changeCreateFormStatus(false)'
+          | 取消
+        /a.btn.btn-primary.btn-wide
+          | 提交

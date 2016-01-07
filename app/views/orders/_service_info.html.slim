@@ -1,0 +1,9 @@
+= simple_form_for(Customer.new, html: { 'ng-submit': 'submitCustomerInfo()' }, url: '') do |f|
+  = render 'shares/select', label: "服务类型", placeholder: "请选择服务类型", options: Service.types, model: 'currentOrder.serviceIds', name: 'order[service_id]', multiple: true, required: true
+  = render 'shares/select', label: "不良效果", placeholder: "不良效果", options: Settings.order.badness, model: 'currentOrder.badness', name: 'order[badness]', multiple: true
+  = render 'shares/select', label: "瑕疵", placeholder: "瑕疵", options: Settings.order.flaw, model: 'currentOrder.flaw', name: 'order[flaw]', multiple: true
+  = render 'shares/select', label: "修复部位", placeholder: "修复部位", options: Settings.order.maintain_parts, model: 'currentOrder.maintainPart', name: 'order[maintain_part]', multiple: true
+  = render 'shares/select', label: "附件", placeholder: "附件", options: Settings.order.attachments, model: 'currentOrder.attachment', name: 'order[attachment]', multiple: true
+
+.form-actions.text-center ng-show='newOrderStep==2'
+  = f.button :submit, class: 'btn btn-success btn-lg', value: "保存订单", 'ng-disabled': 'orderCreatedSuccessfully'

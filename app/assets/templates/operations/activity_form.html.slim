@@ -1,0 +1,286 @@
+form.activity name='aform'
+  .form-inputs.row
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 活动名称
+      .inline-input.pull-left
+        input.form-control[
+          ng-model="activity.name" 
+          placeholder="请输入活动名称"
+          name='aname'
+          required
+        ]
+        .error-message ng-show='aform.aname.$invalid && aform.aname.$dirty'
+          | 活动名称不能为空
+      .clearfix
+
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 活动类型
+      .inline-input.pull-left
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+          placeholder="请选择活动类型" ng-model="activity.atype"
+          ui-select2
+          name='atype'
+          ng-change="atypeChange(activity)"
+        ]
+          option[value=""]
+          option[value=0]
+            | 普通活动
+          option[value=1]
+            | 团购
+          option[value=2]
+            | 优惠券
+          option[value=3]
+            | 定额团购
+        .error-message ng-show='aform.atype.$invalid && aform.atype.$dirty'
+          | 折扣方式不能为空
+      .clearfix
+
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 活动物品
+      .inline-input.pull-left
+        select.multiselect.multiselect-default.form-control.select.select-default.select-block.select2-offscreen[
+          placeholder="选择该活动针对的物品类型" ng-model="activity.itemType"
+          name='itemType'
+          multiple
+          ui-select2
+        ]
+          option ng-repeat='type in itemTypesKeys' value='{{itemTypes[type]}}'
+            | {{type}}
+        .error-message ng-show='aform.itemType.$invalid && aform.itemType.$dirty'
+          | 活动类型不能为空
+      .clearfix
+
+    .form-group.string.required.inputs
+      .inline-label.pull-left
+        label.string.required[for="start_date"]
+          | 开始日期
+      .inline-input.pull-left
+        .form-group
+          .input-group
+            span.input-group-btn
+              button.btn[type="button"]
+                span.fui-calendar
+            input#start_date.string.required.form-control.adate[
+              ng-model="activity.startDate" 
+              placeholder="请输入活动结束日期" 
+              type="text" name="startDate"
+              required date-picker
+            ]
+          /.error-message ng-show='aform.startDate.$invalid && aform.startDate.$dirty'
+            | 活动结束日期不能为空
+
+      .clearfix
+
+    .form-group.string.required.inputs
+      .inline-label.pull-left
+        label.string.required[for="end_date"]
+          | 结束日期
+      .inline-input.pull-left
+        .form-group
+          .input-group
+            span.input-group-btn
+              button.btn[type="button"]
+                span.fui-calendar
+            input#end_date.string.required.form-control.adate[
+              ng-model="activity.endDate" 
+              placeholder="请输入活动结束日期" 
+              type="text" name="endDate"
+              required date-picker
+            ]
+          /.error-message ng-show='aform.endDate.$invalid && aform.endDate.$dirty'
+            | 活动开始时间不能为空
+
+      .clearfix
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 消费累积
+      .inline-input.pull-left
+        input.form-control[
+          ng-model="activity.consumeAddUp"
+          placeholder="消费累积个数"
+          name='consume_add_up'
+          type='number' min="1"
+          required
+        ]
+        .error-message ng-show='aform.consume_add_up.$invalid && aform.consume_add_up.$dirty'
+          | 消费累积数额必须是大于1的整数
+      .clearfix
+
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 折扣方式
+      .inline-input.pull-left
+        select.form-control.select.select-default.select-block.select2-offscreen[
+          placeholder="请选择该活动的折扣方式" ng-model="activity.discountManner"
+          ui-select2
+          name='discountManner'
+        ]
+          option[value=""]
+          option[value=0]
+            | 打折
+          option[value=1]
+            | 减价
+        .error-message ng-show='aform.discountManner.$invalid && aform.discountManner.$dirty'
+          | 折扣方式不能为空
+      .clearfix
+
+    .form-group.inputs
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 优惠叠加
+      .inline-input.pull-left
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+          placeholder="" ng-model="activity.addup"
+          ui-select2
+          name='addup'
+        ]
+          option[value=""]
+          option[value='0']
+            | 不与其他折扣叠加
+          option[value='1']
+            | 可与其他折扣叠加
+        .error-message ng-show='aform.addup.$invalid && aform.addup.$dirty'
+          | 折扣方式不能为空
+      .clearfix
+
+    div ng-if='activity.atype==0'
+      .form-group ng-if='activity.discountManner==0'
+        .inline-label.pull-left
+          label
+            abbr[title="required"]
+              | *
+            | 折扣大小
+        .inline-input.pull-left
+          input.form-control[
+            ng-model="activity.amount"
+            placeholder="请输入折扣比例"
+            name='amount'
+            type='number' min="10" max="100"
+            required
+          ]
+          .error-message ng-show='aform.amount.$invalid && aform.amount.$dirty'
+            | 折扣大小必须是10到100之间的数字
+        .clearfix
+      .form-group ng-if='activity.discountManner==1'
+        .inline-label.pull-left
+          label
+            abbr[title="required"]
+              | *
+            | 减免金额
+        .inline-input.pull-left
+          input.form-control[
+            ng-model="activity.amount"
+            placeholder="请输入减免金额"
+            name='amount'
+            type='number' min="0"
+            required
+          ]
+          .error-message ng-show='aform.amount.$invalid && aform.amount.$dirty'
+            | 减免金额必须是数字
+        .clearfix
+
+
+    div
+      .form-group ng-if='activity.atype==1'
+        .inline-label.pull-left
+          label
+            abbr[title="required"]
+              | *
+            | 原价
+        .inline-input.pull-left
+          input.form-control[
+            ng-model="activity.originalPrice"
+            placeholder="原价"
+            name='originalPrice'
+            type='number' min="1" max="10000"
+            required
+          ]
+          .error-message ng-show='aform.originalPrice.$invalid && aform.originalPrice.$dirty'
+            | 原价必须是1到10000之间的数字
+        .clearfix
+      .form-group ng-if='activity.atype==1 || activity.atype==3'
+        .inline-label.pull-left
+          label
+            abbr[title="required"]
+              | *
+            | 折扣价
+        .inline-input.pull-left
+          input.form-control[
+            ng-model="activity.amount"
+            placeholder="请输入折扣价格"
+            name='amount'
+            type='number' min="1" max="100000"
+            required
+          ]
+          .error-message ng-show='aform.amount.$invalid && aform.amount.$dirty'
+            | 折扣价格必须是1到100000之间的数字
+        .clearfix
+      .form-group
+        .inline-label.pull-left
+          label
+            abbr[title="required"]
+            | 实际收入
+        .inline-input.pull-left
+          input.form-control[
+            ng-model="activity.realIncome"
+            placeholder="请输入实际收入"
+            name='realIncome'
+            type='number'
+          ]
+          .error-message ng-show='aform.realIncome.$invalid && aform.realIncome.$dirty'
+            | 实际收入必须是10到100之间的数字
+        .clearfix
+
+    .form-group
+      .inline-label.pull-left
+        label
+          abbr[title="required"]
+            | *
+          | 活动内容
+      .inline-input.pull-left
+        textarea.form-control[
+          ng-model="activity.content"
+          placeholder="请输入活动内容"
+          name='content'
+          type="text"
+          required
+        ]
+        .error-message ng-show='aform.content.$invalid && aform.content.$dirty'
+          | 活动内容不能为空
+      .clearfix
+
+    .form-actions.mth.row
+      .col-md-3
+      .col-md-6
+        input.btn.btn-default.btn.btn-info[
+          type="submit" name="commit" value="创建新的活动" 
+          ng-click="createNewActivity(activity)" 
+          ng-disabled='aform.$invalid || !acFormCanSubmit'
+          ng-if='!activity.id'
+        ]
+        input.btn.btn-default.btn.btn-info[
+          type="submit" name="commit" value="更新活动信息" 
+          ng-click="updateActivity(activity)" 
+          ng-disabled='aform.$invalid || !acFormCanSubmit'
+          ng-if='activity.id'
+        ]

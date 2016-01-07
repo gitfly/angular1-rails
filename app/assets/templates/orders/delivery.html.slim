@@ -1,0 +1,121 @@
+.modal.delivery-info ng-show='showDelivery'
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.rotate_90def.close.fui-cross[aria-hidden="true" data-dismiss="modal" ng-click="showDeliveryModal(false)" type="button"]
+        .modal-title.text-center
+          | 填写代取人信息
+      .modal-body
+        .by_friend ng-if="currentOrder.deliveryManner==1"
+          form#new_customer.simple_form.new_customer.ng-pristine.ng-valid[ng-submit="createNewCustomer()" novalidate="novalidate" action="" accept-charset="UTF-8" method="post"]
+            input[name="utf8" type="hidden" value="✓"]
+            input[type="hidden" name="authenticity_token" value="r9YvvOxs8r6mFbc3Kpzm9ezqW8obgfJqQOqQEMtwhLPE/bV2v2eKY0ZWGNm1F7TU5tShKkrBeN+0U0K4MsgFQw=="]
+            .form-inputs
+
+              .form-group.string.required.customer_name
+                .inline-label.col-sm-2
+                  label.string.required[for="customer_name"]
+                    abbr[title="required"]
+                      | *
+                    |  真实姓名
+                .col-sm-10.inline-input
+                  input#customer_name.string.required.form-control.form-control.ng-pristine.ng-valid[ng-model="friend.name"  maxlength="255" placeholder="请输入真实姓名" type="tel" size="255" value="" name="customer[name]"]
+
+
+
+              .form-group.tel.required.customer_phone
+                .inline-label.col-sm-2
+                  label.tel.required[for="customer_phone"]
+                    abbr[title="required"]
+                      | *
+                    |  电话号码
+                .col-sm-10.inline-input
+                  input#customer_phone.string.tel.required.form-control.form-control.ng-pristine.ng-valid[ng-model="friend.phone"  maxlength="255" placeholder="电话号码" type="tel" size="255" value="" name="customer[phone]"]
+
+
+
+              /.form-group.email.required.customer_email
+                .inline-label.col-sm-2
+                  label.email.required[for="customer_email"]
+                    abbr[title="required"]
+                      | *
+                    |  常用邮箱
+                .col-sm-10.inline-input
+                  input#customer_email.string.email.required.form-control.form-control.ng-pristine.ng-valid.ng-valid-email[ng-model="friend.email" maxlength="255" placeholder="常用邮箱" type="email" size="255" value="" name="customer[email]" ]
+
+
+
+              /.form-group.string.required.customer_weixin
+                .inline-label.col-sm-2
+                  label.string.required[for="customer_weixin"]
+                    abbr[title="required"]
+                      | *
+                    |  微信号码
+                .col-sm-10.inline-input
+                  input#customer_weixin.string.required.form-control.ng-pristine.ng-valid[ng-model="friend.weixin" maxlength="255" placeholder="微信号码" size="255" type="text" value="" name="customer[weixin]" ]
+
+        .fetch-time ng-if="currentOrder.deliveryManner>=2"
+          ul.nav.nav-tabs.nav-append-content
+            li.active[click-active  ng-click='showDetailTime(true)']
+              a
+                | 无法确定具体时间
+            li[click-active  ng-click='showDetailTime(false)']
+              a
+                | 具体的预约时间
+          .tab-content
+            .tab-pane ng-show='!detailTime'
+              .block.pull-left
+                .form-group.pull-left
+                  input.form-control.pull-left[ng-model="deliveryTime.month"]
+                  label.pull-left
+                    | 月
+                .form-group.pull-left
+                  input.pull-left.form-control[ng-model="deliveryTime.day"]
+                  label.pull-left
+                    | 日
+              .block.pull-left
+                .form-group.pull-left
+                  input.form-control.pull-left[ng-model="deliveryTime.from"]
+                  label.pull-left
+                    | 点到
+                .form-group.pull-left
+                  input.pull-left.form-control[ng-model="deliveryTime.to"]
+                  label.pull-left
+                    | 点
+              .clearfix
+            .tab-pane ng-show='detailTime'
+              .block
+                label class="checkbox" for="checkbox5"
+                  input type="checkbox" value="" id="checkbox5" data-toggle="checkbox" class="custom-checkbox" ng-model='deliveryTime.workday'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 工作日
+
+                label class="checkbox" for="checkbox6"
+                  input type="checkbox" value="" id="checkbox6" data-toggle="checkbox" class="custom-checkbox" ng-model='deliveryTime.weekend'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 周末
+              .block
+                label class="checkbox" for="checkbox7"
+                  input type="checkbox" value="" id="checkbox7" data-toggle="checkbox" class="custom-checkbox" ng-model='deliveryTime.morning'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 上午
+
+                label class="checkbox" for="checkbox8"
+                  input type="checkbox" value="" id="checkbox8" data-toggle="checkbox" class="custom-checkbox" ng-model='deliveryTime.afternoon'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 下午
+
+              .clearfix
+                  
+      .modal-footer
+        a.btn.btn-default.btn-wide[ng-click="showDeliveryModal(false)"]
+          | 取消
+        input.btn.btn-default.btn.btn-success.btn-wide[type="submit" name="commit" value="确认"  ng-click='submitDeliveryInfo(deliveryTime)']

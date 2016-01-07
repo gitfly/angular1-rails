@@ -1,0 +1,19 @@
+.custom-pagination.orders-list
+  ul
+    li.first ng-click='gotoFirstPage()'
+      span
+        | 第一页
+    li.previous ng-click="previous()"
+      span.fui-arrow-left
+    li[
+      ng-repeat='i in getPageArray() track by $index'
+      ng-class="{active: $index+1==(currentPage-pageOffset*tagsNumber)}"
+      ng-click="gotoPage($index+1)"
+    ]
+      span
+        | {{$index+1+pageOffset*tagsNumber}}
+    li.next ng-click="next()"
+      span.fui-arrow-right
+    li.last ng-click='gotoLastPage()'
+      span
+        | 最后一页

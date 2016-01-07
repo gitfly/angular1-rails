@@ -1,0 +1,139 @@
+app = angular.module("customSelect", [])
+
+app.directive 'customSelect', ($compile, $parse) ->
+  restrict: "EA"
+  replace: true
+  require: '^form'
+  scope: {
+    name: '@'
+    datas: '&'
+    label: '@'
+    price: '='
+    errorMsg: '@'
+    queryKey: '@'
+    attribute: '='
+    optionsUrl: '@'
+    queryParams: '='
+    placeholder: '@'
+  },
+
+  templateUrl: (elem, attrs) ->
+    if angular.isUndefined(attrs.textarea)
+      "<%= asset_path('directives/custom_select.html.slim')%>"
+    else
+      "<%= asset_path('directives/custom_multiple_select.html.slim')%>"
+
+  link: ($scope, $element, $attrs, formCtrl) ->
+    $scope.form = formCtrl
+    $scope.multiple = $attrs.hasOwnProperty('multiple')
+    $scope.required = !angular.isUndefined($attrs.required)
+    $scope.textarea = !angular.isUndefined($attrs.textarea)
+    $scope.modelName = $attrs.attribute.split('.')[0]
+    $scope.attributeName = $attrs.attribute.split('.')[1]
+    # $scope.name = $scope.modelName + $scope.attributeName
+
+    if angular.isUndefined($scope.label)
+      modelData = $scope.simpleFormModel[$scope.modelName]
+      if modelData
+        data = modelData[$scope.attributeName]
+        if data
+          $scope.showLabel = data.label
+      $scope.showLabel ||= $scope.attributeName
+    else
+      $scope.showLabel = $scope.label
+
+    if $scope.label == 'false'
+      $scope.showLabel = false
+
+    $scope.showPlaceholder = $scope.placeholder || "请填写#{$scope.showLabel}"
+
+  controller: ($scope, $element, GlobalObject, listFilter, SimpleFormModel) ->
+    $scope.separator = '， '
+    $scope.simpleFormModel = SimpleFormModel
+
+    if $scope.optionsUrl
+      $scope.options = []
+    else
+      $scope.options = $scope.datas()
+
+    selectMultipleOption = (option, price) ->
+      if $scope.isSelected($scope.attribute, option)
+        $scope.attribute = _.filter(
+          $scope.attribute.split($scope.separator), (o) ->
+            o != option
+        ).join($scope.separator)
+        $scope.price -= parseInt(price||0)
+      else
+        $scope.price += parseInt(price||0)
+        if $scope.attribute && $scope.attribute.length
+          $scope.attribute = "#{$scope.attribute}#{$scope.separator}#{option}"
+        else
+          $scope.attribute = option
+
+    $scope.hideAll = ->
+      angular.forEach($scope.form, (value, key) ->
+        if value.hasOwnProperty('$modelValue')
+          $scope.form[key].showOptions = false
+      )
+
+    $scope.queryStrChange = (str) ->
+      $scope.getOptions($scope.attribute)
+      $scope.form[$scope.name].showOptions = true
+
+    $scope.showOptionsChangeTo = (val) ->
+      $scope.hideAll()
+      $scope.form[$scope.name].showOptions = val
+      if val
+        $scope.getOptions('')
+
+    $scope.isSelected = (items='', item='') ->
+      item = item.split('-')[0]
+      unless angular.isArray(items)
+        elems = items.split("， ")
+      else
+        elems = items
+      return _.indexOf(elems, item) != -1
+
+    $scope.inputKeyPress = (event) ->
+      if event.charCode == 13
+        $scope.showOptionsChangeTo(false)
+        if $scope.options[0]
+          $scope.attribute = $scope.options[0]
+      return false
+
+    $scope.selectOption = (option) ->
+      price = option.split('-')[1]
+      option = option.split('-')[0]
+      if $scope.multiple
+        selectMultipleOption(option, price)
+      else
+        $scope.attribute = option
+        $scope.showOptionsChangeTo(false)
+
+    $scope.inputFocused = ->
+      $scope.$emit('inputFocused')
+
+    $scope.inputBlured = ->
+      $scope.$emit('inputBlured')
+
+    $scope.getOptions = (queryStr=$scope.queryStr) ->
+      params = {}
+      params[$scope.queryKey] = queryStr
+
+      if $scope.optionsUrl
+        GlobalObject.$get(
+          "/api/v1/#{$scope.optionsUrl}", params
+        ).then ((results) ->
+          $scope.options = results
+        ), (error) ->
+          console.log error
+      # else
+      #   datas = listFilter($scope.datas(), queryStr)
+      #   $scope.options = if datas.length then datas else $scope.datas()
+
+    $scope.$watch('attribute', (newValue, oldValue) ->
+      if $scope.multiple && newValue
+        $scope.queryStr = _.last(newValue.split($scope.separator))
+      else
+        $scope.queryStr = newValue
+    , true)

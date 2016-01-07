@@ -1,0 +1,82 @@
+.diagnose
+  .pull-left.left-content.pbh
+    form[name='oForm' novalidate] 
+      .order-basic-info
+        .show-basic-info
+          .bs-callout.bs-callout-info
+            .title.pbl
+              span.mrs.square
+                | ◼︎
+            .row.pbs ng-if='!editBasicInfo'
+              p.col-lg-3
+                span.gray
+                  | 种类：
+                | {{item.style}}-{{item.showType}}
+              p.col-lg-4
+                span.gray
+                  | 品牌：
+                | {{item.brand}}
+              p.col-lg-2
+                span.gray
+                  | 型号：
+                | {{item.version}}
+              p.col-lg-3
+                span.gray
+                  | 颜色：
+                | {{item.color}}
+              p.col-lg-3
+                span.gray
+                  | 配件：
+                | {{currentOrder.parts}}
+              p.col-lg-4
+                span.gray
+                  | 附件：
+                | {{currentOrder.attachment}}
+              .col-lg-2
+                span.gray
+                  | 是否加急：
+                | {{currentOrder.showUrgent}}
+          .bs-callout.bs-callout-info ng-if='currentOrder.serviceName'
+            .title.pbs
+              span.mrs.square
+                | ◼︎
+              | 服务项：
+            .col-lg-12
+              pre
+                | {{currentOrder.serviceName}}
+            .clearfix
+          .bs-callout.bs-callout-info ng-if='currentOrder.request'
+            .title.pbs
+              span.mrs.square
+                | ◼︎
+              | 用户需求：
+            .col-lg-12
+              pre
+                | {{currentOrder.request}}
+            .clearfix
+          .bs-callout.bs-callout-info ng-if='currentOrder.diagnose'
+            .title.pbs
+              span.mrs.square
+                | ◼︎
+              | 顾问诊断：
+            .col-lg-12
+              pre
+                | {{currentOrder.request}}
+            .clearfix
+          .clearfix
+
+      .diagnose-update-info ng-class="{'edit-info': editBasicInfo, 'pth': !editBasicInfo}"
+        simple-input.col-md-12.narrow-label[
+          attribute='currentOrder.diagnose' label="意见反馈"
+          textarea name='orderDiagnose' required
+        ]
+      .col-md-12.text-center
+        button.btn.btn-success.btn-lg[
+          ng-disabled='oForm.$invalid'
+          ng-click='saveOrderInfo(currentOrder)'
+        ]
+          span.fui-check.mrs
+          | 提交意见反馈
+
+  .pull-right.right-bar.full-height
+    div ng-include="'#{asset_path('orders/customer_orders.html.slim')}'"

@@ -1,0 +1,33 @@
+.main-content
+  #sidebar
+    ul.nav.nav-list.nav-list-vivid
+      li.active
+        = link_to user_path(current_user)
+          div
+            span.fui-user.glyph
+            span.text 普通顾客
+      li
+        = link_to '#'
+          div
+            span.fui-heart.glyph
+            span.text VIP会员
+      /li
+        = link_to '#'
+          div
+            span.fui-photo.glyph
+            span.text 上传头像
+      /li
+        = link_to edit_user_password_path
+          div
+            span.fui-lock.glyph
+            span.text 修改密码
+      /li
+        = link_to '#'
+          div
+            span.fui-mail.glyph
+            span.text 邮件通知
+  #content
+
+
+
+  #sidebar-resizer resizer="vertical" resizer-width="2" resizer-left="#sidebar" resizer-right="#content" resizer-max="400"

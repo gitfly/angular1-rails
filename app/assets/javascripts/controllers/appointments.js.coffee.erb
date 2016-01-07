@@ -1,0 +1,41 @@
+//= require_tree ./appointments
+
+app = window.app
+
+app.controller "appointmentsCtrl", (
+  $scope, Order, Appointment, $stateParams, dialogs
+) ->
+
+  $scope.appointments = []
+  $scope.params = angular.extend({}, $stateParams)
+
+  $scope.cancel = (appointment, index) ->
+    dialogs.create(
+      "<%= asset_path("appointments/cancel.html.slim")%>",
+      'cancelAppointment',{appointment: appointment}, { size: 'md' }
+    ).result.then ((appointment) ->
+      $scope.appointments.splice(index,1)
+      $scope.alertWith("预约取消成功")
+    )
+
+  $scope.edit = (appointment, index) ->
+    console.log index
+    dialogs.create(
+      "<%= asset_path("appointments/edit.html.slim")%>",
+      'editAppointment',{appointment: appointment}, { size: 'md' }
+    ).result.then ((appo) ->
+      $scope.appointments[index] = appo
+      $scope.alertWith("预约信息保存成功")
+    )
+
+  getAppointment = ->
+    Appointment.$get(
+      "/api/v1/appointments/list", $scope.params
+    ).then ((results) ->
+      $scope.appointments = results
+    ), (error) ->
+      console.log error
+
+  $scope.$watch('params', (newValue, oldValue) ->
+    getAppointment()
+  , true)

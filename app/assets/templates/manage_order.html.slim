@@ -1,0 +1,10 @@
+#manage-order.row
+  .todo.col-md-2[
+    ng-include="'#{asset_path('orders/manage_todo.html.slim')}'"   
+  ]
+  .no-background-color.edit-block.col-md-5.border-block.well[
+    ng-include="'#{asset_path('orders/manage_edit_block.html.slim')}'"   
+  ]
+  .col-md-5.order-info[
+    ng-include="'#{asset_path('orders/manage_order_info.html.slim')}'"   
+  ]

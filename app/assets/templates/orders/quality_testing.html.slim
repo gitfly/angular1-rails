@@ -1,0 +1,72 @@
+.diagnose.quality_testing
+  .title.text-center.mbl
+    strong
+      | 请严格按照修复方案认真进行质检
+
+  .info
+    p
+      strong
+        | 顾客需求：
+      span
+        | {{order.request}}
+    p.mtl
+      strong
+        | 诊断信息：
+      span
+        | {{order.diagnose}}
+  .technologies.mtl
+    .technology.row.pts.pbs ng-repeat='tech in order.technologies'
+      .name.col-md-4
+        | {{tech.showTtype}}
+      .end-time.col-md-4
+        | {{tech.duration}} 分钟
+      .handle.col-md-4
+        span
+          | {{tech.qualityTesting.qualified ? '合格' : '不合格'}}
+        span
+
+      .col-lg-12.pts
+        | {{tech.remark}}
+  table.table.table-condensed.technologies.mtl.row.table-hover
+    tr
+      td
+        | 工艺
+      td
+        | 完成时间
+      td
+        | 工艺备注
+      td
+        a
+          | 操作
+    tr.technology ng-repeat='tech in order.technologies'
+      td
+        div style='width: 60px;'
+          | {{tech.showTtype}}
+      td
+        | {{tech.showEndTime}}
+      td
+        | {{tech.remark | limitTo: 10}}...
+      td
+        | 合格
+
+  .photos.pth
+    .photo.pbh ng-repeat='photo in photos'
+      a
+        img ng-src="{{photo.originalUrl}}"
+
+      .symptoms.mtl ng-repeat='symptom in photo.symptoms track by $index'
+        p ng-bind-html="pageHtml(symptom.desc)"
+
+  .confirm-block.text-center.mbh
+    h6.mbh
+       | 点击下面的按钮确认质检完成
+    button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+      ng-click="confirmStatusFor('quality_testing')"
+      ng-class="{disabled: order.nextStatus!='qualityTesting'}"
+    ]
+      | 确认质检完成
+    button.btn.btn-danger.animate-zoom-out.btn-lg[
+      ng-click="cancelCurrentStatus()"
+      ng-if="order.showStatus=='quality_testing'"
+    ]
+      | 取消确认质检完成

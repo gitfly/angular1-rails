@@ -1,0 +1,84 @@
+//= require_tree ./users
+
+app = window.app
+
+app.controller 'UsersCtrl', (
+  $scope,
+  $http,
+  $state,
+  dialogs,
+  User
+) ->
+  
+  $scope.getUsers = () ->
+    User.query({}).then ((results) ->
+      $scope.users = results.users
+      $scope.roles = results.roles
+    )
+  $scope.getUsers()
+  $scope.showUserDetails = false
+  $scope.cuUser = {}
+  $scope.showUserToggle = (editUser) ->
+    User.get(editUser.id).then (results) ->
+      $scope.cuUser = results
+      $scope.cuUser.email = results.email.split("@")[0]
+    if editUser.id == $scope.cuUser.id
+      $scope.showUserDetails = !$scope.showUserDetails
+    else
+      $scope.showUserDetails = true
+    
+
+  $scope.hideUserDetails = () ->
+    $scope.showUserDetails = false
+    $scope.cuUser = {}
+
+  $scope.saveUser = () ->
+    emailHeader = $scope.cuUser.email
+    $scope.cuUser.email =  $scope.cuUser.email + "@baozheng.cc"
+    new User($scope.cuUser).update().then ((result) ->
+      $scope.alertWith("员工信息更新成功!")
+      $scope.getUsers()
+      $scope.hideUserDetails()
+    ), (error) ->
+      $scope.cuUser.email = emailHeader
+      console.log error.data
+    return
+
+  $scope.user = {}
+  $scope.createUser = (user) ->
+    emailHeader = user.email
+    user.email = user.email + "@baozheng.cc"
+    user.password_confirmation = user.password
+    new User(user).create().then ((results) ->
+      $scope.alertWith('员工新建成功！')
+      $scope.showCreate(false)
+      $scope.getUsers()
+    ), (error) ->
+      user.email = emailHeader
+      console.log(error)
+
+  $scope.showCreateUser = false  
+  $scope.showCreate = (val) ->
+    $scope.showCreateUser = val
+    $scope.hideUserDetails()
+    $scope.user = {} 
+
+
+  $scope.deleteUser = (user, index) ->
+    dialogs.confirm('【删除员工】', "确定删除此员工么！",{size: 'md'}).result.then (btn) ->
+      new User(user).remove().then ((result) ->
+        $scope.users.splice(index, 1)
+        $scope.alertWith("员工#{user.name}删除成功")
+      ), (error) ->
+        console.log error.data
+      return
+  $scope.checkLength = (val) ->
+    if val && val.length < 8
+      $scope.showPasswordLengthErr = true
+    else
+      $scope.showPasswordLengthErr = false
+    
+      
+
+
+

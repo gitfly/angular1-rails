@@ -1,0 +1,22 @@
+div
+  .pull-left#order-status-bar ng-class="{'show-order': orderDetails}" ng-if='leftbarItems.length'
+    ul.nav.nav-list.nav-list-vivid ng-repeat="items in leftbarItems track by $index" ng-init="i = $index"
+      li[
+        ui-sref="orders({'{{items.type}}': '{{item}}', page: 1, offset: 0})"
+        ng-class="{'active': params[items.type]==item}"
+        class="{{items.type}}"
+        ng-repeat="item in items.keys track by $index"
+      ]
+        a
+          | {{item}}{{items.text||"订单"}}
+          span.mls
+            strong
+              | ({{items.values[item]}})
+      li.divider ng-if="i < leftbarItems.length-1"
+
+  .pull-left.order-list
+    div ng-include="'#{asset_path('orders/search_block.html.slim')}'"
+    div ng-include="'#{asset_path('orders/list.html.slim')}'"
+    div ng-include="'#{asset_path('orders/delete_order_dialog.html.slim')}'"
+    #edit-order.fade-in-out ng-show='orderDetails'
+      .full-height ui-view=''

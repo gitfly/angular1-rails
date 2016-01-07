@@ -1,0 +1,6 @@
+host: baozheng.com:3000
+app_id: 90b7607a6459635139057d7a7980b3fabd15652409cfe5d343cd0d28f0bbc76d
+app_secret: e2480025ba66382fe493dd9e548bb9d4ae161f892e579d29d9b68f58593ec6b0
+
+wechat:
+  welcome_url: http://dwz.cn/1db8hA

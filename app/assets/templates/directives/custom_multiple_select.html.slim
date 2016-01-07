@@ -1,0 +1,38 @@
+.form-group.simple-input.custom-select
+  .inline-label.col-sm-3 ng-if='showLabel'
+    label.pull-right for="{{name}}" style='padding-top: 7px;'
+      | {{showLabel||placeholder}}
+      abbr[title="required" ng-if='required'] 
+        | *:
+  .inline-input ng-class="{'col-md-12': !showLabel, 'col-sm-9': showLabel}"
+    textarea.form-control[
+      ng-click='showOptionsChangeTo(!form[name].showOptions)'
+      ng-change='queryStrChange(attribute)' ng-model='attribute' 
+      ng-focus='inputFocused()' placeholder="{{showPlaceholder}}"
+      ng-class="{'as-textarea': textarea, 'as-input': !textarea}"
+      name='{{name}}' ng-required='required' ng-blur='inputBlured()'
+      ng-keypress='inputKeyPress($event)' class='{{modelName}}-{{attributeName}}'
+    ]
+    .error-message ng-show='form[name].$invalid && form[name].$dirty'
+      | {{errorMsg || (showPlaceholder+"不能为空")}}
+
+    ul.dropdown-menu.row.animate-zoom-out.display-block.pll.input-selection.item-brands[
+      role="menu" aria-labelledby="dropdownMenu1" ng-if='form[name].showOptions'
+    ]
+      a.pull-right.pointer.hide-all[
+       ng-click='showOptionsChangeTo(false)'
+      ]
+        strong.fui-cross
+      div.text-center.ptl.mbh ng-if='!options.length'
+        strong.mbh
+          | 搜索结果为空，请手动填写, 最后按回车结束输入
+
+      div
+        .pull-left.pbl.mrs ng-repeat='option in options' ng-if='option.length'
+          button.btn.btn-default[
+            ng-click="selectOption(option)" 
+            ng-dblclick="selectOption(option)"
+            ng-class="{'btn-success': isSelected(attribute, option)}"
+          ]
+            | {{option}}
+        .clearfix

@@ -1,0 +1,6 @@
+.autocomplete-input
+  input.form-control placeholder="搜索" type="search" ng-change='inputValueChange(queryStr)' ng-model='queryStr'
+  ul.dropdown-menu.search-dropdown [role="menu" ng-show='showSearchOptions'] 
+    li ng-repeat='object in results'
+      a ng-click='clickSearchOption()'
+        | {{object.name}}

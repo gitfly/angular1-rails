@@ -1,0 +1,21 @@
+.modal.order-settlement ng-if='showCreate'
+  .modal-dialog
+    .modal-content
+      .modal-header.pts.pbs
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showCreate(false)']
+        .modal-title
+          span.mrh style='font-size: 14px;'
+            | 编辑用户信息
+
+      form#new_customer.new_customer[
+        novalidate="novalidate" accept-charset="UTF-8" 
+        method="post" name='userForm'
+      ]
+        .modal-body
+         div.ptl
+            div ng-include="'#{asset_path('users/new.html.slim')}'"
+        .modal-footer style='padding-right: 48px;'
+          a.btn.btn-default.btn-wide ng-click='showCreate(false)'
+            | 取消
+          a.btn.btn-primary.btn-wide ng-click='createUser(user)' ng-disabled='userForm.$invalid'
+            | 确认

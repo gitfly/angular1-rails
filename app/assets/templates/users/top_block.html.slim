@@ -1,0 +1,19 @@
+.search-block
+  
+  .pull-left.mrl
+    button.btn.btn-hg.btn-primary ng-click="showCreate(true)"
+      span.fui-plus
+        |添加新用户
+  .search-input.pull-right
+    form ng-submit='queryStrChange(queryStr)'
+      input.form-control#search-orders.pull-left[
+        placeholder="输入客户姓名、电话搜索"
+        type="search" ng-model='queryStr'
+      ]
+      button.btn.pull-left.btn-info
+        span.fui-search
+        span
+          | 搜索
+    .clearfix
+
+  

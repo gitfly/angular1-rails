@@ -1,0 +1,102 @@
+.form-inputs
+  .form-group.row
+    .inline-label.col-lg-3.prx 
+      label
+        abbr[title="required"]
+          | *
+        |  公司邮箱
+    .input-group.col-lg-7
+      input.form-control[
+        ng-model="cuUser.email" 
+        placeholder="公司邮箱" 
+        
+      ]
+      span.input-group-addon
+        | @baozheng.cc
+
+  .form-group.row      
+    .inline-label.col-lg-3.prx
+      label
+        abbr[title="required"]
+          | *
+        |  电话号码
+    .inline-input.col-lg-7.plx
+      input.form-control[
+        ng-model="cuUser.phone" placeholder="电话号码"
+        
+        
+        ng-pattern='/^\d{11}$/'
+        required
+      ]
+
+  .form-group.row        
+    .inline-label.col-lg-3.prx
+      label 
+        abbr[title="required"]
+          | *
+        | 员工角色
+    .inline-input.col-lg-7.plx
+        select.form-control.select.select-default.select-block.select2-offscreen[
+          placeholder="请选择该活动的折扣方式" ng-model="cuUser.type" 
+          ui-select2
+         
+        ]
+          - User::Roles.each do |k, v|
+            option[value=v]
+              = k
+
+  .form-group.row
+    .inline-label.col-lg-3.prx
+      label
+        | 员工生日
+    .inline-input.col-lg-7.plx
+      .form-group
+        .input-group
+          span.input-group-btn
+            button.btn[type="button"]
+              span.fui-calendar
+          input#customer_birthday.string.form-control[
+            ng-model="cuUser.birthday" placeholder="请输入员工生日" 
+            type="text" 
+            date-picker
+          ]          
+  .form-group.row
+    .inline-label.col-lg-3.prx
+      label
+        | 微信号码
+    .inline-input.col-lg-7.plx
+      input#customer_weixin.form-control[
+        ng-model="cuUser.weixin" 
+        placeholder="请输入微信号码" 
+        type="text" 
+      ]
+
+  
+  
+
+  .form-group.row
+    .inline-label.col-lg-3.prx
+      label
+        | 员工性别:
+    .inline-input.col-lg-8.plx#user-gender
+      
+      button.btn.btn-default.btn-xs[
+        ng-class="{'btn-danger': cuUser.gender==false}" 
+        ng-click="cuUser.gender=false"
+        style="margin-right:42px;"
+      ]
+        | 女
+        
+      button.btn.btn-default.btn-xs[
+        ng-class="{'btn-danger': cuUser.gender==true}" 
+        ng-click="cuUser.gender=true"
+        style="margin-left:42px;"
+      ]
+        | 男
+  .form-group.row 
+    .inline-label.col-lg-8.plx    
+      .pull-right
+        button.btn.btn-hg.btn-primary.btn-wide ng-click="saveUser()"
+          | 保存
+  
+.clearfix

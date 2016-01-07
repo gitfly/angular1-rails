@@ -1,0 +1,25 @@
+.inline-input
+  input.form-control[
+    placeholder="物品种类"
+    ng-click='showItemType(!itemTypeShown)'
+    ng-model='item.showType'
+    name='itemType'
+    required
+  ]
+  .error-message ng-show='oForm.itemType.$invalid && oForm.itemType.$dirty'
+    | 物品种类不能为空
+
+  ul.dropdown-menu.item-types.animate-zoom-out.display-block.input-selection[
+    role="menu" aria-labelledby="dropdownMenu1" ng-if='itemTypeShown'
+  ]
+    a.pull-right.pointer.hide-all[
+     ng-click='showItemType(false)'
+    ]
+      strong.fui-cross
+    .tag-block ng-repeat='type in itemTypesZh track by $index'
+      button.btn.btn-default[
+        ng-click="selectItemType(item, $index)" 
+        ng-class="{'btn-success': isSelected(item.showType, type)}"
+      ]
+        | {{type}}
+    .clearfix

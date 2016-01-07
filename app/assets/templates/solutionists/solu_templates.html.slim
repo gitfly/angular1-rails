@@ -1,0 +1,93 @@
+.templates
+  .col-md-6.list
+    .title
+      strong.f18
+        | 方案模板
+      .pull-right.btn.btn-success[ng-click='createTemplate()']
+        span.fui-plus
+        | 创建模板
+      .clearfix
+    ul.nav.nav-tabs.nav-append-content.mtl
+      li.active[click-active ng-click='setTemplateType(0)']
+        a
+          | 修复方案模板
+      li[click-active ng-click='setTemplateType(1)']
+        a
+          | 对比方案模板
+
+    .tab-content
+      .tab-pane ng-class="{'active': before==0}"
+        div ng-include="'#{asset_path('solutionists/template_table.html.slim')}'"
+      .tab-pane ng-class="{'active': before==1}"
+        div ng-include="'#{asset_path('solutionists/template_table.html.slim')}'"
+            
+  .col-md-6.prh.template-content
+    strong
+      span
+        | 提示：点击加号添加模板图片，双击图片删除
+    /p
+      strong.f18
+        | 创建模板
+    /label
+      | 模板头部内容：
+    textarea.mtl.template.form-control[
+      placeholder="模板头部内容"
+      ng-model='template.header'
+      tooltip title='模板头部内容'
+      data-placement='bottom'
+      ng-mouseleave='updateTemplate(template)'
+      ng-change='headerChange()'
+    ]
+    .row.mtl.mbl
+      .col-md-2.col-xs-6 ng-repeat='photo in template.headerPhotos track by $index'
+        .thumbnail[
+          ng-dblclick='deletePhoto(photo, $index)'
+          tooltip title='双点击删除该图片'
+        ]
+          img ng-src='{{photo.thumbUrl}}'
+
+      .col-md-2.col-xs-6
+        a.thumbnail[
+          tooltip title='点击上传模板头部图片'
+          ng-file-select ng-model="files"
+          ng-file-change="upload(files, true)"
+          ng-multiple='true'
+        ]
+          span.fui-plus
+
+    .clearfix
+
+    /label
+      | 模板尾部内容：
+    textarea.template.form-control[
+      placeholder="模板尾部内容"
+      ng-model='template.footer'
+      tooltip title='模板尾部内容'
+      data-placement='bottom'
+      ng-mouseleave='updateTemplate(template)'
+      ng-change='footerChange()'
+    ]
+
+    .row.mtl
+      .col-md-2.col-xs-6 ng-repeat='photo in template.footerPhotos track by $index'
+        .thumbnail[
+          ng-dblclick='deletePhoto(photo, $index)'
+          tooltip title='双击击删除该图片'
+        ]
+          img.img-rounded ng-src='{{photo.thumbUrl}}'
+      .col-md-2.col-xs-6
+        a.thumbnail[
+          tooltip title='点击上传模板尾部图片'
+          ng-file-select ng-model="files"
+          ng-file-change="upload(files, false)"
+          ng-multiple='true'
+        ]
+          span.fui-plus
+    /.row.submit.mth
+      .col-md-4
+      .col-md-4
+        .btn.btn-success.btn-lg[
+          ng-click='updateTemplate(template)'  
+        ]
+          | 更新模板信息
+      .col-md-4

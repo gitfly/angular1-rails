@@ -1,0 +1,15 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  $stateProvider.state("userManagement",
+    url: '/users'
+    controller: "UsersCtrl"
+    templateUrl: "<%= asset_path("users.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+  )
+  return

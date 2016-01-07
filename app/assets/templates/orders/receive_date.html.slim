@@ -1,0 +1,15 @@
+/.form-group
+  .input-group
+    span.input-group-btn
+      button.btn[type="button"]
+        span.fui-calendar
+    input.form-control[type="text" value=Date.today placeholder="收货日期" name="order[receive_date]"]
+
+.form-group.required
+  .inline-label.col-sm-2
+    label.tel.required[for="order_receive_date"]
+      abbr[title="required"]
+        | *
+      |  取货日期
+  .col-sm-10.inline-input
+    input#order_receive_date.string.required.form-control.ng-pristine.ng-valid[placeholder="取货日期" type="text" name="order[receive_date]" value=Date.today ng-model='currentOrder.receiveDate']

@@ -1,0 +1,81 @@
+= stylesheet_link_tag 'printer', media: "all"
+
+h4.text-center
+  | 包拯工作室流程单
+table.table.table-bordered style='margin-top: 20px;'
+  tbody
+    tr
+      td.l80
+        | 顾客姓名
+      td 
+        strong
+          | {{customer.name}}
+      td 订单号
+      td 
+        strong
+          | {{order.number}}
+      td colspan=2
+        strong
+          | {{order.showUrgent}}
+    tr
+      td.l80
+        | 下单时间
+      td 
+        strong
+          | {{order.showCreatedAt}}
+      td 交货时间
+      td 
+        strong
+          | {{order.finishDate}}
+      td colspan=2
+        | 是否返工
+    tr
+      td.l80
+        | 服务内容
+      td
+        strong
+          | {{order.showService}}
+      td 产品描述
+      td colspan=3
+        strong
+          span.mr5
+            | {{order.showStyle}}
+          span.mr5
+            | {{order.showColor}}
+          span.mr5
+            | {{order.showBrand}}
+          span.mr5
+            | {{order.showItemType}}
+    tr
+      td.l80
+        | 配件
+      td colspan=2
+        strong
+          | {{order.part}}
+      td 
+        | 附件
+      td colspan=2
+        strong
+          | {{order.attachment}}
+    tr
+      td.l80
+        | 诊断信息
+      td.lg colspan=5
+        | {{order.diagnose}}
+    tr
+      td.l80.flow-high rowspan="{{flowCount}}"
+        | 交接流
+      td
+        | 日期
+      td colspan=3
+        | 工作内容
+      td
+        | 签名
+    tr ng-repeat='i in flowCountArray'
+      td.blank
+      td.blank colspan=3
+      td.blank
+css:
+  td {
+    height: 30px !important;  
+  }

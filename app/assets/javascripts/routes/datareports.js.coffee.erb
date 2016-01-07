@@ -1,0 +1,57 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  $stateProvider.state("orderitem",
+    url: '/datareports/orderitem'
+    controller: "orderitemCtrl"
+    templateUrl: "<%= asset_path("datareports/orderitem.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+  ).state("reportHome",
+    url: '/datareports/report_home'
+    controller: "reportHomeCtrl"
+    templateUrl: "<%= asset_path("datareports/report_home.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+  ).state("paymentDetail",
+    url: '/datareports/payment_detail'
+    controller: "paymentDetailCtrl"
+    templateUrl: "<%= asset_path("datareports/payment_detail.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+  ).state("customerDetail",
+    url: '/datareports/customer_detail'
+    controller: "customerDetailCtrl"
+    templateUrl: "<%= asset_path("datareports/customer_detail.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+  ).state("overdueOrder",
+    url: '/datareports/overdue_order'
+    controller: "overdueOrderCtrl"
+    templateUrl: "<%= asset_path("datareports/overdue_order.html.slim") %>"
+    
+  # ).state("fetchReminder",
+  #   url: '/datareports/fetch_delivery_detail'
+  #   controller: "fetchDeliveryDetailCtrl"
+  #   templateUrl: "<%= asset_path("datareports/fetch_delivery_detail.html.slim") %>"
+
+  ).state("storageDetail",
+    url: '/datareports/storage_detail'
+    controller: "storageDetailCtrl"
+    templateUrl: "<%= asset_path("datareports/storage_detail.html.slim") %>"
+  )
+
+  return

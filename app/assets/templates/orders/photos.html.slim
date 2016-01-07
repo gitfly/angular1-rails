@@ -1,0 +1,53 @@
+.row.pbh
+  .col-md-1
+  .col-md-10.show-photos.well
+    .title
+      .pull-left.text
+        strong
+          | 照片列表（最多30张）
+      .pull-right
+        .buttons.text-center
+          button.btn.btn-success.btn-xs[
+            ng-file-select ng-model="files"
+            ng-file-change="generatImageUrl(files)"
+            ng-multiple='true'
+          ]
+            span.fui-upload
+            | {{initText}}
+      .clearfix
+
+    .text-center.pth ng-if="!photos.length"
+      button.btn.btn-success.btn-lg.mbh.mth[
+        ng-file-select ng-model="files"
+        ng-file-change="generatImageUrl(files)"
+        ng-multiple='true'
+      ]
+        span.fui-upload
+        | {{initText}}
+    table.table[ng-if="photos.length"]
+      thead
+        tr
+          th style='width: 100px;'
+            | 图片预览
+          th style='width: 250px;'
+            | 文件名
+          th style='width: 80px;'
+            | 大小
+          th.text-center style='width: 120px;'
+            | 使用到方案
+          th style='width: 40px;'
+            | 删除
+      tbody[ui-sortable="sortableOptions" ng-model="photos"]
+        tr.photo.pointer.list-pulse.pointer ng-repeat='file in photos track by $index'  style="height:100px"
+          td 
+            a.photo ng-href='{{file.thumbUrl}}' target="_blank"
+              img.preview.pull-left ng-src='{{file.thumbUrl}}'
+          td style='padding-top: 40px'
+            | {{file.name}}
+          td  style='padding-top: 40px'
+            | {{file.showSize}} KB
+          td.text-center ng-click='changeUseStatus(file)' style='padding-top: 40px'
+            span.fui ng-class="{'fui-checkbox-checked': file.used, 'fui-checkbox-unchecked': !order.used}"
+          td  style='padding-top: 40px'
+            span.fui-cross ng-click='removePhoto(file, $index)'
+    .clearfix

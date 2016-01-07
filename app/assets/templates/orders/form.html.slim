@@ -1,0 +1,570 @@
+form#new-order-form.simple_form.new_order[
+  novalidate="novalidate" accept-charset="UTF-8" method="post"
+  name='orderForm'
+]
+  .form-inputs
+
+    .basic-info.border-block.well
+      .form-group.string.required.order_pickup_manner.pull-left.short
+        .inline-label
+          label.string.required[for="order_pickup_manner"]
+            abbr[title="required"]
+              | *
+            |  取货方式
+        .inline-input
+          select#order_pickup_manner.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[name="order[pickup_manner]" placeholder="请选择取货方式" ng-model="currentOrder.pickupManner" ui-select2="" tabindex="-1" title="" ng-change='fetchMannerChange(currentOrder.pickupManner)']
+            option[value=""]
+            - Order::PickupManner.each do |k, v|
+              option[value=v]
+                = k
+
+      .form-group.string.required.order_fetch_date.short.pull-left ng-show="currentOrder.pickupManner==1"
+        .inline-label
+          label.string.required[for="order_fetch_date"]
+            |  取货时间
+        .inline-input
+          .form-group.date
+            .input-group
+              span.input-group-btn
+                button.btn[type="button"]
+                  span.fui-calendar
+              input#order_fetch_date.string.required.form-control[
+                ng-model="currentOrder.fetchDate" 
+                placeholder="取货的具体时间" 
+                type="text" name="addressFetchDate"
+                date-picker
+              ]
+          
+      .clearfix
+
+      .form-group.string.required.order_fetch_date.long#fetch_date ng-show="currentOrder.pickupManner==1"
+        .inline-label
+          label.string.required[for="order_fetch_date"]
+            | 时间段：
+        .inline-input
+          .form-group.hour
+            .left.pull-left
+              .input-group.pull-left
+                input.fetch_time_hour.form-control[type="text" ng-model='currentOrder.fetchHourStart1' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+
+              span.pull-left style='margin-top: 8px;'
+                | 到
+
+              .input-group.pull-left
+                input.fetch_time_hour.form-control[type="text" ng-model='currentOrder.fetchHourEnd1' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+              .clearfix
+
+            .right.pull-right
+              .input-group.pull-right
+                input.fetch_time_hour.form-control[type="text" ng-model='currentOrder.fetchHourStart2' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+
+              span.pull-right style='margin-top: 8px;'
+                | 到
+
+              .input-group.pull-right
+                input.fetch_time_hour.form-control[type="text" ng-model='currentOrder.fetchHourEnd2' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+              .clearfix
+
+            .clearfix
+
+      .clearfix
+
+      .addresses ng-show="currentOrder.pickupManner==1"
+        .pull-left.mtm.mrh
+          strong 该顾客的历史地址记录
+        .pull-left
+          .address ng-repeat='address in addresses'
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click="selectAddress(address)"
+              span 
+                | {{address.province}}
+              span 
+                | {{address.city}}
+              span 
+                | {{address.district}}
+              span 
+                | {{address.details}}
+          .new-address
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click='selectAddress({})'
+              | 使用新地址
+
+      .clearfix
+
+      .form-group.string.required.order_address_province.fetch.long.mbh ng-show="currentOrder.pickupManner==1"
+        .inline-label
+          label.string.required[for="order_province"]
+            abbr[title="required"]
+              | *
+            |  取货地址：
+        .inline-input
+          input#order_province.short.string.required.form-control.ng-pristine.ng-valid[ng-model="fetchAddress.province" maxlength="255" placeholder="省" size="255" type="text" name="address[province]"]
+          input#order_city.string.short.required.form-control.ng-pristine.ng-valid[ng-model="fetchAddress.city" maxlength="255" placeholder="市" size="255" type="text" name="address[city]"]
+          input#order_district.string.short.required.form-control.ng-pristine.ng-valid[ng-model="fetchAddress.district" maxlength="255" placeholder="区" size="255" type="text" name="address[district]"]
+          input#order_details.string.required.form-control.ng-pristine.ng-valid[ng-model="fetchAddress.details" maxlength="255" placeholder="具体地址" size="255" type="text" name="address[details]"]
+
+      .clearfix
+
+
+      .form-group.string.required.order_delivery_manner.short.pull-left
+        .inline-label
+          label.string.required[for="order_delivery_manner"]
+            abbr[title="required"]
+              | *
+            |  送货方式
+        .inline-input
+          select#order_delivery_manner.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[name="order[delivery_manner]" placeholder="请选择送货方式" ng-model="currentOrder.deliveryManner" ui-select2="" tabindex="-1" title="" ng-change='deliveryMannerChange(currentOrder.deliveryManner)']
+            option[value=""]
+            - Order::DeliveryManner.each do |k, v|
+              option[value=v]
+                = k
+
+      .form-group.string.required.order_delivery_date.short.pull-left ng-show="currentOrder.deliveryManner>=2"
+        .inline-label
+          label.string.required[for="order_delivery_date"]
+            abbr[title="required"]
+              | *
+            |  送货时间
+        .inline-input
+          .form-group.date
+            .input-group
+              span.input-group-btn
+                button.btn[type="button"]
+                  span.fui-calendar
+              input#order_delivery_date.string.required.form-control[
+                ng-model="currentOrder.deliveryDate" placeholder="送货的具体时间" 
+                type="text" name="address[delivery_date]"
+                date-picker
+              ]
+
+      .clearfix
+
+      .friend ng-if='currentOrder.deliveryManner==1'
+        .form-group.string.required.customer_name.pull-left.short
+          .inline-label
+            label.string.required[for="customer_name"]
+              abbr[title="required"]
+                | *
+              |  代取人姓名
+          .inline-input
+            input#customer_name.string.required.form-control[
+              ng-model="friend.name" placeholder="请输入真实姓名" 
+              name="friendName" type='text'
+              required
+            ]
+            .error-message ng-show='orderForm.friendName.$invalid && orderForm.friendName.$dirty'
+              | 代取人姓名不能为空
+
+        .form-group.tel.required.customer_phone.pull-left.short
+          .inline-label
+            label.tel.required[for="customer_phone"]
+              abbr[title="required"]
+                | *
+              | 代取人电话
+          .inline-input
+            input#customer_phone.string.tel.required.form-control[
+              ng-model="friend.phone" placeholder="电话号码" name="friendPhone"
+              required ng-pattern='/^\d{11}$/'
+            ]
+            .error-message ng-show='orderForm.friendPhone.$invalid && orderForm.friendPhone.$dirty'
+              | 代取人电话不能为空
+
+      .clearfix
+
+
+      .form-group.string.required.order_delivery_date.long#delivery_date ng-show="currentOrder.deliveryManner>=2"
+        .inline-label
+          label.string.required[for="order_delivery_date"]
+            | 时间段：
+        .inline-input
+          .form-group.hour
+            .left.pull-left
+              .input-group.pull-left
+                input.delivery_time_hour.form-control[type="text" ng-model='currentOrder.deliveryHourStart1' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+
+              span.pull-left style='margin-top: 8px;'
+                | 到
+
+              .input-group.pull-left
+                input.delivery_time_hour.form-control[type="text" ng-model='currentOrder.deliveryHourEnd1' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+              .clearfix
+
+            .right.pull-right
+              .input-group.pull-right
+                input.delivery_time_hour.form-control[type="text" ng-model='currentOrder.deliveryHourStart2' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+
+              span.pull-right style='margin-top: 8px;'
+                | 到
+
+              .input-group.pull-right
+                input.delivery_time_hour.form-control[type="text" ng-model='currentOrder.deliveryHourEnd2' placeholder="几点"]
+                span.input-group-btn
+                  button.btn[type="button"]
+                    span.fui-time
+              .clearfix
+
+            .clearfix
+
+      .clearfix
+
+      .addresses ng-show="currentOrder.deliveryManner>=2"
+        .pull-left.mtm.mrh
+          strong 该顾客的历史地址记录
+        .pull-left
+          .address ng-repeat='address in addresses'
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click="selectDeliveryAddress(address)"
+              span 
+                | {{address.province}}
+              span 
+                | {{address.city}}
+              span 
+                | {{address.district}}
+              span 
+                | {{address.details}}
+          .new-address
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click="selectDeliveryAddress({})"
+              | 使用新地址
+
+      .clearfix
+
+      .form-group.string.required.order_address_province.long.mbh ng-show="currentOrder.deliveryManner>=2"
+        .inline-label
+          label.string.required[for="order_province"]
+            abbr[title="required"]
+              | *
+            |  送货地址：
+        .inline-input
+          input#order_province.short.string.required.form-control.ng-pristine.ng-valid[ng-model="deliveryAddress.province" maxlength="255" placeholder="省" size="255" type="text" name="address[province]"]
+          input#order_city.string.short.required.form-control.ng-pristine.ng-valid[ng-model="deliveryAddress.city" maxlength="255" placeholder="市" size="255" type="text" name="address[city]"]
+          input#order_district.string.short.required.form-control.ng-pristine.ng-valid[ng-model="deliveryAddress.district" maxlength="255" placeholder="区" size="255" type="text" name="address[district]"]
+          input#order_details.string.required.form-control.ng-pristine.ng-valid[ng-model="deliveryAddress.details" maxlength="255" placeholder="具体地址" size="255" type="text" name="address[details]"]
+
+      .clearfix
+
+    .clearfix
+
+    .basic-info.border-block.well
+      .form-group.string.required.order_item_type.short.pull-left
+        .inline-label
+          label.string.required
+            abbr[title="required"]
+              | *
+            | 物品种类
+        .inline-input
+          select#order_item_type.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[name="order[item][type]" placeholder="请选择物品种类" ng-model="currentItem.type" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+            option[value=""]
+            - Item::Type.each do |k, v|
+              option[value=k]
+                = v
+
+      .form-group.string.required.order_item_brand.short.pull-left.autocomplete 
+        .inline-label
+          label.string.required[for="order_item_brand"]
+            abbr[title="required"]
+              | *
+            |  品牌
+        .inline-input
+          input#order_item_brand.string.required.form-control[
+            ng-model="currentItem.brand" placeholder="品牌" 
+            name="itemBrand" ng-change="brandValueChange()" 
+            ng-keypress="brandKeyPress($event)"
+            ng-click='brandValueChange()'
+            required
+          ]
+          .error-message ng-show='orderForm.itemBrand.$invalid && orderForm.itemBrand.$dirty'
+            | 品牌不能为空
+          ul.dropdown-menu ng-show='showBrandOptions' ng-mouseleave='brandInputFocus(false)'
+            li ng-repeat='v in brands track by $index' ng-class="{'active': $index==0}"
+              a ng-click='selectBrand(v.brand)'
+                | {{v.brand}}
+            li ng-show='!brands.length'
+              a 没有对应的搜索结果请直接输入品牌。
+
+      .clearfix
+
+      .form-group.string.required.order_item_style.short.pull-left
+        .inline-label
+          label.string.required[for="order_item_style"]
+            abbr[title="required"]
+              | *
+            |  款式
+        .inline-input
+          select#order_item_style.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[name="order[item][style]" placeholder="请选择款式" ng-model="currentItem.style" ui-select2="" tabindex="-1" title=""]
+            option[value=""]
+            - %w(男款 女款).each do |v|
+              option[value=v]
+                = v
+
+      .form-group.string.required.order_color.short.pull-left.autocomplete
+        .inline-label
+          label.string.required[for="order_color"]
+            abbr[title="required"]
+              | *
+            |  颜色
+        .inline-input
+          input#order_item_color.string.required.form-control[
+            ng-model="currentItem.color" placeholder="颜色" 
+            name="itemColor" ng-change="colorValueChange()" 
+            ng-keypress="colorKeyPress($event)"
+            ng-click='colorValueChange()'
+            required
+          ]
+          .error-message ng-show='orderForm.itemColor.$invalid && orderForm.itemColor.$dirty'
+            | 颜色不能为空
+          ul.dropdown-menu ng-show='showColorOptions' ng-mouseleave='colorInputFocus(false)'
+            li ng-repeat='v in colors track by $index' ng-class="{'active': $index==0}"
+              a ng-click='selectColor(v.color)'
+                | {{v.color}}
+            li ng-show='!colors.length'
+              a 没有对应的搜索结果请直接输入颜色。
+
+      .clearfix
+
+      .form-group.string.required.order_color.short.pull-left
+        .inline-label
+          label.string.required[for="order_color"]
+            abbr[title="required"]
+              | *
+            | 是否加急
+        .inline-input
+          select.form-control.select.select-default.select-block.ng-pristine.ng-invalid.ng-invalid-required.select2-offscreen[name="amount" required="required" model="rechargeAmount" placeholder="选择性别" ng-model="currentOrder.urgent" ui-select2="" tabindex="-1" title=""]
+            option[value='true']
+              | 加急
+            option[value='false']
+              | 不加急
+          /input [type="checkbox" name="square-switch" data-on-color="danger" data-off-color="info" switch data-on-text="加急" data-off-text="不加急" ng-model='urgent']
+          
+      .form-group.string.required.order_finish_date.short.pull-left.autocomplete 
+        .inline-label
+          label.string.required[for="order_item_version"]
+            | 型号
+        .inline-input 
+          
+          input#order_item_version.string.required.form-control.ng-pristine.ng-valid[
+            ng-model="currentItem.version" placeholder="请填写物品型号" 
+            type="text" name="order[item][version]" 
+            ng-change="versionValueChange()" 
+            ng-keypress="versionKeyPress($event)"
+            ng-click="versionValueChange()"
+          ]
+          ul.dropdown-menu ng-show='showVersionOptions' ng-mouseleave='versionInputFocus(false)'
+            li ng-repeat='v in versions track by $index' ng-class="{'active': $index==0}"
+              a ng-click='selectVersion(v.version)'
+                | {{v.version}}
+            li ng-show='!versions.length'
+              a 没有对应的搜索结果请直接输入型号。
+
+      .clearfix
+
+      .form-group.string.required.order_gift.short.pull-left
+        .inline-label
+          label.string.required[for="order_gift"]
+            abbr[title="required"]
+              | *
+            | 开工日期
+        .inline-input
+          .form-group.date
+            .input-group
+              span.input-group-btn
+                button.btn[type="button"]
+                  span.fui-calendar
+              input#order_start_work_date.string.required.form-control[
+                ng-model="currentOrder.startWorkDate" placeholder="开工日期" 
+                type="text" name="startWorkDate"
+                ng-change='startWorkDateChange(currentOrder)'
+                required date-picker
+              ]
+          .error-message ng-show='orderForm.startWorkDate.$invalid && orderForm.startWorkDate.$dirty'
+            | 开工日期不能为空
+
+      .form-group.string.required.order_finish_date.short.pull-left
+        .inline-label
+          label.string.required[for="order_finish_date"]
+            abbr[title="required"]
+              | *
+            | 完成日期
+        .inline-input
+          .form-group.date
+            .input-group
+              span.input-group-btn
+                button.btn[type="button"]
+                  span.fui-calendar
+              input#order_finish_date.string.required.form-control[
+                ng-model="currentOrder.finishDate" 
+                placeholder="加急订单预计完成日期" 
+                type="text" name="finishDate"
+                required date-picker
+              ]
+          .error-message ng-show='orderForm.finishDate.$invalid && orderForm.finishDate.$dirty'
+            | 开工日期不能为空
+
+      /.form-group.string.required.order_finish_date.short.pull-left
+        .inline-label
+          label.string.required
+            abbr[title="required"]
+              | *
+            | 尺寸
+        .inline-input
+          input#order_finish_date.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.finish_date" maxlength="255" placeholder="加急订单预计完成日期" size="255" type="text" name="order[finish_date]"]
+
+      .clearfix
+
+      .form-group.string.required.order_attachment.long
+        .inline-label
+          label.string.required[for="order_attachment"]
+            abbr[title="required"]
+              | *
+            | 服务
+        .inline-input  style='width: 72%'
+          select#order_attachemnt.multiselect.multiselect-default.form-control.select.select-default.select-block.select2-offscreen[
+            name="serviceIds" placeholder="请选择服务" 
+            ng-model="currentOrder.serviceIds" ui-select2=""
+            multiple='multiple' required
+            ng-change="serviceChange(currentOrder.serviceIds)"
+          ]
+            option[ng-repeat='type in serviceTypeKeys' value="{{serviceTypes[type]}}"]
+              | {{type}}
+          .error-message ng-show='orderForm.serviceIds.$invalid && orderForm.serviceIds.$dirty'
+            | 服务不能为空
+
+        .clearfix
+
+      .clearfix
+
+      .form-group.string.required.short.pull-left
+        .inline-label
+          label.string.required[for="order_price"]
+            abbr[title="required"]
+              | *
+            | 原价
+        .inline-input
+          input#order_price.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.price" maxlength="255" placeholder="请输入本次订单原价" size="255" type="text" name="address[price]"]
+
+      .form-group.short.pull-left
+        .inline-label
+          label.string.required[for="order_discount"]
+            | 折扣
+        .inline-input
+          input#order_discount.form-control[
+            placeholder="请输入本次订单折扣" 
+            ng-model="currentOrder.discount" 
+            type="number" name="orderDiscount"
+            min='0' max='1'
+          ]
+          .error-message ng-show='orderForm.orderDiscount.$invalid && orderForm.orderDiscount.$dirty'
+            | 折扣必须是0到1之间的小数
+
+      .clearfix
+
+      .form-group.string.required.order_attachment.long
+        .inline-label
+          label.string.required[for="order_color"]
+            abbr[title="required"]
+            | 配件
+        .inline-input style='width: 72%'
+          select#order_part.multiselect.multiselect-default.form-control.select.select-default.select-block.select2-offscreen[
+            name="amount" placeholder="请选择配件" 
+            ng-model="currentOrder.part" 
+            ui-select2="" tabindex="-1" title="" 
+            multiple='multiple'
+          ]
+            - Settings.order.parts.each do |v|
+              option[value=v]
+                = v
+
+      .form-group.string.required.order_attachment.long
+        .inline-label
+          label.string.required[for="order_attachment"]
+            abbr
+            |  附件
+        .inline-input style='width: 72%'
+          select#order_attachemnt.multiselect.multiselect-default.form-control.select.select-default.select-block.select2-offscreen[
+            name="amount" placeholder="请选择附件" 
+            ng-model="currentOrder.attachment" 
+            ui-select2="" tabindex="-1" 
+            title="" multiple='multiple'
+          ]
+            - Settings.order.attachments.each do |v|
+              option[value=v]
+                = v
+
+      .clearfix
+
+      .form-group.string.required.order_gift.short.pull-left
+        .inline-label
+          label.string.required[for="order_gift"]
+            abbr
+            |  赠品
+        .inline-input
+          input#order_gift.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.gift" placeholder="赠品" type="text" name="order[item][style]"]
+
+      .form-group.string.required.order_gift.short.pull-left
+        .inline-label
+          label.string.required[for="order_gift"]
+            | 购买日期
+        .inline-input
+          input#order_buy_date.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.buy_date" placeholder="格式示例：2013-10-22" type="text" name="order[buy_date]"]
+
+      .clearfix
+
+      .form-group.string.required.order_attachment.short.pull-left
+        .inline-label
+          label.string.required[for="order_source"]
+            | 货物来源
+        .inline-input
+          input#order_source.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.source" maxlength="255" placeholder="物品来源" size="255" type="text" name="order[source]"]
+
+      .clearfix
+
+      .form-group.text.required.order_request style='height: 150px;'
+        textarea.string.required.form-control.ng-pristine.ng-valid[ng-model="currentOrder.request" placeholder="顾客的特殊要求" type="text" name="order[request]"]
+
+
+    .clearfix
+
+    /span.pull-right
+      | 操作员：
+      = User.find(501).name
+  .form-actions.mbh.text-center
+    .btn.btn-default.btn.btn-success.btn-wide[
+      ng-click="createOrder()" ng-disabled='orderForm.$invalid'
+    ]
+      | 保存订单
+
+/div ng-include="'#{asset_path('orders/fetch.html.slim')}'"
+/div ng-include="'#{asset_path('orders/delivery.html.slim')}'"
+
+javascript:
+
+  /*var datepickerSelector = $('#order_fetch_date, #order_delivery_date, #order_start_work_date, #order_finish_date');*/
+
+  $('.fetch_time_hour, .delivery_time_hour').timepicker({
+    'className': 'timepicker-primary',
+    'timeFormat': 'h:i A', 
+    'minTime': '7:00AM',
+    'maxTime': '11:30PM',
+    'step': 60
+  });

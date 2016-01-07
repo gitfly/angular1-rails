@@ -1,0 +1,107 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+  $urlRouterProvider.otherwise "/orders"
+  
+  $stateProvider.state('accessToken',
+    url: '/access_token=:response'
+    controller: ($state, $stateParams, AccessToken) ->
+      token = $stateParams.response.match(/^(.*?)&/)[1]
+      AccessToken.set(token)
+      $state.go('orders')
+      # $state.go $rootScope.toState.name
+
+  ).state('401',
+    url: '/unauthorized'
+    params: { tokenInvalid: false }
+    controller: ($scope, $state, $stateParams, AccessToken, Rails) ->
+      $scope.tokenInvalid = $stateParams.tokenInvalid
+      if $stateParams.tokenInvalid
+        AccessToken.delete()
+        $scope.loginUrl = Rails.loginUrl
+        $state.go 'home' if AccessToken.get()
+    templateUrl: "<%= asset_path("401.html.slim") %>"
+
+  ).state("home",
+    url: "/home"
+    controller: "HomeCtrl"
+    templateUrl: "<%= asset_path("home.html.slim") %>"
+
+  ).state("orders",
+    url: "/orders?status&page&offset&type&dateScope&startDate&endDate&queryStr&orderBy&orderDesc&handler"
+    params: {
+      page: 1,
+      offset: 0,
+      type: '全部',
+      per_page: 30,
+      orderDesc: true,
+      dateScope: 'all',
+      orderBy: 'orders.created_at'
+    }
+    controller: "OrdersCtrl"
+    templateUrl: "<%= asset_path("orders.html.slim") %>"
+
+  ).state("customers",
+    url: "/customers"
+    controller: "CustomersCtrl"
+    templateUrl: "<%= asset_path("customers.html.slim") %>"
+
+  ).state("solutionists",
+    url: '/solutionists'
+    controller: "SolutionistsCtrl"
+    templateUrl: "<%= asset_path("solutionists.html.slim") %>"
+
+  ).state("workers",
+    url: '/workers'
+    controller: "WorkersCtrl"
+    templateUrl: "<%= asset_path("workers.html.slim") %>"
+
+  ).state("finances",
+    url: '/finances'
+    controller: "FinancesCtrl"
+    templateUrl: "<%= asset_path("finances.html.slim") %>"
+
+  ).state("settings",
+    url: '/settings'
+    controller: "SettingsCtrl"
+    templateUrl: "<%= asset_path("settings.html.slim") %>"
+
+  ).state("operation",
+    url: '/operation'
+    controller: "OperationCtrl"
+    templateUrl: "<%= asset_path("operation.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+
+  ).state("datareport",
+    url: '/datareport'
+    controller: "DataReportCtrl"
+    templateUrl: "<%= asset_path("datareprot.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+  ).state("sarehouse",
+    url: '/sarehouse'
+    controller: "SarehouseCtrl"
+    templateUrl: "<%= asset_path("sarehouse.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+  ).state("users",
+    url: '/users'
+    controller: "UsersCtrl"
+    templateUrl: "<%= asset_path("users.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+  )
+  return

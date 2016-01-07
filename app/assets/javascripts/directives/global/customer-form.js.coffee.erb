@@ -1,0 +1,16 @@
+app = angular.module("customerForm", [])
+
+app.directive 'customerForm', ($compile, $parse) ->
+  restrict: "EA"
+  replace: true
+  scope: {
+    customer: '='
+  },
+
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('customers/form.html.slim')%>"
+
+  link: ($scope, $element, $attrs) ->
+    return false
+
+  controller: ($scope, $element, Customer, $timeout) ->

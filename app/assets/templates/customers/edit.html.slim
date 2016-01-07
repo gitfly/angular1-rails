@@ -1,0 +1,7 @@
+.modal-header style='padding: 5px 20px'
+  .modal-title
+    button aria-hidden="true" class="close fui-cross" data-dismiss="modal" ng-click="cancel()" type="button"
+    .modal-title style='font-size:16px;'
+      | 编辑用户信息
+.modal-body style='padding:0px'
+  div ng-include="'#{asset_path('customers/form.html.slim')}'"

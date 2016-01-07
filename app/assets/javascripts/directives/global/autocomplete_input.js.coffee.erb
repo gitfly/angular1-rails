@@ -1,0 +1,108 @@
+app = angular.module("autocompleteInput", [])
+
+
+app.directive "autocompleteInput", ($http)->
+  restrict: "AE"
+  replace: true
+  controller: '@'
+  name: 'controllerName'
+  templateUrl: (elem, attrs) ->
+    return attrs.templateUrl || "<%= asset_path('autocomplete_input.html.slim')%>"
+  link: ($scope, elem, attrs) ->
+
+    # search_path = attrs.searchPath
+    # options_id = "##{attrs.optionsId}"
+    # elem.find('ul.dropdown-menu.search-dropdown').attr("id", attrs.optionsId)
+    # search_options = $(options_id)
+
+    # input = elem.find('input[type=search]')
+
+    # $scope.inputValueChange = () ->
+    #   console.log(input.val())
+
+    # handle_enter_key = ->
+    #   search_options = $(options_id)
+    #   if search_options.find("li.active:first").length != 0
+    #     input.val(search_options.find("li.active:first").find('a span').html())
+    #   search_options.fadeOut('fast')
+
+    # $(document).keyup (e) ->
+    #   if e.which == 27
+    #     search_options.fadeOut('fast')
+
+    # handle_up_key = ->
+    #   search_options = $(options_id)
+    #   if search_options.find('li.active').length == 0
+    #     search_options.find('li:last').addClass('active')
+    #   else
+    #     search_options.
+    #       find('li.active').
+    #         removeClass('active').
+    #         prev().
+    #         addClass('active')
+
+    # handle_down_key = ->
+    #   search_options = $(options_id)
+    #   if search_options.find('li.active').length == 0
+    #     search_options.find('li:first').addClass('active')
+    #   else
+    #     search_options.
+    #       find('li.active').
+    #         removeClass('active').
+    #         next().
+    #         addClass('active')
+    #   active_item = $("#{options_id} li.active:first")
+    #   top = search_options.scrollTop()
+    #   unless active_item.length == 0
+    #     if active_item.position().top >= 150
+    #       search_options.scrollTop(top+30)
+    #   else
+    #     search_options.scrollTop(0)
+
+    # search_request = (val) ->
+    #   $http.get("#{search_path}/#{val}").success((data, status, headers, config) ->
+    #     $scope.results = data.customers
+    #   ).error (data, status, headers, config) ->
+    #     return
+
+    # input.keydown (e) ->
+    #   switch e.which
+    #     when 9
+    #       if e.shiftKey
+    #         handle_up_key()
+    #       else
+    #         handle_down_key()
+    #       return false
+    #     when 13
+    #       handle_enter_key()
+    #       return false
+    #     when 40
+    #       handle_down_key()
+    #     when 38
+    #       handle_up_key()
+    #       return false
+    #     else
+    #       return true
+
+    # input.keypress (e) ->
+      # @char_key = e.which isnt 0
+
+    # input.keyup (e) ->
+    #   switch e.which
+    #     when 9
+    #       return false
+    #     when 13
+    #       return true
+    #     when 40
+    #       return false
+    #     when 38
+    #       return false
+    #     when 46, 8
+    #       return true
+    #     when 32
+    #       return true
+    #     else
+    #       return true
+    #   @char_key = false
+    # return true
+    return

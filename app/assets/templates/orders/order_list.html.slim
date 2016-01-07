@@ -1,0 +1,57 @@
+ui-view
+  .search-block
+    .pull-left.mll style='width: 150px;'
+      h6
+        | 共{{itemCount}}个订单
+    input.mlh.form-control#search-orders.pull-left placeholder="输入客户姓名、电话或者订单号搜索" type="search" ng-change='queryStrChange(queryStr)' ng-model='queryStr'
+
+    select.mlh.form-control.select.select-primary.select-block.pull-left ng-model="orderStatus" ui-select2='' data-placeholder='全部' ng-change='filterByStatus(orderStatus)'
+      option value=''
+      option value='-1' selected='selected'
+        | 全部
+      - OrderStatus::Status.each do |k, v|
+        option value=v
+          = k
+
+  #order-list
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th sort-triangle='' content="订单号" order='number'
+          th sort-triangle='' content="客户姓名" order='name'
+          th sort-triangle='' content="客户电话" order='phone'
+          th 种类
+          th sort-triangle='' content="收货日期" order='receive_date'
+          th sort-triangle='' content="送货日期" order='delivery_date'
+          th sort-triangle='' content="是否加急" order='urgent'
+          th 订单状态
+          th 管理
+      tbody
+        tr.fade-in.order-item ng-repeat="order in orders" ng-dblclick='clickToEdit()' dblclick-active='' ng-click="orderLineClicked()"
+          td ng-bind-html='highlight(order.number, queryStr)' 
+          td ng-bind-html='highlight(order.name, queryStr)'
+          td ng-bind-html='highlight(order.phone, queryStr)'
+          td
+            | {{order.type}}
+          td
+            | {{order.receiveDate}}
+          td
+            | {{order.deliveryDate}}
+          td
+            | {{order.urgent}}
+          td
+            | {{order.showStatusZh}}
+          td
+            a ui-sref='manageOrder({orderNumber: order.number})'
+              | 编辑
+  .pagination.orders-list
+    ul
+      li.previous
+        span.fui-arrow-left ng-click="previous()"
+      li ng-repeat='i in getPageArray(pageNumber) track by $index' ng-class="{active: $index==(currentPage-pageLinksOffset)}"
+        span ng-click="getPage($index+pageLinksOffset)"
+          | {{$index+1+pageLinksOffset}}
+      li.next
+        span.fui-arrow-right ng-click="next()"
+
+  #edit-order.slide-in-right.well ng-show='editOrder'

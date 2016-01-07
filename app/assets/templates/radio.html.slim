@@ -1,0 +1,13 @@
+  .form-group
+    .inline-label.col-sm-2
+      label
+        abbr[title='required']
+          | *
+        | 会员服务
+    .col-sm-10.inline-input
+      label.be_member.pull-left class="radio" ng-click="memberStatusChange(true)"
+        input type="radio" name="group1" value="2" data-toggle="radio" checked=''
+        | 充值成为会员
+      label.not_be_member.pull-left class="radio" ng-click="memberStatusChange(false)"
+        input type="radio" name="group1" value="1" data-toggle="radio"
+        | 暂时不办会员

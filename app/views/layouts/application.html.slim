@@ -1,0 +1,20 @@
+doctype html
+html ng-app='Baozheng' 
+  head
+    title
+      | Baozheng
+    = javascript_include_tag "application"
+    = stylesheet_link_tag 'application', media: 'all'
+    = js_env
+    = csrf_meta_tags
+  body.main-content.narrow-sidebar.bs-docs-home#body-block ng-controller='rootCtrl' ng-keydown="keyDown($event)"
+    = render 'shares/sidebar'
+    #content.container-fluid
+      = render 'shares/topnav'
+      = render 'shares/alert'
+      .body-container.row ui-view='' autoscroll="true"
+    #footer
+      /button ng-click='scrollToTop()'
+        | click me to scroll to top
+      /= render 'shares/modals'
+    /#sidebar-resizer resizer="vertical" resizer-width="2" resizer-left="#sidebar" resizer-right="#content" resizer-max="400"

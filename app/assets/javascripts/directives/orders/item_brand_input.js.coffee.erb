@@ -1,0 +1,49 @@
+app = angular.module("itemBrandInput", [])
+
+app.directive 'itemBrandInput', () ->
+  restrict: "A"
+  replace: true
+  scope: {
+    item: '='
+  },
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('directives/item_brand_input.html.slim')%>"
+  link: ($scope, $element, $attrs) ->
+    $scope.brands = []
+    $scope.itemBrandShown = false
+
+  controller: ($scope, $element, ItemBrand) ->
+    $scope.showItemBrand = (val) ->
+      $scope.itemBrandShown = val
+      if val
+        $scope.getItemBrands()
+
+    $scope.getItemBrands = () ->
+      $scope.itemBrandShown = true
+      ItemBrand.query({brand: $scope.item.brand}).then ((results) ->
+        $scope.brands = results
+      ), (error) ->
+        console.log error
+
+    $scope.itemSelected = (items='', item='') ->
+      unless $.isArray(items)
+        elems = items.split("， ")
+      else
+        elems = items
+      return _.indexOf(elems, item) != -1
+
+    $scope.selectItemBrand = (item, index) ->
+      item.type = $scope.itemBrandsEn[index]
+      item.showBrand = $scope.itemBrandsZh[index]
+      $scope.itemBrandShown = false
+
+    $scope.brandKeyPress = (event) ->
+      if event.charCode == 13
+        $scope.itemBrandShown = false
+        if $scope.brands[0]
+          $scope.item.brand = $scope.brands[0].brand
+      return false
+
+    $scope.selectItemBrand = (brand) ->
+      $scope.item.brand = brand
+      $scope.itemBrandShown = false

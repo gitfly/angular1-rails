@@ -1,0 +1,51 @@
+// css for devise layout and devise controllers
+
+@import "less/flat-ui-pro";
+
+.devise.body-container {
+  background: @midnight-blue;
+  width: 100%;
+  height: 100%;
+  .content {
+    margin-top: 5%;
+    .left {
+      padding-top: 30px;
+      margin-right: -10px;
+      h6 {
+        color: #fff;
+      }
+    }
+    .right {
+      margin-right: 0px;
+      padding: 50px 60px;
+      height: 100%;
+      background: rgb(237, 239, 241);
+      .other-links {
+        text-align: center;
+        padding-top: 30px;
+        a {
+          color: @gray;
+          font-size: 13px;
+          &:first-child {
+            margin-right: 40px;
+          }
+        }  
+      }
+    }
+  }
+  .form-inputs {
+    .form-group {
+      input.form-control {
+        border-color: #fff;
+        .form-control-focus(@brand-success);
+      }
+    }  
+  }
+  .login {
+    .header {
+      text-align: center;
+      font-size: 18px;
+      color: @brand-secondary;
+    }
+  }
+}

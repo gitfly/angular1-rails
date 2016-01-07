@@ -1,0 +1,43 @@
+.reconciliation
+  .filters
+    
+    .pull-right
+      
+    
+      a.btn.btn-success.pull-right.mll.plh.prh[ 
+        ng-href="/api/v1/datareports/report_home/export?from={{from}}&to={{to}}"
+        ]
+        | 导出
+
+      button.btn.btn-info.pull-right.mll.plh.prh[
+        ng-click='selectByDate(from, to)'
+      ]
+        span.fui-search
+        | 筛选
+ 
+      input.form-control.end_date.pull-right.mll[
+        placeholder="结束日期" date-picker
+        ng-model='to'
+      ]
+      input.form-control.start_date.pull-right[
+        placeholder="开始日期" date-picker
+        ng-model='from'
+      ]
+
+
+    .clearfix
+.report-table
+  table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1500px;font-size: 10px;' 
+    thead
+      tr 
+        th ng-repeat='result in results.shift track by $index' 
+          | {{result}}
+        
+    tbody   
+      tr.fade-in ng-repeat='result in results track by $index' 
+        td ng-repeat='item in result track by $index' style='padding:5px 5px 5px 5px;width: 140; ' 
+          | {{item}}
+        
+
+      
+      

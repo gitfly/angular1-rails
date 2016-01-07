@@ -1,0 +1,57 @@
+@import 'less/flat-ui-pro';
+
+.rotate_90def {
+	.transition(.3s, ease-in-out);
+	&:hover {
+		-ms-transform: rotate(90deg);
+		-webkit-transform: rotate(90deg);
+		transform: rotate(90deg);
+	}
+}
+
+
+#alerts {
+  position: fixed;
+  z-index: 10000;
+  right: 0px;
+  top: 50px;
+  .alert {
+    .transition(.3s, ease-in-out);
+    width: 350px;
+    height: 80px;
+    .close {
+      .rotate_90def();
+      font-size: 14px;  
+      top: 10px;
+      color: #fff;
+      opacity: .9;
+    }
+  }
+}
+
+#custom-alert.ng-enter {
+  animation: lightSpeedIn .6s;
+}
+
+#custom-alert.ng-leave {
+  animation: lightSpeedOut .6s;
+}
+
+.alert.alert-success {
+  background: @brand-success;  
+  color: #fff;
+}
+
+.alert.alert-warning {
+  background: @brand-warning;  
+  color: #fff;
+}
+.alert.alert-danger {
+  background: @brand-danger;  
+  color: #fff;
+}
+
+.finish-order {
+  text-align: center;
+  padding: 80px;
+}

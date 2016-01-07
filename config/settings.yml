@@ -1,0 +1,296 @@
+hashids_salt: 'xxxxxxxxxxxxx'
+wechat:
+  host: https://api.weixin.qq.com
+  app_id: xxxxxxxxxxxxx
+  app_secret: xxxxxxxxxxxxx
+  number: xxxxxxxxxxxxx
+  default_response_content: "xxxxxxxxxxxxx"
+
+  news:
+    response1: 
+      Title: 包拯路线图
+      Description: 包拯护理 微信号 baozheng02功能介绍：大众点评唯一五星级，零差评包包护理店 包拯工作室地址：朝阳区
+      PicUrl: http://mmbiz.qpic.cn/mmbiz/iaC6ianHGRGPyD6ticKw7nfsEd3whskr9sxLcl9FWLPAyT8iczZX43gzS1ntpziaW16AXmfX6fAjHVzsn1tFialkbpXA/640?wx_fmt=jpeg&tp=webp&wxfrom=5 
+      Url: http://mp.weixin.qq.com/s?__biz=MzAwNjUzNzQyNA==&mid=208067472&idx=1&sn=410f487bc391ff309d1e6c37a4bea16a#rd
+
+    response2: 
+      Title: 我的包坏了，怎么拯？
+      Description: 包拯服务流程很简单，只需要：1.加我们微信号与客服进行沟通，发姓名地址和取送时间我们五环内免费取送,也可快递给包大人
+      PicUrl: http://mmbiz.qpic.cn/mmbiz/iaC6ianHGRGPyD6ticKw7nfsEd3whskr9sxQN6icy4yKYkGodT7naFbcsSEqx7icJNCvtoOvCgVPmNBQYk94WzQVahA/640?wx_fmt=jpeg&tp=webp&wxfrom=5
+      Url: http://mp.weixin.qq.com/s?__biz=MzAwNjUzNzQyNA==&mid=208067647&idx=1&sn=2f8e5c746254074d3d96f812ee585b89#rd
+
+    response3: 
+      Title: 我要护理包包，怎么收费？
+      Description: 包拯不挑品牌、不分材质，只按包包尺寸大小收费，清洗、保养、上色、修复、去划痕、去磨损等统统包含。
+      PicUrl: http://mmbiz.qpic.cn/mmbiz/iaC6ianHGRGPyD6ticKw7nfsEd3whskr9sxbUL3RnRkiazBF5nzibDUBeyJ42WgOxyc0UZzqiatrztHYgDCQCCksVcDw/640?wx_fmt=jpeg&tp=webp&wxfrom=5
+      Url: http://mp.weixin.qq.com/s?__biz=MzAwNjUzNzQyNA==&mid=208067847&idx=1&sn=8afb1fcaba111a3de45c2e2dbfbfeb5a#rd
+
+    response4: 
+      Title: 包拯拯过那些包？
+      Description: 包拯拯过哪些包？包拯拯过染色的、有油渍的、有划痕的、磨损的，甚至狗啃的都拯过哟
+      PicUrl: http://mmbiz.qpic.cn/mmbiz/iaC6ianHGRGPyD6ticKw7nfsEd3whskr9sxBibLGibtqku9NWOTbz8Dz1Z3iaD1l4JEnzB16HjVpviaq78Y60aJvibyBhw/640?wx_fmt=jpeg&tp=webp&wxfrom=5
+      Url: http://mp.weixin.qq.com/s?__biz=MzAwNjUzNzQyNA==&mid=208068048&idx=1&sn=2b7062af651d38daad4156ac6e1dc2ea#rd
+
+
+
+baidu:
+  short_url: http://dwz.cn/create.php
+
+
+
+permitted_attributes:
+  express: 
+    - expressable_type
+    - expressable_id
+    - company_name
+    - company_type
+    - number
+    - price
+    - cash_on_delivery
+  customer: 
+    - name
+    - email
+    - phone
+    - weixin
+    - avatar
+  appointment:
+    - name
+    - phone
+    - customer_id
+    - date
+    - atype
+    - cancel
+    - cancel_reason
+    - cancel_type
+    - date_detail_end
+    - date_detail_start
+  order:
+    - number
+    - badness
+    - maintain_part
+    - flaw
+    - attachment
+    - receive_date
+    - delivery_date
+    - item
+    - customer_id
+    - color
+    - pickup_manner
+    - delivery_manner
+    - request
+    - fetch_date_start
+    - fetch_date_end
+    - receive_week
+    - receive_day
+    - address_id
+    - urgent
+    - finish_date
+    - buy_date
+    - source
+    - gift
+    - source
+    - part
+    - price
+    - discount
+    - material
+    - position
+    - level
+    - symptom
+    - craft
+    - fetch_hour_start
+    - fetch_hour_end
+    - delivery_hour_start
+    - delivery_hour_end
+    - start_work_date
+    - fetch_date
+    - cancel
+    - delivery_name
+    - delivery_phone
+    - refunded
+    - compensated
+    - pre
+    - diagnose
+    - feedback
+    - rework
+    - rework_reason
+    - handler_id
+    - fetch_address_id
+    - delivery_address_id
+    - abnormal
+    - service_name
+    - appointment_id
+    - blue_print_passed
+    - status
+
+  item:
+    - brand
+    - style
+    - color
+    - version
+    - handler_id
+    - show_type
+
+  address:
+    - country
+    - province
+    - city
+    - district
+    - details
+    - atype
+    - name
+    - phone
+
+  friend: 
+    - name
+    - phone
+    - ftype
+
+  refund: 
+    - amount
+    - rtype
+    - reason
+    - order_id
+    - pm
+  
+  compensate:
+    - amount
+    - ctype
+    - reason
+    - order_id
+    - customer_id
+    - pm
+
+  overdue: 
+    - order_id
+    - original_date
+    - expected_date
+    - reason
+
+order:
+  attachments: 
+    - 钱币
+    - 钱包
+    - 饰品
+    - 照片
+    - 防潮包
+    - 防尘袋
+    - 包装袋
+    - 包装盒
+    - 包包卡
+    - 化妆镜
+    - 购物卡
+    - 化妆品
+    - 锁
+    - LV包锁钥匙
+    - 其它私人物品
+  parts:
+    - 肩带
+    - 包锁
+    - 化妆包
+    - 钥匙包
+    - 机车包镜子
+  maintain_parts:
+    - 内衬
+    - 包带
+    - 配件
+    - 局部
+    - 根部
+    - 全部
+    - 靴子创意修复
+    - 中大包清洁护理
+  badness:
+    - 严重污渍护理后
+    - 鹿皮清洗后可能会起毛
+    - 轻微缩水现象
+  flaw:
+    - 变形
+    - 划痕
+    - 污渍
+    - 磨损
+    - 起毛
+    - 起球
+  material:
+    - 鹿皮
+    - 牛皮
+    - 貂皮
+    - 羊皮
+    - 猪皮
+    - 马皮
+    - 鸟皮
+    - 猪皮
+  position:
+    - 内衬
+    - 四角
+    - 包身
+    - 拉链
+    - 提手
+  level:
+    - 轻微
+    - 一般
+    - 重度
+    - 严重
+    - 超级
+  symptom:
+    - 磨损
+    - 破皮
+    - 变色
+    - 弄脏
+    - 掉色
+  craft:
+    - 换色
+    - 边油
+    - 清洗
+    - 护理
+    - 换件
+  colors: 
+    - MBWL
+    - 白三彩
+    - 藕粉色
+    - 浅蓝
+    - 珠灰色
+    - 黑色
+    - 荧黄色
+    - 白色
+    - 橘红色
+    - 米黄色
+    - 棕色
+    - 酒红色
+    - 粉色
+    - 红色
+    - 橘色
+    - 蓝色
+    - COACH双C图案
+    - 拼色
+    - 浅咖色
+    - 橙色
+    - 黄色
+    - 珠光银
+    - 金色
+    - 咖啡色
+    - 灰色
+    - 墨绿色
+    - 灰色棋盘格
+    - 米白色
+    - 浅灰
+    - 米黄
+    - 黑三彩
+    - 灰白色
+    - 绿色
+    - 紫色
+    - 珠光灰
+    - 浅紫色
+    - 浅棕
+    - burberry图案
+    - 浅绿色
+    - 玫红色
+    - 格纹
+    - 白色LV经典花
+    - 白色LV棋盘格
+    - 珠光棕
+    - 灰黑色LV棋盘格
+    - JEEP
+    - 棕色LV经典花
+    - 棕色LV棋盘格
+    - 深棕色
+    - Gucci图案
+    - LV

@@ -1,0 +1,30 @@
+= simple_form_for(Customer.new, html: { 'ng-submit': 'submitCustomerInfo()' }, url: '') do |f|
+  .form-inputs
+    .form-group.required
+      autocomplete-input search-path='/api/v1/customers/info' controller-name='CreateOrder' template-url=asset_path('query_customer.html.slim') name='order[customer][name]'
+    = f.input :phone, input_html: { 'ng-model': 'currentCustomer.phone', 'ng-disabled': '!showAddNewCustomer' }, required: true
+    = f.input :email, input_html: { 'ng-model': 'currentCustomer.email', 'ng-disabled': '!showAddNewCustomer' }, required: true
+    = f.input :weixin, input_html: { 'ng-model': 'currentCustomer.weixin', 'ng-disabled': '!showAddNewCustomer' }, required: true
+    = f.input :balance, input_html: { 'ng-model': 'currentCustomer.balance', 'ng-disabled': 'true' }
+  .form-actions.text-center
+    /ng-show='showAddNewCustomer'
+    = f.button :submit, class: 'btn btn-success btn-lg', value: "保存"
+
+
+
+
+
+
+
+
+
+
+
+  /div ng-show='showChargeForm'
+    flat-radio controller-name='QueryCustomer'
+    div ng-show='isMember'
+      = c.simple_fields_for ConsumptionRecord.new do |con|
+        = select2_input 'consumption_record[amount]', "充值金额", placeholder: "请选择充值金额", collection: ['', 3000, 5000, 8000], model: :consumptionAmount, 'ng-change': 'consumptionAmountChange(consumptionAmount)'
+      /= con.input :amount
+      /= con.input :payment_method
+  /div ng-show='showAddNewCustomer'

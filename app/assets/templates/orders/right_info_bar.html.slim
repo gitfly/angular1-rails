@@ -1,0 +1,52 @@
+#edit-order.slide-in-right ng-show='orderDetails'
+  div ui-view=''
+  /span.fui-cross.close.pull-left ng-click='hideOrderDetails()'
+  /.customer-info.well
+    .basic-info.row
+      .col-md-2
+        img ng-src='{{currentCustomer.avatarUrl}}'
+      .col-md-4
+        .name 
+          | {{currentCustomer.name}}
+        .phone
+          span 电话：
+          | {{currentCustomer.phone}}
+        .weixin
+          span 微信：
+          | {{currentCustomer.weixin}}
+        .weixin_nickname
+          span 微信昵称：
+          | {{currentCustomer.weixinNickname}}
+        .weixin_nickname
+          span 客服电话：
+          | {{currentCustomer.serviceNumber}}  
+      .col-md-4
+        .member-info
+          .info
+            span.mrl
+              | {{currentCustomer.customerType}}
+            span ng-if='currentCustomer.isMember'
+              | 账户余额：
+              | {{currentCustomer.balance}}
+        .gender
+          span 性别：
+          span 
+            | {{currentCustomer.showGender}}
+          span.mlh
+            | 职业：
+          span 
+            | {{currentCustomer.job}}
+        .birthday
+          span 生日：
+          span 
+            | {{currentCustomer.birthday}}
+        .email
+          span 邮箱：
+          | {{currentCustomer.email}}
+        .sensitivity
+          span 敏感度：
+          | {{currentCustomer.showSensitivity}}  
+
+      .clearfix
+    .clearfix
+  /.order-info.row ng-include="'#{asset_path('orders/order_info.html.slim')}'" 

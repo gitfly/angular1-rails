@@ -1,0 +1,78 @@
+#order-list
+  table.table.table-striped.table-hover.table-condensed
+    thead
+      tr
+        th sort-triangle='' content="姓名" order='name'
+        th sort-triangle='' content="角色" order=''
+        th.pointer 电话
+        th.pointer 邮箱
+        th sort-triangle='' content="微信" order='name' 
+        th.pointer 性别
+        th.pointer 生日
+        th.pointer 管理
+
+    tbody
+      tr.order-item ng-repeat="user in users track by $index" dblclick-active='' ng-dblclick="showUserToggle(user)"
+        td 
+          | {{user.name}} 
+        td 
+          | {{user.showType}}   
+        td
+          | {{user.phone}}
+        td
+          | {{user.email}}
+        td
+          | {{user.weixin}}     
+        td
+          | {{user.showGender}}
+        td
+          | {{user.birthday}}    
+        td
+          a.mls ng-click="deleteUser(user, $index)" ng-if="currentUser.type == 'Admin'"
+            | 删除
+           
+/.pagination.orders-list
+  ul
+    /li.previous
+      span.fui-arrow-left ng-click="previous()"
+    li ng-repeat='i in getPageArray(pageNumber) track by $index' ng-class="{active: $index+1==(currentPage-pageLinksOffset)}"
+      span ng-click="getPage($index+1+pageLinksOffset)"
+        | {{$index+1+pageLinksOffset}}
+    /li.next
+      span.fui-arrow-right ng-click="next()"
+
+/.modal.order-settlement ng-if='reworkModal'
+  .modal-dialog
+    .modal-content.pbh
+      .modal-header
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showReworkModal(false)']
+        h6.modal-title
+          | 订单置为超期
+      form name='reworkForm'
+        .modal-body.pth.pbh
+          .row
+            .col-md-2
+            button.btn.btn-default.col-md-2[
+              ng-repeat='rs in reworkStatus track by $index'
+              ng-click="reworkOrder.rework=$index"
+              ng-class="{'btn-success': reworkOrder.rework==$index}"
+              style='margin-right: 7px;'
+            ]
+              | {{rs}}
+          .row style='padding-top: 20px;'
+            .col-md-2
+            .col-lg-9.row
+              textarea.form-control[
+                ng-model='reworkOrder.reworkReason'  
+                name='reworkReason'
+                type='text'
+                required
+                style='height: 100px;'
+              ]
+            .col-md-2
+        .modal-footer
+          .col-md-3
+          a.btn.btn-default.btn-wide.col-md-2 ng-click='showReworkModal(false)' style='margin-left: 30px;'
+            | 返回
+          a.btn.btn-primary.btn-wide.col-md-2 ng-disabled='reworkForm.$invalid' ng-click='submitRework(reworkOrder)'
+            | 确定

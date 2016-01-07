@@ -1,0 +1,12 @@
+doctype html
+html[lang="zh-ch"]
+  head
+    meta[charset="utf-8"]
+    meta[http-equiv="X-UA-Compatible" content="IE=edge"]
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    title
+      | 包拯
+    = stylesheet_link_tag 'mobile', media: 'all'
+    = csrf_meta_tags
+  body.container-fluid
+    = yield

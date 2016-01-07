@@ -1,0 +1,88 @@
+form.mtl
+  div.animate-zoom-out ng-if='settlement.payRecords.length'
+    table.pay-order-list.table.table-bordered.mbh
+      tbody
+        tr
+          th 金额
+          th 方式
+          th 备注
+          th 操作
+        tr.payRecord ng-repeat='pay in settlement.payRecords track by $index'
+          td
+            | {{pay.amount}}
+          td
+            | {{paymentMethods[pay.pm]}}
+          td
+            | {{pay.content.length > 10 ? (pay.content.substring(0, 10)+'...') : pay.content}}
+          td
+            a.pointer.fui-trash ng-click="removePayRecord(settlement, pay, $index)"
+        tr
+          td colspan=2
+            span.mrl.color-red
+              | 总金额：{{payRecordsAmount}} 元
+            span.color-red
+              | 仍需支付：{{remainingAmount()}} 元
+  div
+    .form-inputs
+      .form-group.row.small
+        .inline-label.col-md-2
+          label
+            abbr[title="required"]
+              | *
+            | 付款金额
+        .inline-input.col-md-4
+          input.color-red.form-control[
+            ng-model="payRecord.amount"
+            placeholder="请输入付款金额"
+            ng-disabled='customer.balance>settlement.amount'
+            type='number'
+          ]
+        .inline-label.col-md-2
+          label
+            abbr[title="required"]
+              | *
+            |  支付方式
+        .inline-input.col-md-4
+          select.form-control.select.select-default.select-block.select2-offscreen[
+            placeholder="请选择支付方式" ng-model="payRecord.pm" ui-select2
+            ng-disabled='customer.balance>settlement.amount'
+            ng-change="setCanPay()"
+            type='number'
+          ]
+            option[value=""]
+            - ConsumptionRecord::PaymentMethod.each do |k, v|
+              option[value=v]
+                = k
+
+      .form-group.row ng-show="payRecord.pm=='6'"
+        .inline-label.col-md-2
+          label
+            abbr[title="required"]
+              | *
+            | 会员电话
+        .inline-input.col-md-4
+          input.form-control[
+            ng-model="payRecord.memberPhone"
+            placeholder="会员电话"
+            required
+            ng-change="getFriendsInfo()"
+          ]
+        .inline-label.col-md-6
+          label ng-if="friendCardInfo"
+            | {{friendCardInfo}} 
+      .form-group.row
+        .inline-label.col-md-2
+          label
+            | 备注信息
+        .inline-input.col-md-10
+          textarea#pay_remarks.form-control[
+            ng-model="payRecord.content" 
+            placeholder="请填写本次支付的备注信息"
+            style='height: 100px;'
+          ]
+
+css:
+  .select2-drop {
+    width: 177px !important;
+    min-width: 177px;
+  }

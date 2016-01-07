@@ -1,0 +1,118 @@
+.diagnose
+  .pull-left.left-content.pbh
+    form[name='oForm' novalidate] 
+      .order-basic-info
+        .show-basic-info
+          .bs-callout.bs-callout-info
+            .title.pbl
+              span.mrs.square
+                | ◼︎
+              span
+                | {{editBasicInfo ? '编辑基本信息' : '基本信息'}}
+              .pull-right
+                a.pointer style='margin-right: 7px;' ng-click='editBasicInfoChange(!editBasicInfo)'
+                  strong ng-if='editBasicInfo'
+                    | 收起表单
+                  strong ng-if='!editBasicInfo'
+                    | 编辑基本信息
+            .row.pbs ng-if='!editBasicInfo'
+              p.col-lg-3
+                span.gray
+                  | 种类：
+                | {{item.style}}-{{item.showType}}
+              p.col-lg-4
+                span.gray
+                  | 品牌：
+                | {{item.brand}}
+              p.col-lg-2
+                span.gray
+                  | 型号：
+                | {{item.version}}
+              p.col-lg-3
+                span.gray
+                  | 颜色：
+                | {{item.color}}
+              p.col-lg-3
+                span.gray
+                  | 配件：
+                | {{currentOrder.parts}}
+              p.col-lg-4
+                span.gray
+                  | 附件：
+                | {{currentOrder.attachment}}
+              .col-lg-2
+                span.gray
+                  | 是否加急：
+                | {{currentOrder.showUrgent}}
+          .bs-callout.bs-callout-info ng-if='!editBasicInfo && currentOrder.request'
+            .title.pbs
+              span.mrs.square
+                | ◼︎
+              | 用户需求：
+            .col-lg-12
+              pre
+                | {{currentOrder.request}}
+            .clearfix
+          .clearfix
+        .edit-basic-info ng-if='editBasicInfo'
+          simple-radio-buttons.col-md-6[
+            options="{'不加急': false, '加急': true}" required
+            attribute='currentOrder.urgent' name='orderUrgent'
+          ]
+          simple-radio-buttons.col-md-6[
+            options="{'女款': '女款', '男款': '男款'}" required
+            attribute='item.style' name='itemStyle'
+          ]
+          custom-select.col-md-6[
+            datas=Item::Type.values required
+            attribute='item.showType' name='itemType'
+          ]
+          custom-select.col-md-6[
+            options-url='items/brands' required
+            attribute='item.brand' name='itemBrand' query-key='brand'
+          ]
+          custom-select.col-md-6[
+            options-url='items/versions?brand={{item.brand}}'
+            attribute='item.version' name='itemVersion' query-key='version'
+          ]
+          custom-select.col-md-6[
+            attribute='item.color' name='itemColor'
+            query-key='color' options-url='items/colors'
+          ]
+          custom-select.col-md-6[
+            attribute='currentOrder.part' name='orderPart'
+            datas=Settings.order.parts multiple
+          ]
+          custom-select.col-md-6[
+            attribute='currentOrder.attachment' name='orderAttachment'
+            datas=Settings.order.attachments multiple
+          ]
+          simple-input.col-md-6[
+            attribute='currentOrder.startWorkDate'
+            name='orderStartWorkDate' date-picker
+          ]
+          simple-input.col-md-6[
+            attribute='currentOrder.finishDate'
+            name='orderFinishDate' date-picker
+          ]
+          simple-input.col-md-12.narrow-label[
+            attribute='currentOrder.request' name='orderRequest' textarea
+          ]
+      .diagnose-update-info ng-class="{'edit-info': editBasicInfo, 'pth': !editBasicInfo}"
+        custom-select.col-md-12.narrow-label[
+          multiple=true textarea query-key='name' options-url='services/types'
+          attribute='currentOrder.serviceName' name='orderService' required 
+        ]
+        simple-input.col-md-12.narrow-label[
+          attribute='currentOrder.diagnose'
+          textarea name='orderDiagnose' required
+        ]
+      .col-md-12.text-center
+        button.btn.btn-success.btn-lg[
+          ng-disabled='oForm.$invalid'
+          ng-click='saveOrderInfo(currentOrder)'
+        ]
+          span.fui-check.mrs
+          | 保存订单信息
+  .pull-right.right-bar.full-height
+    div ng-include="'#{asset_path('orders/customer_orders.html.slim')}'"

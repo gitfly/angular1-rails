@@ -1,0 +1,201 @@
+.bs-callout.bs-callout-danger style='padding: 10px 20px'
+  .title style='padding-bottom: 0px'
+    .pull-left
+      div ng-if='currentOrder.pre'
+        strong
+          | 预订单
+      div ng-if='!currentOrder.pre'
+        strong
+          | 正式订单
+    .pull-left.pll
+      | {{currentOrder.number}}
+    .pull-right.prs ng-click='editOrder(currentOrder)'
+      a.pointer
+        strong
+          | 编辑
+    .clearfix
+
+.bs-callout.bs-callout-info
+  .title
+    span.mrs.square
+      | ◼︎
+    | 客户信息
+  .row
+    .col-lg-6
+      span
+        span.gray
+          | 用户姓名：
+        | {{customer.name}}
+    .col-lg-6
+      span
+        span.gray
+          | 账户余额：
+        | {{customer.balance}} 元
+  .row
+    .col-lg-6 ng-if='customer.weixin'
+      span
+        span.gray
+          | 微信号：
+        | {{customer.weixin}}
+    .col-lg-6 ng-if='customer.weixinNickname'
+      span
+        span.gray
+          | 微信昵称：
+        | {{customer.weixinNickname}}
+  .row
+    .col-lg-6 ng-if='customer.weixin'
+      span
+        span.gray
+          | 用户类型：
+        | {{customer.customerType}}
+    .col-lg-6
+      span
+        span.gray
+          | 来自客服手机：
+        | {{customer.serviceNumber}}
+.bs-callout.bs-callout-primary
+  .title
+    span.mrs.square
+      | ◼︎
+    | 物品信息
+  .row
+    .col-lg-12
+      span ng-if='currentOrder.showType'
+        | {{currentOrder.showItemType}}&nbsp：
+      span ng-if='currentOrder.showBrand'
+        | {{currentOrder.showBrand}}
+      span ng-if='currentOrder.showVersion'
+        | {{currentOrder.showVersion}}
+      span ng-if='currentOrder.showColor'
+        | &nbsp&nbsp•&nbsp&nbsp{{currentOrder.showColor}}
+      span ng-if='currentOrder.showStyle'
+        | &nbsp&nbsp•&nbsp&nbsp{{currentOrder.showStyle}}
+  .row
+    .col-lg-6 ng-if='currentOrder.part'
+      span
+        span.gray
+          | 配件：
+        | {{currentOrder.part}}
+    .col-lg-6 ng-if='currentOrder.attachment'
+      span
+        span.gray
+          | 附件：
+        | {{currentOrder.attachment}}
+    .col-lg-6 ng-if='currentOrder.gift'
+      span
+        span.gray
+          | 赠品：
+        | {{currentOrder.gift}}
+.bs-callout.bs-callout-success
+  .title
+    span.mrs.square
+      | ◼︎
+    | 服务类型
+  .row
+    .col-lg-12
+      span
+        | {{currentOrder.serviceName}}
+.bs-callout.bs-callout-warning
+  .title
+    span.mrs.square
+      | ◼︎
+    | 价格信息
+
+    .pull-right.prl
+      a ui-sref="payOrder({customerId: customer.id, orderType: 'paid'})" ng-if='order.paid'
+        strong
+          | 已付
+      a ui-sref="payOrder({customerId: customer.id, orderType: 'unpaid'})" ng-if='!order.paid'
+        strong
+          | 付款
+    
+  .row
+    .col-lg-6
+      span.gray
+        | 原价：
+      span
+        | {{currentOrder.price | number:2}} 元
+    .col-lg-6
+      span.gray
+        | 最终价：
+      span
+        | {{currentOrder.finalPrice | number:2}} 元
+
+  .row
+    .col-lg-12
+      span.gray
+        | 会员价：
+      span
+        | {{currentOrder.price}}&nbspx&nbsp{{currentOrder.discount}}&nbsp=&nbsp{{currentOrder.memberPrice | number:2}} 元
+
+  .row
+    .col-lg-12 ng-if='currentOrder.activity'
+      span.gray
+        | 活动价：
+      span
+        | {{currentOrder.actPrice | number:2}} 元
+
+  .row ng-if='currentOrder.activity'
+    .col-lg-12
+      span.gray
+        | 活动信息：
+      span
+        | {{currentOrder.activity.name}}
+        | &nbsp&nbsp•&nbsp&nbsp
+        | {{currentOrder.activity.showCoupon}}
+  /.row
+    .col-lg-12
+      span.gray
+        | 服务类型：
+      span
+        | {{currentOrder.serviceName}}
+.bs-callout.bs-callout-danger
+  .title
+    span.mrs.square
+      | ◼︎
+    | 时间信息
+    span.pull-right.mrl.color-red.mll ng-if='currentOrder.urgent'
+      | 加急
+    span.color-red.mll.mrl.pull-right ng-if='currentOrder.late'
+      | 超期
+  .row
+    .col-lg-6
+      span.gray
+        | 开单日期：
+      span
+        | 20{{currentOrder.showCreatedAt}}
+    .col-lg-6
+      span
+        span.gray
+          | 订单状态：
+        | {{currentOrder.showStatusZh}}
+  .row
+    .col-lg-6
+      span
+        span.gray
+          | 开工日期：
+        | {{currentOrder.startWorkDate}}
+    .col-lg-6
+      span
+        span.gray
+          | 完工日期：
+        | {{currentOrder.finishDate}}
+
+.bs-callout.bs-callout-info ng-if='currentOrder.request'
+  .title
+    span.mrs.square
+      | ◼︎
+    | 顾客要求
+  .row
+    .col-lg-12
+      span
+        | {{currentOrder.request}}
+.bs-callout.bs-callout-warning
+  .title
+    span.mrs.square
+      | ◼︎
+    | 诊断信息
+  .row
+    .col-lg-12
+      span
+        | {{currentOrder.diagnose}}

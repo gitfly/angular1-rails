@@ -1,0 +1,11 @@
+#new-order-form.row
+  div.step-block#customer-form ng-show='newOrderStep==0'
+    = render 'orders/customer_info'
+
+  = simple_form_for(Order.new, html: { 'ng-submit': 'createOrder()' }, url: '') do |f|
+    .form-inputs
+      div.step-block ng-show='newOrderStep==1'
+        = render 'orders/order_info', f: f
+
+      div.step-block ng-show='newOrderStep==2'
+        = render 'orders/service_info', f: f

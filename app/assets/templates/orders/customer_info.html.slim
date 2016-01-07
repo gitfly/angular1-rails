@@ -1,0 +1,71 @@
+.customer-info.well
+  .basic-info ng-if='!newCustomerButton'
+    .pull-left.avatar
+      img ng-src='{{currentCustomer.avatarUrl}}'
+    .pull-left.info
+      .name 
+        | {{currentCustomer.name}}
+      .phone
+        span 电话：
+        | {{currentCustomer.phone}}
+      .weixin
+        span 微信：
+        | {{currentCustomer.weixin}}
+      .weixin_nickname
+        span 微信昵称：
+        | {{currentCustomer.weixinNickname}}
+    .pull-left.account.mlh
+      .member-info
+        .info
+          span.mrl
+            | {{currentCustomer.customerType}}
+          span ng-if='currentCustomer.isMember'
+            | 账户余额：
+            | {{currentCustomer.balance}}
+      .gender
+        span 性别：
+        span 
+          | {{currentCustomer.showGender}}
+        span.mlh
+          | 职业：
+        span 
+          | {{currentCustomer.job}}
+      .birthday
+        span 生日：
+        span 
+          | {{currentCustomer.birthday}}
+      .email
+        span 邮箱：
+        | {{currentCustomer.email}}
+
+    .pull-left.recharge
+      .edit.pull-left.mrl
+        .btn.btn-info ng-click='editCustomer()'
+          | 编辑
+      .member-info.pull-left ng-if='currentCustomer.isMember'
+        .btn.btn-success ng-click='showRechargeForm(true, currentCustomer)'
+          | 充值
+      .not-member.pull-left ng-if='!currentCustomer.isMember'
+        .btn.btn-success ng-click='showRechargeForm(true, currentCustomer)'
+          | 充值成为会员
+
+      .clearfix
+    .clearfix
+  .order-histroy ng-show='!newCustomerButton'
+    .orders.pull-left
+      .order ng-repeat="o in currentCustomer.orders"
+        
+        a.mrl ui-sref="manageOrder({orderNumber: {{o.number}}})" target="_blank"
+          | {{o.number}}
+        span.mrl
+          | {{o.showItemType}}
+        span
+          | {{o.showStatusZh}}
+    .summary.pull-left ng-if='currentCustomer.orderSummary'
+      strong
+        | 总计：
+        | {{currentCustomer.orderSummary}}
+    .clearfix
+
+  div ng-include="'#{asset_path('customers/new.html.slim')}'" ng-if='newCustomerButton'
+  div ng-controller='rechargeCtrl' ng-include="'#{asset_path('partials/recharge.html.slim')}'"

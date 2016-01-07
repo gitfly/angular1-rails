@@ -1,0 +1,86 @@
+.warehouses-store
+  .filters
+    div  style='font-size: 18px;margin-top: 10px;' 
+    .mbl
+      
+
+      button.btn.btn-hg.btn-primary ng-if="should_finished"
+        | 应完成个数：{{should_finished}}   
+      button.btn.btn-hg.btn-primary ng-if="overdues"
+        | 超期个数：{{overdues.length}}   
+      button.btn.btn-hg.btn-primary ng-if="should_finished"
+        | 超期率：{{((overdues.length/should_finished)*100).toFixed(2)}}%
+    .mbl
+      .pull-center.mr15
+        button.btn.btn-success.btn-wide
+          | 门店开单
+          span.btn-tip
+            | {{store.advanceOrderCount}}单
+
+        button.btn.btn-warning.btn-wide
+          | 门店发出
+          span.btn-tip
+            | {{store.sendToFactoryCount}}单
+
+        button.btn.btn-danger.btn-wide
+          | 修复中心接收
+          span.btn-tip
+            | {{store.factoryReceiveCount}}单
+
+        button.btn.btn-info.btn-wide
+          | 修复中心发
+          span.btn-tip
+            | {{store.outOfStorageCount}}单
+
+        button.btn.btn-inverse.btn-wide
+          | 门店接收
+          span.btn-tip
+            | {{store.storeReceiveCount}}单
+
+        button.btn.btn-primary.btn-wide
+          | 门店出库
+          span.btn-tip
+            | {{store.completeCount}}单
+
+    .clearfix
+  .line ng-if="abnormalOrders"
+    span
+      | 异常订单
+
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered ng-if="abnormalOrders"
+    thead
+      tr
+        th 异常时间
+        th 订单号
+        th 异常信息 
+        th 说明
+        
+       
+
+    tbody
+      tr.fade-in ng-repeat='order in abnormalOrders'
+        td
+          | {{order.abnormalTime}}
+        td
+          | {{order.number}}
+        td
+          | {{order.abnormalInfo}}
+        td
+          | {{info}}
+        
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+

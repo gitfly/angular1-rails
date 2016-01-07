@@ -1,0 +1,74 @@
+.services
+  .pull-left.left
+    h6.text-center.mth
+      | 服务列表
+    
+    button.btn.btn-success.btn-sm.pull-right.mbl[
+      ng-click='changeNewServiceStatus(true)' ng-show='!addNewService'
+    ]
+      span.fui-plus
+      | 添加新的服务
+
+    .btn.btn-link.pull-right.mbl[
+      ng-click='changeNewServiceStatus(false)' ng-show='addNewService'
+    ]
+      | 收起表单
+
+    .clearfix
+
+    form name='serviceForm' ng-show='addNewService'
+      .form-inputs
+        .form-group
+          .inline-label.pull-left
+            label
+              abbr[title="required"]
+                | *
+              | 服务名称
+          .inline-input.pull-left
+            input.form-control[
+              placeholder="服务名称" required
+              type='text'
+              name='serviceName'
+              ng-model="currentService.name" 
+            ]
+            .error-message ng-show='serviceForm.serviceName.$invalid && serviceForm.serviceName.$dirty'
+              | 服务名称不能为空
+          .clearfix
+
+        .form-group
+          .inline-label.pull-left
+            label
+              abbr[title="required"]
+                | *
+              | 服务价格
+          .inline-input.pull-left
+            input.form-control[
+              placeholder="服务价格" required
+              type='number' min="0" max="10001"
+              name='servicePrice'
+              ng-model="currentService.price" 
+            ]
+            .error-message ng-show='serviceForm.servicePrice.$invalid && serviceForm.servicePrice.$dirty'
+              | 价格必须是1到1000之间的数字
+            .clearfix
+        .form-actions.text-center
+          .btn.btn-success.mtl ng-disabled='serviceForm.$invalid' ng-click='createService(currentService)'
+            | 创建服务
+
+    table.table.table-striped.mtl
+      thead
+        tr
+          th 服务名称
+          th 价格
+          th 管理
+      tbody
+        tr ng-repeat='service in services'
+          td
+            | {{service.name}}
+          td
+            | {{service.price}}
+          td
+            a.fui-cross.pointer ng-click='deleteService(service)'
+
+
+

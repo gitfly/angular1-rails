@@ -1,0 +1,31 @@
+// css for footer
+
+@import 'less/flat-ui-pro';
+
+@ts1: 0.5s;
+
+.bottom-menu {
+  // margin-bottom: -30px;
+}
+.bottom-menu-iconic-list {
+  .left, .right {
+    height: 50px;
+    width: 50px;
+  }
+  li a {
+    img {
+      -webkit-transition: @ts1;
+      -moz-transition: @ts1;
+      -o-transition: @ts1;
+      transition: @ts1;
+      .opacity(0.5);
+      height: 30px;
+      width: 30px;
+      &:hover {
+        height: 35px;
+        width: 35px;
+        .opacity(0.8);
+      }
+    }
+  }  
+}

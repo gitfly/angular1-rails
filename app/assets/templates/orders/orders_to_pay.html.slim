@@ -1,0 +1,98 @@
+.create-order-form.ptl.prs
+  div ng-include="'#{asset_path('orders/create.html.slim')}'"
+
+.table-responsive
+  table.table.table-striped.table-condensed.orders style='table-layout: fixed;'
+    tbody
+      tr
+        th.pointer.prs ng-click="selectAll(!sAll)" style='width: 88px;'
+          span.fui ng-class="{'fui-checkbox-checked': sAll, 'fui-checkbox-unchecked': !sAll}"
+          | 全选
+        th style='padding-left: 0px'
+          | 订单号
+        th 物品信息
+        th style='width: 80px;'
+          | 原价
+        th
+          | 折扣价 ({{customer.customerType}})
+        th.activities style='width: 200px;'
+          div ng-include="'#{asset_path('orders/pay_activities.html.slim')}'"
+        th style='width: 125px;'
+          | 最终价
+      tr.animate-zoom-out.pointer[
+        ng-repeat='o in orders track by $index'
+        ng-class="{'active': o.newCreated}"
+        ng-dblclick="editOrder(o)"
+      ]
+        td.pointer.prs ng-click="selectOrder(o)"
+          span.fui ng-class="{'fui-checkbox-checked': o.selected, 'fui-checkbox-unchecked': !o.selected}"
+        td.col-md-1 style='padding-left: 0px' ng-click="selectOrder(o)"
+          strong
+            | {{o.number}}
+          div
+            strong.mrl
+              | {{o.showStatusZh}}
+            strong
+              | {{o.showPaid}}
+          div ng-if='o.cancel'
+            span.color-red
+              | 已取消
+          div ng-if='o.compensated'
+            span.color-red
+              | 赔付：{{o.compensateAmount | number:2}} 元
+          div ng-if='o.refunded'
+            span.color-red
+              | 退款：{{o.refundAmount | number:2}} 元
+        td.col-md-2 ng-click="selectOrder(o)"
+          p
+            span.mrs
+              | {{o.showStyle}}
+            strong
+              |{{o.showItemType}}
+          p
+            small.mrs
+              | {{o.showColor}}
+            small
+              | {{o.showBrand}}
+
+        td ng-click="selectOrder(o)"
+          | {{o.price | number:2}}
+        td ng-click="selectOrder(o)"
+          | {{o.price | number:2}}x{{o.discount}}
+          span.mls.mrs
+            | =
+          strong
+            | {{(o.price * o.discount) | number:2}}
+
+        td ng-click="selectOrder(o)"
+          .name
+            | {{o.showActivityName}}
+          .price
+            | {{o.showActivityInfo}}
+
+        td ng-click="selectOrder(o)"
+          | {{o.finalPrice | number:2}}
+      tr
+        td.pointer.prs[
+           style='width: 88px;'
+           ng-click="selectAll(!sAll)" colspan=1
+        ]
+          span.fui ng-class="{'fui-checkbox-checked': sAll, 'fui-checkbox-unchecked': !sAll}"
+          | 全选
+        td
+          | 共 {{orders.length}} 个订单
+        td colspan=2
+          | 总原价：
+          | {{totalPrice | number:2}}
+        td colspan=2
+          | 总最终价格：
+          | {{totalFinalPrice | number:2}}
+        td.goto-pay[
+          ng-click="showPayForm(true && orderCount && orderType=='unpaid')"
+          ng-class="{'cannot-pay': !orderCount||orderType!='unpaid'}"
+        ]
+          | 结算 {{totalFinalPrice | number:2}}
+
+div ng-include="'#{asset_path('orders/pay_modal.html.slim')}'"
+div ng-include="'#{asset_path('orders/recharge_modal.html.slim')}'"
+

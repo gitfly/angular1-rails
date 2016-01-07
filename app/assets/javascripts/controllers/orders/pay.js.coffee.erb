@@ -1,0 +1,823 @@
+app = window.app
+
+app.controller "payOrder", (
+  $scope,
+  $sce,
+  Order,
+  Orders,
+  $state,
+  $stateParams,
+  dialogs,
+  Activity,
+  Recharge,
+  Settlement,
+  Printer,
+  focus,
+  $timeout,
+  Address,
+  OrderLog,
+  Customer,
+  useActivity
+) ->
+
+  $scope.orders = []
+  $scope.customer = {}
+  $scope.activity = {}
+  $scope.showActivities = false
+  $scope.sAll = false
+  $scope.payRecordsAmount = 0.0
+  $scope.rechargeForm = false
+  $scope.recharge = {
+    bonus: 0
+  }
+  $scope.addresses = []
+  $scope.logs = []
+  $scope.showLogs = true
+
+  $scope.hideLogs = (val) ->
+    $scope.showLogs = val
+
+  $scope.changeUrlParams = (params) ->
+    if $scope.customer
+      customerId = $scope.customer.id
+    if $scope.order
+      orderId = $scope.order.id
+
+    initParams = {
+      orderId: orderId
+      customerId: customerId
+      orderForm: $scope.orderForm
+      orderType: $scope.orderType
+    }
+
+    p = _.extend(initParams, params)
+    $state.transitionTo('payOrder', p, {
+      location: true,
+      notify:false,
+      reload:false
+    })
+
+  $scope.initOrder = ->
+    $scope.order = {
+      pickupManner: 0
+      deliveryManner: 0
+      urgent: false
+      part: ''
+      attachment: ''
+      price: 0,
+      discount: $scope.customer.discount || 1.0
+    }
+
+    $scope.item = {
+      style: '女款'
+    }
+    $scope.fetchAddress = {}
+    $scope.deliveryAddress = {}
+
+  $scope.initAllData = ->
+    $scope.initOrder()
+    $scope.friend = {}
+
+  $scope.initAllData()
+
+  getOrderLogs = (order) ->
+    OrderLog.query({orderId: order.id}).then ((results) ->
+      $scope.logs = results
+    ), (error) ->
+      console.log(error)
+
+  $scope.setOrderFrom = (order) ->
+    Order.get(order.id).then ((result) ->
+      $scope.order = result
+      $scope.item = result.item
+      $scope.friend = result.friend
+      $scope.fetchAddress = result.fetchAddress
+      $scope.deliveryAddress = result.deliveryAddress
+    ), (error) ->
+      console.log error
+    getOrderLogs(order)
+
+  $scope.pickupManners = {
+    0: "亲自来店"
+    1: "包拯上门取"
+    2: "快递寄来"
+  }
+  $scope.deliveryManners = {
+    0: "顾客来店取"
+    1: "朋友来店代取"
+    2: "包拯上门送"
+    3: "快递"
+  }
+
+  $scope.settlement = {
+    orderIds: [],
+    payRecords: []
+  }
+
+  $scope.payRecord = {}
+
+  $scope.paymentMethods = {
+    '0': "会员消费"
+    '1': "现金"
+    '2': "刷卡"
+    '3': "微信支付"
+    '4': "支付宝支付"
+    '5': "银行转账"
+    '6': "优惠券"
+    '7': "使用朋友会员卡消费"
+  }
+
+  getOrders = (customerId, params={type: 'unpaid'}) ->
+    if customerId
+      Order.$get("/api/v1/orders/types", {
+        customerId: customerId, type: params.type
+      }).then ((results) ->
+        $scope.orders = results.orderList
+
+        if $scope.orders.length
+          $scope.order = $scope.orders[0]
+
+        customer = results.customer
+        $scope.customer = customer
+        $scope.order.discount = customer.discount
+        $scope.recharge.customerId = customer.id
+        $scope.settlement.customerId = customer.id
+        $scope.recharge.discount = customer.discount
+        $scope.recharge.total = customer.rechargeTotal
+
+        if params.type == 'pre' && !$scope.orders.length
+          unless $scope.order
+            $scope.initAllData()
+          $scope.orderForm = true
+          $scope.order.pre = true
+          $scope.alertWith("该用户没有预订单，请先创建。", 'warning')
+
+        if parseInt($stateParams.orderId) && $stateParams.orderForm=='true'
+          _.each($scope.orders, (order) ->
+            if order.id == parseInt($stateParams.orderId)
+              order.newCreated = true
+              $scope.setOrderFrom(order)
+          )
+      ), (error) ->
+
+  $scope.getOrders = (type) ->
+    $scope.orderType = type
+    $scope.orderForm = false
+
+    $state.go('payOrder', {
+      orderType: type
+      orderForm: false
+      customerId: $scope.customer.id
+    })
+    # getOrders($scope.customer.id, {type: type})
+
+  $scope.orderForm = $stateParams.orderForm == 'true'
+  $scope.orderType = $stateParams.orderType
+  getOrders($stateParams.customerId, {type: $scope.orderType})
+  
+  $scope.useGrouponCode = (event, activity) ->
+    activity.activityCodes ||= []
+    if event.charCode == 13
+      if activity.grouponCode.length == 10
+        activity.activityCodes.push(activity.grouponCode)
+        activity.grouponCode = ''
+      else
+        $scope.alertWith("团购码必须是10位", 'danger')
+
+  $scope.removeGrouponCode = (index, activity) ->
+    activity.activityCodes.splice(index, 1)
+
+  Activity.query({type: 'available'}).then ((results) ->
+    $scope.activity = results[0]
+    $scope.activities = results
+    $scope.normalAcs = _.filter(results, (ac)->
+      return ac.atype == 0
+    )
+    $scope.grouponAcs = _.filter(results, (ac)->
+      return ac.atype == 1 || ac.atype == 3
+    )
+  ), (error) ->
+    console.log(error)
+
+  $scope.activityChange = (val) ->
+    $scope.showActivities = val
+
+  orderCanUseActivity = (order, activity) ->
+    if !order.selected || order.paid
+      return false
+
+    if activity.itemType && activity.itemType.match('0')
+      return true
+    else
+      return !!activity.showItemType.match(order.showItemType)
+
+  $scope.orderCanUseActivity = () ->
+    return !_.some($scope.orders, (order) ->
+      return order.selected && (order.paid || order.cancel || order.completed)
+    )
+
+  activityCanBeUsedOnOrders = (orders, ac) ->
+    if ac.id
+      if ac.consumeAddUp == 1
+        return  _.some(orders, (order)->
+          orderCanUseActivity(order, ac)
+        )
+      else
+        count = _.filter(orders, (order)->
+          orderCanUseActivity(order, ac)
+        ).length
+        return ac.consumeAddUp == count
+    else
+      return true
+
+  $scope.selectActivity = (orders, ac={}) ->
+    $scope.activity = ac
+    $scope.activity.enable = activityCanBeUsedOnOrders(orders, ac)
+    if $scope.activity.atype != 0
+      focus('activity-code')
+
+  $scope.useNoActivity = (orders) ->
+    orders = new Orders(orders)
+
+    Activity.$put("/api/v1/activities/clear_activity", {
+      orderIds: orders.selectedIds()
+    }).then ((result) ->
+      $scope.showActivities = false
+      useActivity(orders, undefined)
+    ), (error) ->
+      console.log(error)
+
+  $scope.confirmActivity = (orders, ac={}) ->
+    orders = new Orders(orders)
+    Activity.$put("/api/v1/activities/apply_to_orders/#{ac.id}", {
+      orderIds: orders.selectedIds(), activityCodes: ac.activityCodes,
+    }).then ((result) ->
+      $scope.showActivities = false
+      useActivity(orders, ac)
+    ), (error) ->
+      console.log(error)
+
+  $scope.selectAll = (val) ->
+    $scope.sAll = val
+    $scope.payTools = $scope.sAll
+    _.each($scope.orders, (order, index)->
+      $scope.orders[index].selected = val
+    )
+
+  roundNumber = (number) ->
+    Number((number).toFixed(2))
+
+  $scope.selectOrder = (order) ->
+    order.selected = !order.selected
+    if order.selected
+      $scope.payTools = true
+    $scope.sAll = _.every($scope.orders, (order)->
+      return order.selected
+    )
+
+  $scope.remainingAmount = () ->
+    roundNumber($scope.settlement.amount - $scope.payRecordsAmount)
+
+  $scope.$watch('orders', (newValue, oldValue) ->
+    $scope.totalPrice = 0.0
+    $scope.totalFinalPrice = 0.0
+    $scope.orderCount = 0
+
+    $scope.sAll = true
+    _.each(newValue, (order) ->
+      if order.selected
+        $scope.totalPrice += order.price
+        $scope.totalFinalPrice += order.finalPrice
+        $scope.orderCount += 1
+        $scope.order = order
+      else
+        $scope.sAll = false
+    )
+    $scope.totalFinalPrice = roundNumber($scope.totalFinalPrice)
+    $scope.settlement.amount = $scope.totalFinalPrice
+    $scope.settlement.payRecords = []
+
+    if $scope.totalFinalPrice > $scope.customer.balance && $scope.customer.balance
+      $scope.settlement.payRecords.push({
+        pm: '0',
+        amount: $scope.customer.balance,
+        content: "会员卡余额不足，会员卡全部消费"
+      })
+      $scope.payRecordsAmount = $scope.customer.balance
+      $scope.payRecord.amount = roundNumber($scope.totalFinalPrice-$scope.customer.balance)
+      $scope.payRecord.pm = 1
+    else
+      $scope.payRecord.amount = $scope.totalFinalPrice
+      $scope.payRecord.pm = '0'
+
+    $scope.selectActivity(newValue, $scope.activity)
+  , true)
+
+  $scope.showPayForm = (val) ->
+    $scope.payForm = val
+
+  $scope.removePayRecord = (settlement, pay, index) ->
+    $scope.payRecord.amount += pay.amount
+    $scope.payRecordsAmount = roundNumber($scope.payRecordsAmount-pay.amount)
+    settlement.payRecords.splice(index, 1)
+
+  $scope.selectedOrders = () ->
+    _.filter($scope.orders, (order)->
+      return order.selected
+    )
+
+  $scope.submitSettlement = (settlement) ->
+    dialogs.confirm('【确认收款】', "╰_╯ 确定收到款了吗！",{size: 'md'}).result.then (btn) ->
+      if $scope.payRecord.pm=='0'
+        if $scope.payRecord.amount > $scope.customer.balance
+          $scope.alertWith("会员卡余额不足，请充值或使用别的方式支付。", 'danger')
+          if $scope.customer.balance
+            $scope.payRecord.amount = $scope.customer.balance
+          return false
+
+      if $scope.remainingAmount() > $scope.payRecord.amount
+        $scope.settlement.payRecords.push($scope.payRecord)
+        $scope.payRecordsAmount += $scope.payRecord.amount
+        $scope.payRecord = {
+          amount: roundNumber($scope.settlement.amount-$scope.payRecordsAmount)
+        }
+      else if $scope.remainingAmount() == $scope.payRecord.amount
+        settlement.payRecords.push($scope.payRecord)
+        settlement.order_ids = _.map($scope.selectedOrders(), (order)->
+          return order.id
+        )
+        new Settlement(settlement).create().then (result) ->
+          $scope.orders = result.orderList
+          $scope.payForm = false
+          _.each(settlement.payRecords, (pay)->
+            if pay.pm == '0'
+              $scope.customer.balance = roundNumber($scope.customer.balance-pay.amount)
+          )
+        , (error) ->
+          console.log(error)
+          # TODO parser error message 
+        return false
+
+  $scope.selectSpecialActivity = (orders) ->
+    $scope.activity = {
+      atype: 10,
+      enable: true,
+      itemType: [0],
+      name: "特殊活动",
+      discountManner: 1
+    }
+
+  $scope.submitSepcialActivity = (orders, ac) ->
+    orders = new Orders(orders)
+
+    ac.orderIds = orders.selectedIds()
+    new Activity(ac).create().then ((result) ->
+      $scope.showActivities = false
+      useActivity(orders, ac)
+    ), (error) ->
+      console.log(error)
+
+  showDiscount = true
+  $scope.$watch('activity', (newValue, oldValue) ->
+    if newValue
+      if newValue.discountManner == '0'
+        $scope.showDiscount = true
+      else if newValue.discountManner=='1'
+        $scope.showDiscount = false
+  , true)
+
+  $scope.payTools = false
+  $scope.showPayTools = (val) ->
+    $scope.payTools = val
+
+  $scope.printFlowTable = (order) ->
+    document.title = "包拯工作室流程单"
+    flowCount = 8
+    flowCountArray = Array.apply(
+      null, {length: flowCount-1}
+    ).map(Number.call, Number)
+
+    Printer.print("<%= asset_path("orders/flow_table.html.slim")%>", {
+      order: order,
+      customer: $scope.customer,
+      flowCount: flowCount,
+      flowCountArray: flowCountArray
+    })
+
+  $scope.printServiceOrder = () ->
+    paidTotal = 0.0
+    paymentMethods = ""
+    _.each($scope.selectedOrders(), (order) ->
+      if order.paid
+        paidTotal +=  order.finalPrice
+      unless paymentMethods.includes(order.showPms)
+        paymentMethods += order.showPms
+    )
+    Printer.print("<%= asset_path("orders/bills.html.slim")%>", {
+      customer: $scope.customer,
+      orders: $scope.selectedOrders(),
+      order: $scope.selectedOrders()[0],
+      originalTotal: $scope.totalPrice,
+      paidTotal: paidTotal,
+      paymentMethods: paymentMethods,
+      finalTotal: $scope.totalFinalPrice,
+      count: $scope.selectedOrders().length,
+      finalDiscount: $scope.finalDiscount
+    })
+
+  $scope.trustAsHtml = (str) ->
+    return $sce.trustAsHtml(str)
+
+  $scope.printBarcode = () ->
+    repeater = Array.apply(
+      null, {length: 4}
+    ).map(Number.call, Number)
+
+    Printer.print("<%= asset_path("orders/barcode.html.slim")%>", {
+      repeater: repeater,
+      orders: $scope.selectedOrders(),
+      customerName: $scope.customer.name
+    })
+
+  $scope.showRecharge = (val) ->
+    $scope.rechargeForm = val
+
+
+  $scope.repeater = Array.apply(
+    null, {length: 2}
+  ).map(Number.call, Number)
+  
+  $scope.rechargeAmountChange = (recharge) ->
+    recharge.total = $scope.customer.rechargeTotal + recharge.amount
+    if recharge.total < 3000
+      recharge.discount = 1.00
+    else if recharge.total >= 3000 && recharge.total < 5000
+      recharge.discount = 0.88
+    else if recharge.total >= 5000 && recharge.total < 8000
+      recharge.discount = 0.8
+    else if recharge.total >= 8000
+      recharge.discount = 0.75
+
+    recharge.orderType = $scope.orderType
+
+  $scope.submitRecharge = (recharge) ->
+    new Recharge(recharge).create().then (result) ->
+      angular.extend($scope.customer, result.customer)
+      $scope.rechargeForm = false
+      $scope.orders = result.orders
+      $scope.recharge = {}
+    , (error) ->
+      console.log(error)
+
+  # cancel order
+  $scope.cancelForm = false
+  $scope.refund = {}
+  $scope.cancelReasons = [
+    "价格贵",
+    "工艺不满足修复需求",
+    "配件缺少不能做",
+    "工期长",
+    "售中沟通不满意",
+    "其他"
+  ]
+
+  $scope.showCancelForm = (val) ->
+    $scope.cancelForm = val
+    if $scope.order.paid
+      $scope.refund.amount = $scope.order.finalPrice
+
+  $scope.cancelReasonChange = (refund) ->
+    refund.reason = $scope.cancelReasons[refund.cancelR]
+    if refund.reason == '其他'
+      refund.reason = undefined
+
+  $scope.useAddress = (address) ->
+    $scope.order.deliveryAddress = address
+
+  $scope.submitCancel = (order) ->
+    order.cancel = true
+    $scope.refund.rtype = 0
+    order.refund = $scope.refund
+    Order.$put("api/v1/orders/#{order.id}/cancel", order).then ((result)->
+      $scope.cancelForm = false
+      if $scope.orderType != 'all'
+        $scope.orders.splice(_.indexOf($scope.orders, order), 1)
+      if $scope.refund.pm == '0'
+        $scope.customer.balance = roundNumber($scope.customer.balance+$scope.refund.amount)
+      $scope.refund = {}
+    ), (error) ->
+      console.log(error)
+
+  # refund order
+  $scope.refundForm = false
+  $scope.refundReasons = [
+    "部分修复未实现",
+    "用户不满意",
+    "其他"
+  ]
+
+  $scope.refundReasonChange = (refund) ->
+    refund.reason = $scope.refundReasons[refund.cancelR]
+    if refund.reason == '其他'
+      refund.reason = undefined
+
+  $scope.showRefundForm = (val) ->
+    $scope.refundForm = val
+    $scope.refund.amount = $scope.order.finalPrice
+
+  $scope.submitRefund = (order) ->
+    order.refunded = true
+    $scope.refund.rtype = 1
+    order.refund = $scope.refund
+
+    Order.$put("api/v1/orders/#{order.id}/refund", order).then ((result)->
+      debugger
+      $scope.refundForm = false
+      order.finalPrice -= $scope.refund.amount
+      order.refundAmount = $scope.refund.amount
+      # $scope.orders.splice(_.indexOf($scope.orders, order), 1)
+      if $scope.refund.pm == '0'
+        $scope.customer.balance = roundNumber($scope.customer.balance+$scope.refund.amount)
+      $scope.refund = {}
+      order.finalPrice = result.finalPrice
+    ), (error) ->
+      console.log(error)
+
+
+  # compensate order
+  $scope.compensateForm = false
+  $scope.compensate = {}
+  $scope.compensateReasons = [
+    "做坏了",
+    "用户不满意",
+    "丢失",
+    "其他"
+  ]
+
+  $scope.compensateReasonChange = (compensate) ->
+    compensate.reason = $scope.compensateReasons[compensate.cancelR]
+    if compensate.reason == '其他'
+      compensate.reason = undefined
+
+  $scope.showCompensateForm = (val) ->
+    $scope.compensateForm = val
+    $scope.compensate.amount = $scope.order.finalPrice
+
+  $scope.submitCompensate = (order) ->
+    order.compensated = true
+    $scope.compensate.rtype = 2
+    order.compensate = $scope.compensate
+    order.refund = $scope.compensate
+    debugger
+
+    Order.$put("api/v1/orders/#{order.id}/cancel", order).then ((result)->
+      debugger
+      $scope.compensateForm = false
+      # $scope.orders.splice(_.indexOf($scope.orders, order), 1)
+      order.finalPrice -= $scope.compensate.amount
+      order.compensateAmount = $scope.compensate.amount
+      if $scope.compensate.pm == '0'
+        $scope.customer.balance = roundNumber($scope.customer.balance+$scope.compensate.amount)
+      $scope.compensate = {}
+    ), (error) ->
+      console.log(error)
+
+
+
+
+
+
+
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                                create or update order 
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  
+  # fetch and delivery manner
+  $scope.showOrderForm = (val, pre=false) ->
+    $scope.initAllData()
+    $scope.changeUrlParams({orderForm: val})
+    $scope.order.pre = pre
+    $scope.orderForm = val
+    unless val
+      _.each($scope.orders, (order) ->
+        order.newCreated = false
+      )
+
+  $scope.setManner = (value, type) ->
+    $scope.order[type] = value
+    if !$scope.deliveryAddress.details && type='deliveryManner' && value >= 2
+      $scope.deliveryAddress = _.clone($scope.fetchAddress)
+
+  $scope.pickUpMannerEdit = () ->
+    $scope.editFetchManner = false
+    $scope.editDeliveryManner = false
+
+  $scope.pickUpMannerEdit()
+
+  $scope.fetchOrderCount = 0
+  $scope.fetchDateChange = (fetchDate) ->
+    Order.$get('api/v1/orders/get_send_count', {date: fetchDate}).then ((result) ->
+      $scope.getSendOrderCount = result.orderCount
+    )
+
+  $scope.getAddresses = (val) ->
+    if $scope.addresses.length || !val
+      return
+
+    Address.query({customerId: $scope.customer.id}).then ((results) ->
+      $scope.addresses = results.addresses
+      if !$scope.order.id && $scope.addresses.length
+        $scope.fetchAddress = $scope.addresses[0]
+        $scope.deliveryAddress = $scope.addresses[0]
+    ), (error) ->
+      return
+
+  $scope.showFetchManner = (val) ->
+    $scope.fetchDateChange($scope.order.fetchDate)
+    $scope.editFetchManner = val
+    $scope.getAddresses(val)
+
+  $scope.deliveryOrderCount = 0
+  $scope.deliveryDateChange = (deliveryDate) ->
+    Order.$get('api/v1/orders/get_send_count', {date: deliveryDate}).then ((result) ->
+      $scope.deliveryOrderCount = result.orderCount
+    )
+
+  $scope.selectAddress = (address, type) ->
+    $scope[type] = address
+    if (_.isEmpty(address))
+      $scope[type] = {
+        name: $scope.customer.name
+        phone: $scope.customer.phone
+      }
+
+  $scope.showDeliveryManner = (val) ->
+
+    $scope.deliveryDateChange($scope.order.deliveryDate)
+    $scope.editDeliveryManner = val
+    $scope.getAddresses(val)
+
+  $scope.editFetchMannerText = (editFetchManner) ->
+    if editFetchManner
+      return "收起"
+    else
+      return "编辑"
+
+  $scope.editDeliveryMannerText = (editDeliveryManner) ->
+    if editDeliveryManner
+      return "收起"
+    else
+      return "编辑"
+
+  $scope.orderCanSubmit = true
+  $scope.submitOrder = (order, another) ->
+    $scope.orderCanSubmit = false
+    $timeout ->
+      $scope.orderCanSubmit = true
+    , 2000
+
+    order.template = 'order_for_pay'
+    order.customerId = $scope.customer.id
+
+    if order.id
+      new Order(order).update().then ((result) ->
+        $scope.alertWith("订单#{result.number}更新成功！")
+        $scope.orderForm = false
+        _.each($scope.orders, (o) ->
+          if result.id == o.id
+            o.price = result.price
+            o.discount = result.discount
+            o.finalPrice = result.finalPrice
+
+            o.showStyle = order.item.style
+            o.showColor = order.item.color
+            o.showBrand = order.item.brand
+            o.showItemType = order.item.showType
+            o.showActivityInfo = result.showActivityInfo
+        )
+        $scope.initAllData()
+        $scope.changeUrlParams({ orderForm: false })
+      ), (error) ->
+        console.log error
+    else
+      new Order(order).create().then ((result) ->
+        $scope.alertWith("订单#{result.number}创建成功！")
+        $scope.orders.unshift(result)
+        result.newCreated = true
+        if another
+          o= _.clone($scope.order)
+          $scope.initOrder()
+          $scope.order.pickupManner = o.pickupManner
+          $scope.order.deliveryManner = o.deliveryManner
+        else
+          $scope.orderForm = another
+          $scope.initAllData()
+          $scope.changeUrlParams({ orderForm: false })
+      ), (error) ->
+        console.log error
+
+  $scope.$watch('item', (newValue, oldValue) ->
+    $scope.order.item = newValue
+  , true)
+
+  $scope.$watch('deliveryAddress', (newValue, oldValue) ->
+    $scope.order.deliveryAddress = newValue
+  , true)
+
+  $scope.$watch('fetchAddress', (newValue, oldValue) ->
+    $scope.order.fetchAddress = newValue
+  , true)
+
+  $scope.$watch('friend', (newValue, oldValue) ->
+    $scope.order.friend = newValue
+  , true)
+
+  $scope.$watch('order.startWorkDate', (newValue, oldValue) ->
+    $scope.order.finishDate =
+      moment(newValue).add(15, 'days').format('YYYY-MM-DD')
+  , true)
+
+  $scope.editOrder = (order) ->
+    # $scope.scrollToTop()
+    $scope.showLogs = true
+    _.each($scope.orders, (o) ->
+      o.newCreated = false
+    )
+
+    $scope.setOrderFrom(order)
+    $scope.changeUrlParams({
+      orderId: order.id, orderForm: true
+    })
+    if $scope.order.id == order.id
+      $scope.orderForm = !$scope.orderForm
+    if $scope.order.id != order.id && !$scope.orderForm
+      $scope.orderForm = true
+    order.newCreated = $scope.orderForm
+
+
+  $scope.preOrderChange = (val) ->
+    if $scope.order
+      orderId = $scope.order.id
+    if val
+      $scope.orderType = 'pre'
+    else
+      $scope.orderType = 'unpaid'
+
+    $scope.changeUrlParams({orderId: orderId})
+    $scope.order.pre = val
+
+
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  #                                customer info
+  # ------------------------------------------------------------------------------------------------------------------------------------------
+  
+  $scope.showEditCustomer = (val) ->
+    dialogs.create(
+      "<%= asset_path("customers/edit.html.slim")%>",
+      'editCustomer',{customer: $scope.customer}, { size: 'md' }
+    ).result.then ((customer) ->
+      $scope.customer = customer
+      $scope.alertWith("用户信息更新成功")
+    )
+  
+
+  $scope.getFriendsInfo = () ->
+    if $scope.payRecord.memberPhone && $scope.payRecord.memberPhone.length < 11
+      $scope.friendCardInfo = undefined
+      $scope.payRecord.memberId = undefined
+      $scope.capNotPay = true
+      return
+    
+    $scope.friendCardInfo = ""
+    
+    $scope.payRecord.memberId = undefined
+    Customer.$get('/api/v1/customers/verify', {phone: $scope.payRecord.memberPhone}).then ((results) ->
+      if !results[0]
+        $scope.alertWith("没有找到相应的用户信息，请确认！", 'danger')
+        $scope.friendCardInfo = undefined
+        $scope.payRecord.memberId = undefined
+        $scope.capNotPay = true
+      else if $scope.payRecord && $scope.payRecord.amount > results[0].balance
+        $scope.alertWith("朋友会员卡余额不足，请使用别的方式支付。", 'danger')
+        $scope.friendCardInfo = "#{results[0].name} #{results[0].discount}折  余额:#{results[0].balance}元"
+        $scope.capNotPay = true
+
+      else
+        $scope.capNotPay = false
+        $scope.friendCardInfo = "#{results[0].name} #{results[0].discount}折  余额:#{results[0].balance}元"
+        $scope.payRecord.memberId = results[0].id
+        focus('pay_remarks')
+    ), (error) ->
+      console.log error
+
+  $scope.setCanPay = () ->
+    if $scope.payRecord.pm == '6'
+      $scope.capNotPay = true
+    else if $scope.payRecord.pm == '0' && $scope.totalFinalPrice > $scope.customer.balance && $scope.customer.balance
+      $scope.alertWith("会员卡余额不足", 'danger')
+      $scope.capNotPay = true
+    else
+      $scope.capNotPay = false
+      $scope.payRecord.memberId = undefined
+      $scope.friendCardInfo = undefined
+      $scope.payRecord.memberPhone = undefined

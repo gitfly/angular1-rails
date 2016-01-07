@@ -1,0 +1,2 @@
+class Bag < Item
+end

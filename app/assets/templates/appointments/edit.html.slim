@@ -1,0 +1,41 @@
+.modal-header.pts.pbs
+  button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='cancel()']
+  .modal-title
+    span.mrh style='font-size: 14px;'
+      | 编辑预约
+
+form[
+  novalidate="novalidate" accept-charset="UTF-8" 
+  method="post" name="appForm"
+]
+  .modal-body
+    simple-input.col-md-12[
+      attribute='appointment.name' required
+      name='appointmentName' label="联系人姓名"
+    ]
+    simple-input.col-md-12[
+      attribute='appointment.phone' required
+      name='appointmentPhone' label="联系人电话"
+    ]
+    div ng-if='appointment.atype'
+      custom-select.col-md-12[
+        datas="companyNames" required label="快递公司"
+        attribute='appointment.express.companyName' name='appointmentExpressName'
+      ]
+      simple-input.col-md-12[
+        attribute='appointment.express.number' required
+        name='appointmentExpressNumer' label="快递单号"
+      ]
+    div ng-if='!appointment.atype'
+      delivery-date-input.no-label order='appointment' label='false'
+      address-select.no-label address="appointment.address" label='false'
+      simple-input.col-md-12[
+        attribute='appointment.address.details' required
+        name='appointmentAddressDetails' label="详细地址"
+      ]
+    .clearfix
+  .modal-footer style='padding: 0px 80px 60px 20px;'
+    a.btn.btn-default.btn-wide.pull-left ng-click='cancel()' style='margin-left: 200px;'
+      | 取消
+    a.btn.btn-primary.btn-wide ng-click='submit(appointment)' ng-disabled='appForm.$invalid'
+      | 确认

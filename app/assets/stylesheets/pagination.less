@@ -1,0 +1,45 @@
+@import 'less/flat-ui-pro';
+
+.custom-pagination.orders-list {
+  ul {
+    padding-left: 15px;
+  }
+}
+
+.custom-pagination {
+  text-align: center;
+	ul {
+		li {
+      background: @gray-light;
+      padding: 8px 10px;
+      float: left;
+      cursor: pointer;
+      margin: 0px 1px;
+      width: 45px;
+      height: 35px;
+      text-align: center;
+      &:hover {
+        background: @gray;
+      }
+		}
+    li.first {
+      width: 80px;
+      .border-left-radius(4px);
+    }
+    li.last {
+      width: 80px;
+      .border-right-radius(4px);
+    }
+    li.active {
+      background: @brand-success;  
+      span {
+        color: #fff;
+      }
+    }
+	}
+	.pagination-dropdown.dropup {
+		ul.dropdown-menu {
+			display: block;	 
+		}
+	}
+}

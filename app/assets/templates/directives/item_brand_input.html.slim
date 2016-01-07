@@ -1,0 +1,31 @@
+.inline-input.item-brand
+  input.form-control[
+    placeholder="{{item.type||'物品'}}品牌"
+    ng-click='showItemBrand(!itemBrandShown)'
+    ng-model='item.brand'
+    ng-change='getItemBrands()'
+    ng-keypress='brandKeyPress($event)'
+    required name='itemBrand'
+  ]
+  .error-message ng-show='oForm.itemBrand.$invalid && oForm.itemBrand.$dirty'
+    | 物品品牌不能为空
+
+  ul.dropdown-menu.row.animate-zoom-out.display-block.pll.input-selection.item-brands[
+    role="menu" aria-labelledby="dropdownMenu1"
+    ng-if='itemBrandShown'
+  ]
+    a.pull-right.pointer.hide-all[
+     ng-click='showItemBrand(false)'
+    ]
+      strong.fui-cross
+    div.text-center.ptl.mbh ng-if='!brands.length'
+      strong.mbh
+        | 搜索结果为空，请手动填写{{item.showType}}品牌, 最后按回车结束输入
+
+    .pull-left.pbl.mrl ng-repeat='b in brands track by $index' ng-if='b.brand.length'
+      button.btn.btn-default[
+        ng-click="selectItemBrand(b.brand)" 
+        ng-class="{'btn-danger': $index==0}"
+      ]
+        | {{b.brand}}
+    .clearfix

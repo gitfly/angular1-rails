@@ -1,0 +1,108 @@
+zh-cn:
+  helpers:
+    submit:
+      appointment:
+        #create: "Add %{model}"
+        create: "提交预约"
+        update: "更新预约"
+
+  activerecord: 
+    models:
+      user: 用户
+    attributes:
+      user: 
+        email: 邮箱
+        name: 姓名
+        type: 类型
+        password: 密码
+        password_confirmation: 确认密码
+        phone: 电话号码
+        gender: 性别
+        avatar: 头像
+        weixin: 微信号码
+      customer:
+        phone: 电话
+      order:
+        discount: 折扣
+      order_log:
+        service_ids: 服务项
+        price: 价格
+        attachment: 附件
+        request: 客户需求
+        urgent: 加急状态
+        finish_date: 结束时间
+        buy_date: 购买时间
+        source: 物品来源
+        gift: 赠品
+        part: 配件
+        start_work_date: 开工日期
+        diagnose: 顾问诊断
+        item_type: 物品种类
+        item_show_type: 物品种类
+        item_brand: 物品品牌
+        item_color: 物品颜色
+        item_scale: 物品大小
+        item_version: 物品型号
+        item_style: 物品款式
+        status: 状态
+        fetch_address_id: 取货地址
+        delivery_address_id: 送货地址
+        fetch_date: 取货时间
+        delivery_date: 送货时间
+        delivery_hour_start: 最早时间
+        delivery_hour_end: 最晚时间
+        delivery_manner: 送货方式
+        rework: 返工
+        rework_reason: 返工原因
+        pickup_manner: 取货方式
+        friend_id: 朋友信息
+        activity_id: 活动信息
+        act_price: 活动价格
+        final_price: 最终价格
+        settlement_id: 结算
+        pre: 订单状态
+        friend_name: 朋友姓名
+        friend_phone: 朋友电话
+        created_at: 开单时间
+        discount: 折扣
+        cancel: 订单取消
+        compensate: 赔付
+        refunded: 退款
+        fetch_hour_end: 送货最晚时间
+        fetch_hour_start: 送货最早时间
+
+  simple_form:
+    labels:
+      customer: 
+        phone: 电话号码
+        email: 常用邮箱
+        weixin: 微信号码
+        balance: 账户余额
+      item:
+        type: 物品种类
+        brand: 品牌
+        style: 样式
+        color: 颜色
+      consumption_record:
+        amount: 消费金额
+        payment_method: 支付方式
+        remark: 备注
+      order:
+        color: 颜色
+    placeholders:
+      customer: 
+        phone: 电话号码
+        email: 常用邮箱
+        weixin: 微信号码
+        balance: 账户余额
+      consumption_record:
+        amount: 消费金额
+        payment_method: 支付方式
+        remark: 填写关于本次消费的备注信息
+      order:
+        color: 颜色
+      item:
+        type: 物品种类
+        brand: 品牌
+        style: 样式
+        color: 颜色

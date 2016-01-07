@@ -1,0 +1,45 @@
+div ng-controller='customerOrders'
+  .customer-info
+    p
+      strong
+        | {{customer.name}}
+        | &nbsp&nbsp•&nbsp&nbsp
+        | {{customer.showGender}}
+    p
+      span
+        | 微信号：
+        | {{customer.weixin||'无'}}
+    p
+      span
+        | 微信昵称：
+        | {{customer.weixinNickname||'无'}}
+    p
+      span
+        | 电话：{{customer.phone||'无'}}
+    p
+      | {{customer.customerType}}
+      span.mls
+        | 余额：{{customer.balance}} 元
+
+  .order-info
+    div ng-repeat='oc in orderCounts'
+      ul.nav.nav-list.nav-list-bricks
+        li.nav-header[
+          ng-click="showOrdersChange(oc.status)"
+          ng-class="{'active': showOrders[oc.status]}"
+        ]
+          | {{oc.status}}
+          span.badge.pull-right
+            | {{oc.count}}
+      ul.nav.nav-list.nav-list-bricks.pbl ng-if="showOrders[oc.status]"
+        li[
+          ng-click='updateCurrentOrder(o)'
+          ng-repeat='o in cOrders[oc.status]'
+          ng-class="{'active': o.id === currentOrder.id}"
+        ]
+          a
+            .pull-left.number
+              | {{o.number}}
+            .pull-left
+              | {{o.itemType}}
+            .clearfix

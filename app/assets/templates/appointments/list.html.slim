@@ -1,0 +1,77 @@
+.appointments.appointments-list
+  .left-bar.full-height
+    ul.nav.nav-list.nav-list-vivid.text-center
+      /li ui-sref="appointments({status: 'all', type: '{{params.type}}'})" ng-class="{'active': params.status=='all'}"
+        a.text-center
+          | 全部预约
+      li ui-sref="appointments({status: 'unfinished', type: '{{params.type}}'})" ng-class="{'active': params.status=='unfinished'}"
+        a.text-center
+          | 未完成的预约
+      li ui-sref="appointments({status: 'troubled', type: '{{params.type}}'})" ng-class="{'active': params.status=='troubled'}"
+        a.text-center
+          | 有问题的预约
+      li ui-sref="appointments({status: 'cancel', type: '{{params.type}}'})" ng-class="{'active': params.status=='cancel'}"
+        a.text-center
+          | 已取消的预约
+      li ui-sref="appointments({status: 'finished', type: '{{params.type}}'})" ng-class="{'active': params.status=='finished'}"
+        a.text-center
+          | 已完成的预约
+  .right-bar.full-height
+    ul.nav.nav-tabs.nav-append-content
+      /li ui-sref="appointments({type: 'all', status: '{{params.status}}'})" ng-class="{'active': params.type=='all'}"
+        a
+          | 全部预约
+      li ui-sref="appointments({type: 'door_type', status: '{{params.status}}'})" ng-class="{'active': params.type=='door_type'}"
+        a
+          | 上门取
+      li ui-sref="appointments({type: 'express_type', status: '{{params.status}}'})" ng-class="{'active': params.type=='express_type'}"
+        a
+          | 快递寄来
+
+    .tab-content
+      table.table.table-striped
+        thead
+          tr
+            th ng-if="params.type=='door_type'"
+              | 上门日期
+            th 姓名
+            th 电话
+            th ng-if="params.type=='door_type'"
+              | 地址
+            th ng-if="params.type=='express_type'"
+              | 快递公司
+            th ng-if="params.type=='express_type'"
+              | 快递单号
+            th ng-if="params.status=='troubled'"
+              | 问题描述
+            th ng-if="params.status=='cancel'"
+              | 取消原因
+            th ng-if="params.status!='cancel' && params.status != 'finished'"
+              | 管理
+        tbody
+          tr.pointer ng-repeat="app in appointments track by $index"
+            td ng-if="params.type=='door_type'"
+              | {{app.showDate}}
+            td
+              | {{app.name}}
+            td
+              | {{app.phone}}
+            td ng-if="params.type=='door_type'"
+              | {{app.showAddress}}
+            td ng-if="params.type=='express_type'"
+              | {{app.expressName}}
+            td ng-if="params.type=='express_type'"
+              | {{app.expressNumber}}
+            td ng-if="params.status=='troubled'"
+              | {{app.showTroubleType}}
+            td ng-if="params.status=='cancel'"
+              | {{app.showCancelType}}
+            td ng-if="params.status!='cancel' && params.status != 'finished'"
+              a.pointer.mrx ng-click="edit(app, $index)"
+                | 编辑
+              a.pointer.mrx ng-click="cancel(app, $index)"
+                | |
+                | 取消
+              a.pointer ui-sref="payOrder({customerId: app.customerId, orderForm: true})" ng-if="params.type=='express_type'"
+                | |
+                | 开单

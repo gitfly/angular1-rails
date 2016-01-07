@@ -1,0 +1,39 @@
+table.desc-list.table
+  tbody
+    tr.consumption[
+      ng-repeat='d in descs track by $index' 
+      ng-click="selectDesc(d)" 
+      ng-class="{'active': d.id == desc.id}"
+    ]
+
+      td.pointer.ptl
+        .content.mbm
+          .text.animate-zoom-out[ng-if='!d.edit']
+            span ng-if="descType==3" ng-bind-html="highlight(d.content, searchStr)"
+            div ng-if="descType==0"
+              span.highlighted-desc ng-if='d.symptom'
+                | 症状: 
+              span ng-bind-html="highlight(d.symptom, searchStr)" 
+              br ng-if='d.symptom'
+              span.highlighted-desc ng-if='d.technology' 
+                | 工艺:
+              span ng-bind-html="highlight(d.technology, searchStr)" 
+              br ng-if='d.technology'
+              span.highlighted-desc ng-if='d.expect'
+                | 预期效果: 
+              span ng-bind-html="highlight(d.expect, searchStr)"
+
+          span.fui-trash.pull-right.remove.color-red.pointer[
+            tooltip title="删除"
+            ng-click='deleteDesc(d, $index)'
+          ]
+
+.pagination ng-if='descs.length'
+  ul
+    li.previous
+      span.fui-arrow-left ng-click="previousPage()"
+    li ng-repeat='i in getPageArray(pageCount) track by $index' ng-class="{active: $index+1==currentPage}"
+      span ng-click="getPage($index+1)"
+        | {{$index+1}}
+    li.next
+      span.fui-arrow-right ng-click="nextPage()"

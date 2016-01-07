@@ -1,0 +1,63 @@
+.basic-info ng-if='!newCustomerButton'
+  .col-md-2
+    img ng-src='{{customer.avatarUrl}}' style='height: 80px;width: 80px'
+  .col-md-4.info
+    .name 
+      | {{customer.name}}
+    .phone
+      span 电话：
+      | {{customer.phone}}
+    .weixin
+      span 微信：
+      | {{customer.weixin}}
+    .weixin_nickname
+      span 微信昵称：
+      | {{customer.weixinNickname}}
+  .col-md-6.account
+    .gender
+      span 性别：
+      span 
+        | {{customer.showGender}}
+      span.mlh
+        | 职业：
+      span 
+        | {{customer.job}}
+    .birthday
+      span 生日：
+      span 
+        | {{customer.birthday}}
+    .email
+      span 邮箱：
+      | {{customer.email}}
+
+  /.pull-left.recharge
+    .member-info.pull-left ng-if='customer.isMember'
+      .btn.btn-success ng-click='showRechargeForm(true, customer)'
+        | 充值
+    .not-member.pull-left ng-if='!customer.isMember'
+      .btn.btn-success ng-click='showRechargeForm(true, customer)'
+        | 充值成为会员
+
+    .clearfix
+  .clearfix
+div ng-controller='rechargeCtrl' ng-include="'#{asset_path('partials/recharge.html.slim')}'"
+.payoff
+  .member-info
+    strong
+      span.mrl
+        | {{customer.customerType}}
+      span ng-if='customer.isMember'
+        | 账户余额：
+        | {{customer.balance}}
+  ul.nav.nav-tabs.nav-append-content.mtl ng-init='showCharge=false'
+    li.active[click-active ng-click='showCharge=false']
+      a
+        | 结算
+    li[click-active ng-click='showCharge=true']
+      a
+        | 充值
+  .tab-content.pbh
+    .tab-pane#tab1 ng-class="{'active': !showCharge}"
+      div ng-include="'#{asset_path('orders/payoff_form.html.slim')}'"
+    .tab-pane#tab2 ng-class="{'active': showCharge}"
+      div ng-include="'#{asset_path('orders/recharge_form.html.slim')}'"

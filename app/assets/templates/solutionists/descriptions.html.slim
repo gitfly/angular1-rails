@@ -1,0 +1,98 @@
+#solutionist.row.ptl
+  .content-block.descs.col-md-6.pll
+    .title
+      strong.pull-left
+        | 话术库
+      button.btn.btn-info.pull-right.mll ng-click="addNewDesc()"
+        span.fui-plus
+        | 添加新话术
+      input.form-control.pull-right[
+        placeholder="输入话术内容，然后点击回车键搜索"
+        ng-model='searchStr'
+        ng-keyPress='performSearch($event, searchStr)'
+      ]
+
+    ul.nav.nav-tabs.nav-append-content.mtl
+      li.active[click-active ng-click='setDescType(0)']
+        a
+          | 症状描述
+      /li[click-active ng-click='setDescType(1)']
+        a
+          | 工艺描述
+      /li[click-active ng-click='setDescType(2)']
+        a
+          | 效果描述
+      li[click-active ng-click='setDescType(3)']
+        a
+          | 效果方案话术
+    .tab-content
+      .tab-pane ng-class="{'active': descType==0}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      /.tab-pane ng-class="{'active': descType==1}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      /.tab-pane ng-class="{'active': descType==2}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      .tab-pane ng-class="{'active': descType==3}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+  .col-md-6
+    div style='position:fixed;width: 50%;height:80%;overflow:scroll;padding-bottom: 40px'
+      p
+        strong style='font-size: 16px;'
+          | 编辑话术并打标签
+
+      div[style='padding:8px']
+        textarea.form-control.animate-zoom-out#desc-content[
+          style='height: 160px;width: 86%;'
+          ng-model="desc.content"
+          ng-change='descContentChange(desc)'
+          ng-if="descType==3"
+        ]
+      div[style='padding:8px'
+        ng-if="descType==0"]
+        label.highlighted-desc
+          | 症状
+        textarea.form-control.animate-zoom-out#desc-symptom[
+          style='height: 80px;width: 86%;'
+          ng-model="desc.symptom"
+          ng-change='descContentChange(desc)'
+        ]
+
+        label.highlighted-desc
+          | 工艺
+        textarea.form-control.animate-zoom-out#desc-technology[
+          style='height: 80px;width: 86%;'
+          ng-model="desc.technology"
+          ng-change='descContentChange(desc)'
+        ]
+        label.highlighted-desc
+          | 预期效果
+        textarea.form-control.animate-zoom-out#desc-expect[
+          style='height: 80px;width: 86%;'
+          ng-model="desc.expect"
+          ng-change='descContentChange(desc)'
+        ]
+      .confirm-block.text-center.mbh
+        button.btn.btn-primary[
+          ng-click="updateOrCreate(desc)"
+        ]
+          | 保存
+      .tags-block.container-fluid
+        .row.tag.mbl ng-repeat='tag in desc.tags track by $index'
+          div ng-init='i = $index'
+            span.label.label-success.mrs ng-repeat='name in tag.names track by $index' ng-click="updateTag($index, tag)"
+              | {{name}}
+            strong.fui-cross.mll.color-red.pointer ng-click="removeTags(tag, desc, i)"
+
+          .options.mtl.pbl ng-if='tag.options.length && !tag.hideOptions'
+            span.label.col-md-2.label-info.mbs.mrs ng-repeat='option in tag.options' ng-click="selectTagsFor(option, tag)"
+              | {{option.name}}
+          .clearfix
+        .tag.row
+          .options.mts ng-repeat='tag in initTags track by $index' ng-if='showInitTags||!desc.tags.length'
+            span.label.col-md-2.label-info.mbs.mrs ng-click='startToAddTag(desc, tag)'
+              | {{tag.name}}
+
+          .clearfix
+          button.btn.btn-info.btn-xs.mtl ng-click='addNewTagList()'
+            span.fui-plus
+              | 添加标签序列

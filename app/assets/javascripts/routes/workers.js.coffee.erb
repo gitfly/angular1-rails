@@ -1,0 +1,8 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+  $stateProvider.state("reworkOrders",
+    url: '/reworkOrders'
+    controller: "ReworkOrders"
+    templateUrl: "<%= asset_path("workers/rework_orders.html.slim") %>"
+  )

@@ -1,0 +1,181 @@
+.reconciliation
+  .filters
+    div  style='font-size: 18px;margin-top: 10px;' 
+    .mbl
+
+      button.btn.btn-hg.btn-primary ng-if="new_customers"
+        | 新增用户数：{{new_customers}} 
+      button.btn.btn-hg.btn-primary ng-if="old_customers"
+        | 老用户数：{{old_customers}}
+      button.btn.btn-hg.btn-primary ng-if="orderd_customers"
+        | 下单总用户数：{{orderd_customers}}
+      button.btn.btn-hg.btn-primary ng-if="orderd_customers"
+        | 重复购买率：{{((old_customers/orderd_customers)*100).toFixed(2)}}%
+
+    .pull-left
+      .mbl
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+          placeholder="是否会员" ng-model="is_member"
+          ui-select2
+        ]
+          option[value=""]
+            | 是否会员
+          option[value=0]
+            | 否
+          option[value=1]
+            | 是
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+        placeholder="请选择客户来源" ng-model="customer_source" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""
+        ]
+          option[value=""]
+            | 请选择客户来源
+          - Customer::Source.each do |k, v|
+            option[value=k]
+              = v    
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[placeholder="总消费次数" ng-model="total_consume_num" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+          option[value=""]
+            | 总消费次数
+          - (1...20).to_a.each do |v|
+            option[value=v]
+              = v    
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[placeholder="总消费订单量" ng-model="total_order_num" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+          option[value=""]
+            | 总消费订单
+          - (1...20).to_a.each do |v|
+            option[value=v]
+              = v
+        select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[placeholder="最近三个月消费订单量" ng-model="recent_order_num" ui-select2="{maximumSelectionLength: 2}" tabindex="-1" title=""]
+          option[value=""]
+            | 最近三个月订单量
+          - (1...20).to_a.each do |v|
+            option[value=v]
+              = v      
+        
+     
+    .pull-right
+      a.btn.btn-success.pull-right.mll.plh.prh[ 
+        ng-href="/api/v1/datareports/customer_details/export?from={{export_from}}&to={{to}}&is_member={{is_member}}&total_consume_num={{total_consume_num}}&total_order_num={{total_order_num}}&recent_order_num={{recent_order_num}}&customer_source={{customer_source}}"
+        ]
+        | 导出
+
+      button.btn.btn-info.pull-right.mll.plh.prh[
+        ng-click='selectByDate(from, to)'
+      ]
+        span.fui-search
+        | 筛选
+      input.form-control.end_date.pull-right.mll[
+        placeholder="结束日期" date-picker
+        ng-model='to'
+      ]
+      input.form-control.start_date.pull-right[
+        placeholder="开始日期" date-picker
+        ng-model='from'
+      ]
+
+    .btn-group.pull-right.mrh role="group" aria-label="buttons"
+      button.active.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('today')"
+      ]
+        | 今天
+      button.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('week')"
+      ]
+        | 本周
+      button.btn.btn-default[
+        type="button" click-active ng-click="selectByDate('month')"
+      ]
+        | 本月
+
+    .clearfix
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1500px;font-size: 10px;' 
+    thead
+      tr
+        th 最近消费日期
+        th 用户名
+        th 手机号
+        th 微信号
+        th 是否会员
+        th 性别
+        th 生日
+        th 职业
+        th 用户来源
+        th 首次消费日期
+        th 总消费次数
+        th 总消费订单量
+        th 总消费金额
+        th 订单单价
+        th 包单价
+        th 最近三个月消费订单量
+        th 最近收货地址
+
+    tbody
+      tr.fade-in ng-repeat='customer in customers'
+        td
+          | {{customer.latestOrderTime}}
+        td
+          | {{customer.name}}        
+        td
+          | {{customer.showPhone}} 
+        td
+          | {{customer.weixin}}  
+        td
+          | {{customer.showIsMember}}
+        td
+          | {{customer.showGender}}
+        td
+          | {{customer.showBirthday}} 
+        td
+          | {{customer.job}} 
+        td
+          | {{customer.customerSource}} 
+        td
+          | {{customer.earliestOrderTime}} 
+        td
+          | {{customer.consumptionTimes}}         
+        td
+          | {{customer.consumptionOrders}}      
+        td
+          | {{customer.consumptionTotalMoney}}
+        td
+          | {{(customer.consumptionTotalMoney/customer.consumptionTimes).toFixed(2)}}
+        td
+          | {{(customer.consumptionTotalMoney/customer.consumptionOrders).toFixed(2)}}  
+        td
+          | {{customer.recentThreeMonthsOrders}} 
+        td
+          | {{customer.recentAddress}}   
+
+
+
+css:
+   .select2-drop .select2-results .select2-result-selectable {
+     font-size: 12px;
+   }
+   .body-container .reconciliation .filters .pull-left .inline-input .select2-container a{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .inline-input{
+     width: 1000px;
+   }
+   .select2-choice{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .mbl button{
+   font-size: 12px;
+   padding:5px 20px 5px 20px;
+
+   margin-left:5px;
+   }
+   .mbl{
+   width:1000px;
+   } 
+   .select{
+    min-width:0px
+   }              

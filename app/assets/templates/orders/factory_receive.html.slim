@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认工厂已收到该订单对用的物品
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('factory_receive')"
+    ng-class="{disabled: order.nextStatus!='factoryReceive'}"
+  ]
+    | 工厂确认接收
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='factory_receive'"
+  ]
+    | 取消工厂确认接收

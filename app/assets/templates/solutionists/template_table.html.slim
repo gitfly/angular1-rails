@@ -1,0 +1,16 @@
+table.table.table-hover
+  tr[
+    ng-repeat='t in templates track by $index' 
+    ng-click='selectTemplate(t, $index)'
+    ng-class="{'active': t.id==template.id}"
+  ]
+    td
+      p ng-if='t.header.length'
+        | {{t.header}}
+      p ng-if='t.footer.length'
+        | {{t.footer}}
+      /p.color-red  ng-if='!t.footer.length || !t.header.length'
+        | 模板内容为空，请在右侧输入框编辑
+      span.pull-right.fui-trash[
+        ng-click='deleteTemplate(t, $index)'  
+      ]

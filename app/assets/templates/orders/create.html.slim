@@ -1,0 +1,51 @@
+form[name='oForm' novalidate]
+  .fetch-and-delivery
+    .col-md-6 ng-click="showDeliveryManner(false)"
+      div ng-include="'#{asset_path('orders/fetch_manner.html.slim')}'"
+    .col-md-6 ng-click="showFetchManner(false)"
+      div ng-include="'#{asset_path('orders/delivery_manner.html.slim')}'"
+    .clearfix
+
+  .new-order-form.small-input ng-click='pickUpMannerEdit()'
+    .order-info-form ng-dblclick='hideAll()'
+      .well.row.inputs-block ng-class="{'pre-order': order.pre && orderForm}"
+        div[
+          ng-include="'#{asset_path('orders/info_form.html.slim')}'" 
+          ng-if='!order.pre'
+        ]
+        div[
+          ng-include="'#{asset_path('orders/pre_info_form.html.slim')}'" 
+          ng-if='order.pre'
+        ]
+        .row.mtl
+          .col-md-2
+            .btn.btn-sm.btn-default.full-width[
+              ng-class="{'btn-danger': order.pre}" 
+              ng-click='preOrderChange(true)'
+            ]
+              | 预订单
+          .col-md-2.plm
+            .btn.btn-sm.btn-default.full-width[
+              ng-class="{'btn-danger': !order.pre}"
+              ng-click='preOrderChange(false)'
+            ]
+              | 正式订单
+          .col-md-2
+          .col-md-2
+            button.btn.btn-default.btn-sm.full-width ng-click='showOrderForm(false)'
+              | 取消
+          .col-md-2
+            button.btn.btn-success.btn-sm.full-width[
+              ng-click="submitOrder(order, false)"
+              ng-disabled='oForm.$invalid || !orderCanSubmit'
+            ]
+              span ng-if='order.id'
+                | 保存订单
+              span ng-if='!order.id'
+                | 创建订单
+          .col-md-2 ng-if='!order.id'
+            button.btn.btn-success.btn-sm.full-width[
+              ng-disabled='oForm.$invalid || !orderCanSubmit'
+              ng-click="submitOrder(order, true)"
+            ]
+              | 提交并创建新订单

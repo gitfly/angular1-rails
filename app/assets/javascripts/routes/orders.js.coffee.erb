@@ -1,0 +1,254 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  $stateProvider.state("orderList",
+    url: '/orderList'
+    controller: "OrdersCtrl"
+    templateUrl: "<%= asset_path("orders/order_list.html.slim") %>"
+
+  ).state("fetchDelivery",
+    url: '/fetch_delivery'
+    controller: "fetchDelivery"
+    templateUrl: "<%= asset_path("orders/fetch_delivery.html.slim") %>"
+
+  ).state("fetchDeliveryDetail",
+    url: '/fetch_delivery_detail'
+    controller: "fetchDeliveryDetailCtrl"
+    templateUrl: "<%= asset_path("orders/fetch_delivery_detail.html.slim") %>"
+
+  ).state("orders.show",
+    url: "/:orderId"
+    controller: "showOrder"
+    templateUrl: "<%= asset_path("orders/show.html.slim") %>"
+
+  ).state("orders.show.info",
+    url: "/info"
+    controller: "orderInfoController"
+    templateUrl: "<%= asset_path("orders/info.html.slim") %>"
+
+  ).state("orders.show.photos",
+    url: "/photos"
+    controller: "orderPhotosController"
+    templateUrl: "<%= asset_path("orders/photos.html.slim") %>"
+
+  ).state("orders.show.diagnose",
+    url: "/diagnose"
+    controller: "orderDiagnose"
+    templateUrl: "<%= asset_path("orders/diagnose.html.slim") %>"
+
+  ).state("orders.show.verifyOrder",
+    url: "/verifyOrder"
+    controller: "verifyOrder"
+    templateUrl: "<%= asset_path("orders/verify.html.slim") %>"
+
+  ).state("orders.show.bluePrint",
+    url: "/bluePrint"
+    controller: "orderBluePrint"
+    templateUrl: "<%= asset_path("orders/blue_print.html.slim") %>"
+
+  ).state("orders.show.effectPhoto",
+    url: "/effectPhoto"
+    controller: "orderEffectPhoto"
+    templateUrl: "<%= asset_path("orders/effect_photo.html.slim") %>"
+
+  ).state("orders.show.effectResult",
+    url: "/effectResult"
+    controller: "orderEffectResult"
+    templateUrl: "<%= asset_path("orders/effect_result.html.slim") %>"
+
+  ).state("orders.show.sendEffectResult",
+    url: "/sendEffectResult"
+    controller: "orderSendEffectResult"
+    templateUrl: "<%= asset_path("orders/send_effect_result.html.slim") %>"
+
+  ).state("orders.show.confirmEffectResult",
+    url: "/confirmEffectResult"
+    controller: "orderConfirmEffectResult"
+    templateUrl: "<%= asset_path("orders/confirm_effect_result.html.slim") %>"
+
+  ).state("orders.show.confirmDeliveryManner",
+    url: "/confirmDeliveryManner"
+    controller: "orderConfirmDeliveryManner"
+    templateUrl: "<%= asset_path("orders/confirm_delivery_manner.html.slim") %>"
+    resolve: {
+      PreviousState: [
+        "$state", ($state) ->
+          {
+            name: $state.current.name,
+            params: $state.params,
+            url: $state.href($state.current.name, $state.params)
+          }
+      ]
+    }
+
+  ).state("orders.show.confirmCustomerReceipt",
+    url: "/confirmCustomerReceipt"
+    controller: "orderconfirmCustomerReceipt"
+    templateUrl: "<%= asset_path("orders/confirm_customer_receipt.html.slim") %>"
+
+  ).state("deliveryReminder",
+    url: "/:orderId/deliveryReminder"
+    controller: "deliveryReminder"
+    templateUrl: "<%= asset_path("orders/delivery_reminder.html.slim") %>"
+
+  ).state("reconciliation",
+    url: "/orders/reconciliation"
+    controller: "reconciliation"
+    templateUrl: "<%= asset_path("orders/reconciliation.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin", "Finance"]
+      }
+    }
+
+  ).state("objectManage",
+    url: "/objectManage"
+    controller: "objectManage"
+    templateUrl: "<%= asset_path("orders/object_manage.html.slim") %>"
+
+  ).state("serviceType",
+    url: "/serviceType"
+    controller: "serviceType"
+    templateUrl: "<%= asset_path("orders/service_type.html.slim") %>"
+
+  ).state("selectCustomer",
+    url: "/selectCustomer"
+    controller: "CreateOrder"
+    templateUrl: "<%= asset_path("orders/selectCustomer.html.slim") %>"
+
+  ).state("orders.basicInfo",
+    url: "/basicInfo"
+    controller: "orderBasicInfo"
+    templateUrl: "<%= asset_path("orders/basic_info.html.slim") %>"
+
+  ).state("orders.overdue",
+    url: "/overdue?orderId"
+    params: {orderId: 0}
+    controller: "orderOverdue"
+    templateUrl: "<%= asset_path("orders/overdue.html.slim") %>"
+
+  ).state("orders.status",
+    url: "/status"
+    controller: "orderStatus"
+    templateUrl: "<%= asset_path("orders/status.html.slim") %>"
+
+  ).state("newOrder",
+    url: "/orders/new?customerId"
+    controller: "newOrder"
+    templateUrl: "<%= asset_path("orders/new.html.slim") %>"
+
+  ).state("editOrder",
+    url: "/orders/:id/edit"
+    controller: "editOrder"
+    templateUrl: "<%= asset_path("orders/edit.html.slim") %>"
+
+  ).state("manageOrder",
+    url: "/orders/:orderNumber"
+    controller: "ManageOrder"
+    templateUrl: "<%= asset_path("manage_order.html.slim") %>"
+
+  ).state("manageOrder.uploadPhoto",
+    url: "/uploadPhoto"
+    controller: "orderUploadPhoto"
+    templateUrl: "<%= asset_path("orders/upload_photo.html.slim") %>"
+
+  ).state("manageOrder.diagnose",
+    url: "/diagnose"
+    controller: "orderDiagnose"
+    templateUrl: "<%= asset_path("orders/diagnose.html.slim") %>"
+
+  ).state("manageOrder.verifyOrder",
+    url: "/verifyOrder"
+    controller: "verifyOrder"
+    templateUrl: "<%= asset_path("orders/verify.html.slim") %>"
+
+  ).state("manageOrder.bluePrint",
+    url: "/bluePrint"
+    controller: "orderBluePrint"
+    templateUrl: "<%= asset_path("orders/blue_print.html.slim") %>"
+
+  ).state("manageOrder.sendToFactory",
+    url: "/sendToFactory"
+    controller: "orderSendToFactory"
+    templateUrl: "<%= asset_path("orders/send_to_factory.html.slim") %>"
+
+  ).state("manageOrder.factoryReceive",
+    url: "/factoryReceive"
+    controller: "orderFactoryReceive"
+    templateUrl: "<%= asset_path("orders/factory_receive.html.slim") %>"
+
+  ).state("manageOrder.producing",
+    url: "/producing"
+    controller: "orderProducing"
+    templateUrl: "<%= asset_path("orders/producing.html.slim") %>"
+
+  ).state("manageOrder.finishProduct",
+    url: "/finishProduct"
+    controller: "orderFinishProduct"
+    templateUrl: "<%= asset_path("orders/finish_product.html.slim") %>"
+
+  ).state("manageOrder.storeReceive",
+    url: "/storeReceive"
+    controller: "orderStoreReceive"
+    templateUrl: "<%= asset_path("orders/store_receive.html.slim") %>"
+
+  ).state("manageOrder.qualityTesting",
+    url: "/qualityTesting"
+    controller: "orderQualityTesting"
+    templateUrl: "<%= asset_path("orders/quality_testing.html.slim") %>"
+
+  ).state("manageOrder.effectPhoto",
+    url: "/effectPhoto"
+    controller: "orderEffectPhoto"
+    templateUrl: "<%= asset_path("orders/effect_photo.html.slim") %>"
+
+  ).state("manageOrder.effectResult",
+    url: "/effectResult"
+    controller: "orderEffectResult"
+    templateUrl: "<%= asset_path("orders/effect_result.html.slim") %>"
+
+  ).state("manageOrder.delivery",
+    url: "/delivery"
+    controller: "orderDelivery"
+    templateUrl: "<%= asset_path("orders/delivery_manage.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", 'CustomerService', 'Counselor', 'CounselorManager']
+      }
+    }
+
+  ).state("manageOrder.finishDelivery",
+    url: "/finishDelivery"
+    controller: "orderFinishDelivery"
+    templateUrl: "<%= asset_path("orders/finish_delivery.html.slim") %>"
+
+  ).state("manageOrder.complete",
+    url: "/complete"
+    controller: "orderComplete"
+    templateUrl: "<%= asset_path("orders/complete.html.slim") %>"
+
+  ).state("payOrder",
+    url: "/customer/:customerId/payOrder?orderForm&orderId&orderType"
+    params: { orderForm: false, orderId: 0, orderType: 'unpaid' }
+    controller: "payOrder"
+    templateUrl: "<%= asset_path("orders/pay.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", 'CustomerService', 'Counselor', 'CounselorManager']
+      }
+    }
+
+  ).state("newOrder.newCustomer",
+    url: "/newCustomer"
+    controller: "newCustomer"
+    templateUrl: "<%= asset_path("customers/new.html.slim") %>"
+
+  ).state("appointments",
+    url: "/appointments?type&status"
+    params: { type: 'door_type', status: 'unfinished' }
+    controller: "appointmentsCtrl"
+    templateUrl: "<%= asset_path("appointments/list.html.slim") %>"
+  )
+  return
+

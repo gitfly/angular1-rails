@@ -1,0 +1,20 @@
+#sidebar ng-controller='leftSideBarCtrl as leftBar'
+  ul.nav.nav-list.nav-list-vivid
+    li.logo
+      a.navbar-brand 
+        = image_tag('logo-white.png', size: '50x26', class: 'rollIn pull-left', 'ng-show': 'showSidebarText' )
+        span.fui-list-columned.pull-left.fade-in ng-click='sidebarTextStatusChange(!showSidebarText)'
+
+    li.rollIn.sidebar-menu ng-repeat="obj in leftSideBar" ng-mouseleave="leftBar[obj.key]=false"
+      a ui-sref='{{obj.key}}' ui-sref-active='active' ng-class='{gray: leftBar[obj.key]}'  ng-mouseenter="leftBar[obj.key]=true"
+        span.glyph.glyphicon class='{{obj.icon}}'
+        span.text.rollIn ng-show='showSidebarText'
+          | {{obj.value}}
+
+      ul.dropdown-menu.sidebar-child-menu role="menu" ng-show="leftBar[obj.key]"
+        li ng-repeat='menu in obj.menus'
+          a ui-sref='{{menu.key}}' ui-sref-active='active'
+            span.glyph.glyphicon class='{{menu.icon}}'
+            span
+              | {{menu.value}}
+

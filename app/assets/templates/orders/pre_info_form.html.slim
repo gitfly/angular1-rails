@@ -1,0 +1,45 @@
+.row.pre-order-form
+  custom-select.col-md-2[
+    datas=Item::Type.values label='false'
+    attribute='item.showType' name='itemType' placeholder="物品类型"
+  ]
+  simple-radio-buttons.col-md-2[
+    options="{'女款': '女款', '男款': '男款'}" 
+    attribute='item.style' name='itemStyle' label='false'
+  ]
+  simple-radio-buttons.col-md-2[
+    options="{'不加急': false, '加急': true}" 
+    attribute='order.urgent' name='orderUrgent' label='false'
+  ]
+  custom-select.col-md-3[
+    options-url='items/brands' 
+    attribute='item.brand' name='itemBrand' query-key='brand'
+  ]
+  custom-select.col-md-3[
+    options-url='items/versions?brand={{item.brand}}'
+    attribute='item.version' name='itemVersion' query-key='version'
+  ]
+  custom-select.col-md-3[
+    attribute='item.color' name='itemColor' 
+    query-key='color' options-url='items/colors'
+  ]
+  simple-input.col-md-3[
+    attribute='order.startWorkDate'
+    name='orderStartWorkDate' date-picker
+  ]
+  simple-input.col-md-3[
+    attribute='order.finishDate'
+    name='orderFinishDate' date-picker
+  ]
+  simple-input.col-md-3.narrow-label[
+    attribute='order.gift' name='orderGift'
+  ]
+  simple-input.textarea.col-md-12.narrow-label[
+    attribute='order.request' name='orderRequest' textarea
+    label='false' placeholder="请填写顾客需求"
+  ]
+
+
+h1 style='display:none'
+  | 1111111
+

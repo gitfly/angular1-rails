@@ -1,0 +1,37 @@
+app = window.app
+
+app.controller('NavbarCtrl', (
+  $scope, $state, Customer, $timeout, Order, Printer, dialogs
+) ->
+
+  $scope.navbarTabs = [
+    { key: 'orders', value: '订单' }
+    { key: 'customers', value: '顾客' }
+    { key: 'solutionists', value: '方案' }
+    { key: 'workers', value: '工人'}
+    { key: 'finances', value: '财务统计'}
+  ]
+
+  # animation for navbar dropdown menu
+  $scope.dropdownMenu = false
+  $scope.click = (value) ->
+    $scope.dropdownMenu = value
+    return
+
+  $scope.createOrder = ->
+    dialogs.create(
+      "<%= asset_path("topnavs/select_customer.html.slim")%>",
+      'selectCustomer',{}, { size: 'md' }
+    ).result.then ((customer) ->
+      debugger
+      # $scope.alertWith("预约取消成功")
+    )
+
+  $scope.printBarcodes = ->
+    dialogs.create(
+      "<%= asset_path("topnavs/barcodes.html.slim")%>",
+      'barcodeList',{}, { size: 'md' }
+    ).result.then (() ->
+      # $scope.alertWith("预约取消成功")
+    )
+)

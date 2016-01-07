@@ -1,0 +1,129 @@
+div ng-if="showCreateUser"
+  .form-inputs
+    .form-group.row
+      .inline-label.col-lg-3.prx 
+        label
+          abbr[title="required"]
+            | *
+          |  员工姓名
+      .inline-input.col-lg-7.plx
+        input.form-control[
+          ng-model="user.name" 
+          placeholder="员工姓名" 
+          required
+        ]
+    .form-group.row
+      .inline-label.col-lg-3.prx 
+        label
+          abbr[title="required"]
+            | *
+          |  密码
+      .inline-input.col-lg-7.plx
+        input.form-control[
+          ng-model="user.password" 
+          placeholder="密码" 
+          required
+          type="password"
+          ng-change="checkLength(user.password)"
+        ]
+      .inline-label.col-lg-2.prx ng-if="showPasswordLengthErr"
+        label style='color:red;'
+          | 长度不能小于8  
+            
+    .form-group.row
+      .inline-label.col-lg-3.prx 
+        label
+          abbr[title="required"]
+            | *
+          |  公司邮箱
+      .input-group.col-lg-7.plx
+        input.form-control[
+          ng-model="user.email" 
+          placeholder="公司邮箱"  
+          required
+          
+        ]
+        span.input-group-addon
+          | @baozheng.cc
+
+    .form-group.row      
+      .inline-label.col-lg-3.prx
+        label
+          abbr[title="required"]
+            | *
+          |  电话号码
+      .inline-input.col-lg-7.plx
+        input.form-control[
+          ng-model="user.phone" placeholder="电话号码"
+          ng-pattern='/^\d{11}$/'
+          required
+        ]
+
+    .form-group.row        
+      .inline-label.col-lg-3.prx
+        label 
+          abbr[title="required"]
+            | *
+          | 员工角色
+      .inline-input.col-lg-7.plx
+          select.form-control.select.select-default.select-block.select2-offscreen[
+            placeholder="请选择该活动的折扣方式" ng-model="user.type" 
+            ui-select2
+            name='type'
+            required
+          ]
+            - User::Roles.each do |k, v|
+              option[value=v]
+                = k
+
+    .form-group.row
+      .inline-label.col-lg-3.prx
+        label
+          | 员工生日
+      .inline-input.col-lg-7.plx
+        .form-group
+          .input-group
+            span.input-group-btn
+              button.btn[type="button"]
+                span.fui-calendar
+            input.string.form-control[
+              ng-model="user.birthday" 
+                placeholder="请输入员工生日" 
+              type="text" 
+              date-picker
+            ]          
+    .form-group.row
+      .inline-label.col-lg-3.prx
+        label
+          | 微信号码
+      .inline-input.col-lg-7.plx
+        input#customer_weixin.form-control[
+          ng-model="user.weixin" 
+          placeholder="请输入微信号码" 
+          type="text" 
+        ]
+
+    
+    
+
+    .form-group.row
+      .inline-label.col-lg-3.prx
+        label
+          | 员工性别:
+      .inline-input.col-lg-8.plx#user-gender
+        
+        button.btn.btn-default.btn-xs[
+          ng-class="{'btn-danger': user.gender==false}" 
+          ng-click="user.gender=false"
+          style="margin-right:42px;"
+        ]
+          | 女
+          
+        button.btn.btn-default.btn-xs[
+          ng-class="{'btn-danger': user.gender==true}" 
+          ng-click="user.gender=true"
+          style="margin-left:42px;"
+        ]
+          | 男
+  
+  .clearfix

@@ -1,0 +1,41 @@
+.modal.barcode ng-if="showEditBarcodesNum"
+  .modal-dialog
+    .modal-content
+      .modal-header.pts.pbs
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showEditToggle(false)']
+        .modal-title
+          span.mrh style='font-size: 14px;'
+            | 打印条形码
+
+      form[
+        novalidate="novalidate" accept-charset="UTF-8" 
+        method="post" name="printModal"
+      ]
+        .modal-body
+         div.ptl
+            div 
+              .small-input.form-inputs
+                .form-group.string.required
+                  .inline-label.col-lg-2.prx
+                    label
+                      |  打印份数
+                      abbr[title="required"]
+                        | *
+                    
+                  .inline-input.col-lg-10.plx
+                    input.string.form-control[
+                      ng-model="barcodes_count" 
+                      placeholder="输入打印份数"
+                      name="barcodes_count"
+                      ng-pattern='/^\d+$/'
+                      required
+                      disabled=true
+                    ]
+                    .error-message ng-show='printModal.reason.$invalid && printModal.reason.$dirty'
+                      | 打印份数不能为空
+        .modal-footer style='padding-right: 48px;'
+          a.btn.btn-default.btn-wide ng-click='showEditToggle(false)'
+            | 取消
+          a.btn.btn-primary.btn-wide ng-click='printBarcodes(barcodes_count)' ng-disabled='printModal.$invalid'
+            | 打印
+  

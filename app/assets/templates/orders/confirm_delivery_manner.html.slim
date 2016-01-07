@@ -1,0 +1,212 @@
+.diagnose.confirm_delivery_manner
+  .pull-left.left-content.pbh.mtl
+    .pull-left style='width: 560px;'
+      .bs-callout.bs-callout-danger.full-height
+        .title.pbs
+          span.mrs.square
+            | ◼︎
+          span.mrl
+            | 送货方式：
+          span.mlx
+            | {{showDeliveryManner()}}
+          a.pull-right.pointer style='font-size:22px;margin-top:-10px' ng-click="editStatusChange(!editDeliveryManner)"
+            i.icon.ion-compose[
+              ng-if='!editDeliveryManner' tooltip data-placement='right' data-toggle="tooltip"
+            ]
+            i.icon.ion-arrow-shrink[
+              ng-if='editDeliveryManner' tooltip
+              data-placement='right' data-toggle="tooltip" title="点击收起表单"
+            ]
+        div.mbm.col-lg-12.delivery-manner-block ng-class="{'edit': editDeliveryManner}"
+          div.full-height ng-if="editDeliveryManner"
+            form[name='orderForm' novalidate]
+              simple-radio-buttons.row.mtm[name='orderDeliveryManner' required options="deliveryManners" attribute='currentOrder.deliveryManner']
+              div ng-if='currentOrder.deliveryManner == 1'
+                simple-input.row attribute='currentOrder.friend.name' name='friendName' required=true label="朋友姓名"
+                simple-input.row attribute='currentOrder.friend.phone' name='friendPhone' required=true label="朋友电话"
+              div ng-if='currentOrder.deliveryManner >= 2'
+                simple-input.row attribute='currentOrder.deliveryAddress.name' name='deliveryAddressName' required=true label="联系人姓名"
+                simple-input.row attribute='currentOrder.deliveryAddress.phone' name='deliveryAddressPhone' required=true label="联系人电话"
+                delivery-date-input order='currentOrder' ng-if='currentOrder.deliveryManner==2' label='送货时间' required=true
+                address-select address='currentOrder.deliveryAddress' label='选择地址' required required=true
+                simple-input.row attribute='currentOrder.deliveryAddress.details' name='deliveryAddressDetails' required=true label="具体地址"
+              .col-md-12 ng-show='currentOrder.deliveryManner>=2'
+                label.pointer.radio[
+                  ng-repeat='add in addresses track by $index' 
+                  ng-click="useAddress(add)"
+                  ng-if='add.showAddress.length'
+                ]
+                  input.custom-radio[
+                    type="radio" name="group1" 
+                    value="1" data-toggle="radio"
+                  ]
+                  span.icons
+                    span.icon-unchecked
+                    span.icon-checked
+                  | 历史地址{{$index+1}}：
+                  span
+                    | {{add.showAddress}}
+                label.pointer.radio ng-click="useAddress({})"
+                  input.custom-radio[
+                    type="radio" name="group1" 
+                    value="1" data-toggle="radio"
+                  ]
+                    span class="icons"
+                      span class="icon-unchecked"
+                      span class="icon-checked"
+                    | 使用新地址
+                .clearfix
+              .clearfix
+              .col-md-12.text-center.pbl
+                button.btn.btn-success.btn-lg[
+                  ng-disabled='orderForm.$invalid'
+                  ng-click='saveOrderInfo(currentOrder)'
+                ]
+                  span.fui-check.mrs
+                  | 保存送货方式
+              .clearfix
+          .clearfix
+
+          div ng-if="!editDeliveryManner"
+            pre ng-if="currentOrder.deliveryManner===1"
+              p
+                span.gray
+                  | 朋友姓名：
+                strong
+                  | {{currentOrder.friend.name}}
+              p
+                span.gray
+                  | 朋友电话：
+                strong
+                  | {{currentOrder.friend.phone}}
+            pre ng-if="currentOrder.deliveryManner===2"
+              p
+                span.gray style='margin-right: 13px;'
+                  | 联系人：
+                span.mrh
+                  | {{currentOrder.deliveryAddress.name}}
+              p
+                span.gray
+                  | 联系电话：
+                span
+                  | {{currentOrder.deliveryAddress.phone}}
+              p
+                span ng-if='currentOrder.deliveryDate'
+                  span.gray
+                    | 取货时间：
+                  strong.mrl
+                    | {{currentOrder.deliveryDate}} 
+                  span ng-if="currentOrder.deliveryHourStart && currentOrder.deliveryHourEnd"
+                    span
+                      | {{currentOrder.deliveryHourStart}}
+                    span.mls.mrs
+                      | 到
+                    span
+                      | {{currentOrder.fetchHourEnd}}
+              p
+                span.gray
+                  | 取货地址：
+                span.mrs
+                  | {{currentOrder.deliveryAddress.province}}
+                span.mrs
+                  | {{currentOrder.deliveryAddress.city}}
+                span.mrl
+                  | {{currentOrder.deliveryAddress.district}}
+              p style='padding-left: 65px'
+                span style='font-size:12px'
+                  | {{currentOrder.deliveryAddress.details}}
+            pre ng-if="currentOrder.deliveryManner===3"
+              p
+                span.gray style='margin-right: 13px;'
+                  | 联系人：
+                span.mrh
+                  | {{currentOrder.deliveryAddress.name}}
+              p
+                span.gray
+                  | 联系电话：
+                span
+                  | {{currentOrder.deliveryAddress.phone}}
+              p
+                span.gray
+                  | 快递地址：
+                span.mrs
+                  | {{currentOrder.deliveryAddress.province}}
+                span.mrs
+                  | {{currentOrder.deliveryAddress.city}}
+                span.mrl
+                  | {{currentOrder.deliveryAddress.district}}
+              p style='padding-left: 65px'
+                span style='font-size:12px'
+                  | {{currentOrder.deliveryAddress.details}}
+        .clearfix
+
+
+  .unfinished-orders.mtl.pull-right.right-bar.full-height style='width: 500px; border: 0px;'
+    .bs-callout.bs-callout-success.background-white style='border-left-width: 0px;'
+      .title.mbm
+        span.mrs.square
+          | ◼︎
+        | 客户信息
+      .row.pbm
+        p.col-lg-6
+          | {{customer.name}}
+          | &nbsp&nbsp•&nbsp&nbsp{{customer.customerType}}
+        p.col-lg-6
+          span.gray
+            | 账户余额：
+          | {{customer.balance}} 元
+        p.col-lg-6
+          span.gray
+            | 微信号：
+          | {{customer.weixin}}
+        p.col-lg-6
+          span.gray
+            | 微信昵称：
+          | {{customer.weixinNickname}}
+
+      .title.mbm.order-header
+        span.mrs.square
+          | ◼︎
+        | 未支付订单 {{unpaidCount}}个
+        a.btn.btn-danger.btn-xs.pay-order.pull-right[
+          ui-sref="payOrder({customerId: customer.id})" target="_blank"
+        ]
+          | 支付
+        .clearfix
+      a.each-order.pointer.row[
+        ng-repeat='o in unpaidOrders' ng-click='updateCurrentOrder(o)'
+        ng-class="{'active': o.id == currentOrder.id}"
+      ]
+        .col-lg-9.info-line.prx
+          strong
+            | {{o.number}}--
+          strong
+            | {{o.itemInfo}}
+        .col-lg-3.info-line.prx.plx
+          strong.order-status
+            | {{o.status}}
+
+      .title.mbm.order-header
+        span.mrs.square
+          | ◼︎
+        | 已支付订单 {{paidCount}}个
+      a.each-order.pointer.row[
+        ng-repeat='o in paidOrders' ng-click='updateCurrentOrder(o)'
+        ng-class="{'active': o.id == currentOrder.id}"
+      ]
+        .col-lg-9.info-line.prx
+          strong
+            | {{o.number}}--
+          strong
+            | {{o.itemInfo}}
+        .col-lg-3.info-line.prx.plx
+          strong.order-status
+            | {{o.status}}
+
+css: 
+  .ui-timepicker-wrapper {
+    width: 88px;	 
+  }
+  .ui-timepicker-wrapper .ui-timepicker-list li {
+    padding-left: 8px;  
+  }

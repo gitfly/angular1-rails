@@ -1,0 +1,31 @@
+h1 Listing addresses
+
+table
+  thead
+    tr
+      th Addressable type
+      th Country
+      th Province
+      th City
+      th District
+      th Details
+      th
+      th
+      th
+
+  tbody
+    - @addresses.each do |address|
+      tr
+        td = address.addressable_type
+        td = address.country
+        td = address.province
+        td = address.city
+        td = address.district
+        td = address.details
+        td = link_to 'Show', address
+        td = link_to 'Edit', edit_address_path(address)
+        td = link_to 'Destroy', address, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Address', new_address_path

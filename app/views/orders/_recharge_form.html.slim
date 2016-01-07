@@ -1,0 +1,9 @@
+div.charge-form ng-show='showRechargeForm'
+  = simple_form_for(ConsumptionRecord.new, html: { 'ng-submit': 'rechargeAccount()', class: 'consumption' }, url: '') do |f|
+    .form-inputs
+      /= f.input :amount, required: true, label: "充值金额", input_html: { 'ng-model': 'rechargeAmount' }, placeholder: "请输入充值金额"
+      = select2_input :amount, "充值金额", collection: {'': ''}.merge(Customer::Recharge), required: true, model: 'rechargeAmount', placeholder: "请输入充值金额"
+      = select2_input :payment_method, "付款方式", collection: {'': ''}.merge(ConsumptionRecord::PaymentMethod), required: true, model: 'rechargePaymentMethod', placeholder: "请选择付款方式"
+      = f.input :remark, placeholder: "请输入本次重置的备注信息", input_html: { 'ng-model': 'rechargeRemark' }
+    .form-actions.text-center
+      = f.button :submit, class: 'btn btn-success btn-lg', value: "确认充值"

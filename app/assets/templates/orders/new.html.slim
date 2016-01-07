@@ -1,0 +1,12 @@
+.new-order-page
+  .customer-list.pull-left ng-include="'#{asset_path('orders/customer_list.html.slim')}'"
+  .pull-left.order-form.animate-zoom-out ui-view=''
+    .content 
+      div ng-include="'#{asset_path('orders/customer_info.html.slim')}'"
+      /div ng-include="'#{asset_path('orders/histroy.html.slim')}'"
+      div ng-if='!newCustomerButton'
+        div ng-include="'#{asset_path('orders/form.html.slim')}'" ng-if='newOrderForm'
+        div.mth.another-new-order ng-if='!newOrderForm'
+          .btn.btn-info.btn-wide ng-click='createAnotherOrder()'
+            span.fui-plus
+            | 再添加一个订单

@@ -1,0 +1,79 @@
+.upload-photos
+  p.text-center.color-red
+    strong
+      | 上传照片，最多30张
+
+  /.photos.row[ui-sortable='sortableOptions' ng-model="photos"]
+    .photo.list-pulse.pointer.col-md-3 ng-repeat='photo in photos track by $index'
+      a.thumbnail[hover-show target='span.remove']
+        span.fui-cross-circle.pull-right.remove[
+          title="点击删除该图片" Tooltip
+          ng-click='deletePhoto(photo.id, $index)'
+        ]
+        img ng-src="{{photo.thumbUrl}}"
+
+  table.table.table-striped[ng-show="photos.length"]
+    thead
+      tr
+        th style='width: 100px;'
+          | 图片预览
+        th style='width: 150px;'
+          | 文件名
+        th style='width: 80px;'
+          | 大小
+        th.text-center style='width: 80px;'
+          | 使用到方案
+        th style='width: 40px;'
+          | 删除
+    tbody[ ui-sortable="sortableOptions" ng-model="photos"]
+      tr.photo.list-pulse.pointer ng-repeat='file in photos track by $index'
+        td 
+          img.preview.pull-left ng-src='{{file.thumbUrl}}'
+        td
+          | {{file.name}}
+        td 
+          | {{file.showSize}} KB
+        td.text-center ng-click='changeUseStatus(file)'
+          span.fui ng-class="{'fui-checkbox-checked': file.used, 'fui-checkbox-unchecked': !order.used}"
+        td 
+          span.fui-cross ng-click='removePhoto(file, $index)'
+  .clearfix
+
+  /span.mrh
+    | 上传照片
+  .buttons.text-center
+    button.btn.btn-primary[
+      ng-file-select ng-model="files"
+      ng-file-change="generatImageUrl(files)"
+      ng-multiple='true'
+    ]
+      span.fui-upload.mrm
+      | {{initText}}
+
+    /button.btn.btn-success.mlh.animate-zoom-out ng-click='upload(fileArray)' ng-if="fileArray.length"
+      span.fui-cross-circle.mrm
+      | 全部上传
+
+    /button.btn.btn-danger.mlh.animate-zoom-out ng-click='clearphotos()' ng-if="fileArray.length"
+      span.fui-cross-circle.mrm
+      | 清空
+
+  .text-center ng-if="photos.length"
+    button.btn.btn-success.animate-zoom-out[
+      ng-click="confirmStatusFor('upload_photo')"
+      ng-class="{disabled: order.nextStatus!='uploadPhoto'}"
+    ]
+      span.fui-check
+      span
+        | 确认完成图片上传
+
+    button.btn.btn-danger.animate-zoom-out.mlh[
+      ng-click="cancelCurrentStatus()"
+      ng-if="order.showStatus=='upload_photo'"
+    ]
+      span.fui-cross
+      span
+        | 取消确认
+    
+  h1 
+    | {{$parent.statusUpdated}}

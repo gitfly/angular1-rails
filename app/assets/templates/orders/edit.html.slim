@@ -1,0 +1,6 @@
+.new-order-page
+  .animate-zoom-out ui-view=''
+    .content 
+      div ng-include="'#{asset_path('orders/customer_info.html.slim')}'"
+      div ng-if='!newCustomerButton'
+        div ng-include="'#{asset_path('orders/form.html.slim')}'"

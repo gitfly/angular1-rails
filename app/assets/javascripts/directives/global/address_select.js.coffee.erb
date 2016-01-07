@@ -1,0 +1,63 @@
+app = angular.module("addressSelect", [])
+
+app.directive 'addressSelect', ->
+  restrict: "EA"
+  replace: true
+  require: '^form'
+  scope: {
+    label: '@'
+    address: '='
+    required: '@'
+  },
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('directives/address_select.html.slim')%>"
+  link: ($scope, $element, $attrs, formCtrl) ->
+    $scope.form = formCtrl
+
+    if angular.isUndefined($scope.label)
+      modelData = $scope.simpleFormModel[$scope.modelName]
+      if modelData
+        data = modelData[$scope.attributeName]
+        if data
+          $scope.showLabel = data.label
+      $scope.showLabel ||= $scope.attributeName
+    else
+      $scope.showLabel = $scope.label
+    if $scope.label == 'false'
+      $scope.showLabel = false
+
+    return
+  controller: ($scope, $element, Address, SimpleFormModel) ->
+    $scope.simpleFormModel = SimpleFormModel
+    $scope.provinces = ["北京市", "上海市", "天津市", "广东省", "河北省", "河南省", "福建省", "安徽省", "浙江省", "重庆市", "山东省", "山西省", "陕西省", "黑龙江省", "湖北省", "湖南省", "四川省", "江苏省", "江西省", "辽宁省", "贵州省", "海南省", "吉林省", "内蒙古自治区", "宁夏回族自治区", "青海省", "西藏自治区", "新疆维吾尔自治区", "云南省", "甘肃省", "广西壮族自治区"]
+    $scope.cities = ["暂无"]
+    $scope.districts = ["东城区", "西城区", "崇文区", "宣武区", "朝阳区", "丰台区", "石景山区", "海淀区", "门头沟区", "房山区", "通州区", "顺义区", "昌平区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县"]
+
+    getCities = (province) ->
+      Address.$get(
+        "/api/v1/addresses/cities", {province: province}
+      ).then ((results) ->
+        $scope.cities = results
+        if results.length == 1
+          getDistricts(results[0])
+          $scope.address.city = undefined
+      ), (error) ->
+        console.log error
+
+    getDistricts = (city) ->
+      Address.$get(
+        "/api/v1/addresses/districts", {city: city}
+      ).then ((results) ->
+        $scope.districts = results
+      ), (error) ->
+        console.log error
+
+    $scope.$watch('address.province', (newValue, oldValue) ->
+      if newValue && newValue.length
+        getCities(newValue)
+    , true)
+    
+    $scope.$watch('address.city', (newValue, oldValue) ->
+      if newValue && newValue.length
+        getDistricts(newValue)
+    , true)

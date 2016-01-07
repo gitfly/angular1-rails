@@ -1,0 +1,13 @@
+div.consumption-form ng-show='!showRechargeForm && orderConsumption'
+  = simple_form_for(ConsumptionRecord.new, html: { 'ng-submit': 'createConsumptionRecord()', class: 'consumption' }, url: '') do |f|
+    .form-inputs
+      = f.input :amount, required: true, input_html: { 'ng-model': 'currentCon.amount' }
+      = select2_input :payment_method, "付款方式", collection: {'': ''}.merge(ConsumptionRecord::PaymentMethod), required: true, model: 'currentCon.paymentMethod', placeholder: "请选择付款方式"
+      = f.input :remark, input_html: { 'ng-model': 'currentCon.remark' }
+    .form-actions.text-center
+      = f.button :submit, class: 'btn btn-success btn-lg', value: "确认付款"
+
+div.finish-order ng-show='!orderConsumption'
+  span 订单已完成
+  .btn.btn-success ng-click='orderFinish()'
+    | 返回

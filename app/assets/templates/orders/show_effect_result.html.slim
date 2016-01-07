@@ -1,0 +1,115 @@
+.diagnose.send-effect-result ng-controller="showEffectResult"
+  .pull-left.left-content.pbh
+    .order-basic-info.pull-left.position-fixed style='width: 400px;height: 680px;overflow-y:scroll'
+      .show-basic-info.mbh.pbh
+        .bs-callout.bs-callout-info.mtl
+          .title.pbm
+            span.mrs.square
+              | ◼︎
+            | 基本信息
+          .row.pbl
+            p.col-lg-6
+              span.gray
+                | 种类：
+              | {{item.style}}-{{item.showType}}
+            p.col-lg-6
+              span.gray
+                | 是否加急：
+              | {{currentOrder.showUrgent}}
+            p.col-lg-6
+              span.gray
+                | 品牌：
+              | {{item.brand}}
+            p.col-lg-6 ng-if='item.version'
+              span.gray
+                | 型号：
+              | {{item.version}}
+            p.col-lg-6
+              span.gray
+                | 颜色：
+              | {{item.color}}
+            p.col-lg-6 ng-if='currentOrder.parts'
+              span.gray
+                | 配件：
+              | {{currentOrder.parts}}
+            p.col-lg-6 ng-if='currentOrder.attachment'
+              span.gray
+                | 附件：
+              | {{currentOrder.attachment}}
+        .bs-callout.bs-callout-success
+          .title.pbs
+            span.mrs.square
+              | ◼︎
+            | 服务类型
+          .col-lg-12
+            pre
+              | {{currentOrder.serviceName}}
+          .clearfix
+        .bs-callout.bs-callout-warning
+          .title.pbs
+            span.mrs.square
+              | ◼︎
+            | 用户需求：
+          .col-lg-12
+            pre
+              | {{currentOrder.request}}
+          .clearfix
+        .bs-callout.bs-callout-danger
+          .title.pbs
+            span.mrs.square
+              | ◼︎
+            | 顾问诊断：
+          .col-lg-12
+            pre
+              | {{currentOrder.diagnose}}
+          .clearfix
+        .clearfix
+    .pull-right.mrm style='width:460px;'
+      .blue-print.mtl.well[dblclick-to-select style='background: #fff'] 
+        h6.title.mbl.mtl
+          div.text-center
+            strong
+              | 【包拯好了】
+              | {{customer.callName}}的
+              | {{itemTitle()}}
+              | 拯好了
+        .photos
+          .photo.center-block.pbl ng-repeat='photo in template.photos' ng-if='photo.header'
+            a ng-if='photo.header'
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+
+        p
+          | {{template.header}}
+        p
+          | {{customer.callName}}你的
+          strong.mlx.mrx
+            | {{itemTitle()}}
+          | 拯好了！
+          | 包大人喊你回来看【包拯好了】
+
+        .photos.order-photo
+          .photo.mbh ng-repeat='photo in photos track by $index' ng-if='photo.used'
+            a
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+            a.after
+              img.img-responsive ng-src="{{afterPhotos[$index].originalUrl}}"
+
+            /a ng-repeat='p in photo.childPhotos'
+              img ng-src="{{p.originalUrl}}"
+            /.symptoms.mtl ng-repeat='symptom in photo.symptoms track by $index'
+              p ng-bind-html="pageHtml(symptom.desc)"
+
+        p
+          | 订单编码
+          strong
+            | {{currentOrder.number}}，
+          | 如查询宝贝状态请报编码联系客服呦！
+
+        p.mtl
+          | {{template.footer}}
+        .photos.mtl
+          .photo.pbs ng-repeat='photo in template.photos' ng-if='!photo.header'
+            a ng-if='!photo.header'
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+  .pull-right.right-bar.full-height
+    div ng-include="'#{asset_path('orders/customer_orders.html.slim')}'"

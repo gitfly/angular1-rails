@@ -1,0 +1,62 @@
+#be-member.modal ng-show='consumeForm'
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.rotate_90def.close.fui-cross[aria-hidden="true" data-dismiss="modal" ng-click="showConsumeForm(false, currentCustomer)" type="button"]
+        .modal-title.text-center
+          |  充值成为会员 
+      form#new_consumption_record.simple_form.consumption.ng-pristine.ng-invalid.ng-invalid-required[ng-submit="consumeAccount(consume)" novalidate="novalidate" action="" accept-charset="UTF-8" method="post"]
+        .modal-body
+          .account
+            .member-info ng-if='currentCustomer.isMember'
+              .info
+                span.mrl
+                  | {{currentCustomer.showDiscount}}
+                  | 会员
+                span
+                  | 账户余额：
+                  | {{currentCustomer.balance}}
+            .not-member ng-if='!currentCustomer.isMember'
+              .info
+                span
+                  | 非会员
+          input[name="utf8" type="hidden" value="✓"]
+          input[type="hidden" name="authenticity_token" value="z8GeOXZiGe7/ovS3TxdOtT+iiKj042qjhDyRlHcmSAOk6gTzJWlhMx/hW1nQnByUNZxySKWj4BZwhUM8jp7J8w=="]
+          .form-inputs
+            .form-group.string.required
+              .inline-label.col-sm-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 消费金额
+              .col-sm-10.inline-input
+                input.string.optional.form-control.ng-pristine.ng-valid[ng-model="consume.amount" maxlength="65535" placeholder="请输入本次消费金额" name="consumption_record[amount]"]
+
+
+            .form-group.string.required
+              .inline-label.col-sm-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 付款方式
+              .col-sm-10.inline-input
+                select#payment_method.form-control.select.select-default.select-block.ng-pristine.ng-invalid.ng-invalid-required.select2-offscreen[name="payment_method" required="required" model="consumePaymentMethod" placeholder="请选择付款方式" ng-model="consume.paymentMethod" ui-select2="" tabindex="-1" title=""]
+                  option[value=""]
+                  option[value="0"]
+                    | 现金
+                  option[value="1"]
+                    | 刷卡
+                  option[value="2"]
+                    | 大众点评团购
+            .form-group.text.optional.consumption_record_remark
+              .inline-label.col-sm-2
+                label.text.optional[for="consumption_record_remark"]
+                  | 备注
+              .col-sm-10.inline-input
+                textarea#consumption_record_remark.text.optional.form-control.ng-pristine.ng-valid[ng-model="consume.remark" maxlength="65535" placeholder="请输入本次重置的备注信息" name="consumption_record[remark]"]
+
+
+        .modal-footer
+          a.btn.btn-default.btn-wide[ ng-click="showConsumeForm(false, currentCustomer)"]
+            | 取消
+          input.btn.btn-default.btn.btn-success.btn-wide[type="submit" name="commit" value="确认付款"]

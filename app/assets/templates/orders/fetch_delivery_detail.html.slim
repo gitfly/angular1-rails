@@ -1,0 +1,132 @@
+.reconciliation
+  .filters
+    div  style='font-size: 18px;margin-top: 10px;' 
+    .mbl
+      
+
+      button.btn.btn-hg.btn-primary ng-if="customers"
+        | 今日客户：{{customers_num}}位 
+      button.btn.btn-hg.btn-primary ng-if="customers"
+        | 今日物品：{{items_num}}件  
+     
+    .pull-right
+      button.btn.btn-success.pull-right.mll.plh.prh[
+        ng-click="printFetchDelivery()"
+      ]
+
+        span.icon-print
+          | 打印
+
+      button.btn.btn-info.pull-right.mll.plh.prh[
+        ng-click='selectByDate(from)'
+      ]
+        span.fui-search
+        | 筛选
+      input.form-control.start_date.pull-right[
+        placeholder="超期日期" date-picker
+        ng-model='from'
+      ]
+    
+    .clearfix
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1500px;font-size: 10px;' 
+    thead
+      tr
+        th 用户姓名
+        th 用户电话
+        th 类型
+        th 地址
+        th 收费总计
+        th 订单号码
+        th 收费单价
+        th 物品信息
+        th 取送时间
+
+    tbody ng-repeat='customer in customers'
+      tr.fade-in colspan="{{customer.orders.length + 1}}"
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="customer.orders[0].pre"] 
+          |  {{customer.orders[0].fetchAddress.name}}
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="!customer.orders[0].pre"] 
+          |  {{customer.orders[0].deliveryAddress.name}}  
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="customer.orders[0].pre"]
+          |  {{customer.orders[0].fetchAddress.phone}}  
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="!customer.orders[0].pre"]
+          |  {{customer.orders[0].deliveryAddress.phone}}  
+
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="customer.orders[0].pre"] 
+          |  取
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="!customer.orders[0].pre"] 
+          |  送   
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="customer.orders[0].pre"
+          ] 
+          | {{customer.orders[0].fetchAddress.district}}
+          | ---{{customer.orders[0].fetchAddress.details}}
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="!customer.orders[0].pre"
+          ] 
+          | {{customer.orders[0].deliveryAddress.district}}
+          | ---{{customer.orders[0].deliveryAddress.details}}  
+        td rowspan="{{customer.orders.length + 1}}" 
+          | {{customer.money}} 元
+
+        
+      tr.fade-in ng-repeat='order in customer.orders'
+        td 
+          |{{order.number}}
+        td 
+          |{{order.showRemainMoney}} 元
+                
+        td 
+          | {{order.showColor}}
+          | {{order.showStyle}}
+          | {{order.showItemType}}
+
+        td ng-if="order.pre"  
+          | {{order.fetchDateDetail}}
+
+        td ng-if="!order.pre"  
+          | {{order.deliveryDateDetail}}    
+
+      
+
+css:
+   .select2-drop .select2-results .select2-result-selectable {
+     font-size: 12px;
+   }
+   .body-container .reconciliation .filters .pull-left .inline-input .select2-container a{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .inline-input{
+     width: 1000px;
+   }
+   .select2-choice{
+   font-size: 12px;
+   padding:5px 0 5px 5px;
+   width:150px;
+   margin-left:5px;
+   }
+   .mbl button{
+   font-size: 12px;
+   padding:5px 20px 5px 20px;
+
+   margin-left:5px;
+   }
+   .mbl{
+   width:1000px;
+   } 
+   .select{
+    min-width:0px
+   }              

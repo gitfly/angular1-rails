@@ -1,0 +1,56 @@
+h4.title
+  | 【包怎么拯】
+  = @customer.call_name
+  = "的#{@item.color}#{@item.brand}#{@item.show_type}怎么拯"
+.photo-list
+  - @template.photos.where(header: true).each do |p|
+    .photo
+      = image_tag(p.photo.url, class: 'img-responsive')
+p
+  = @template.header
+
+br
+
+p
+  = @customer.call_name
+  | 你的
+  = "#{@item.color}#{@item.brand}#{@item.show_type}"
+  | 怎么拯？交给包大人你就放心吧～ 
+p
+  | 来看看咱的方案：
+
+.photo-list
+  - @photos.each do |p|
+    .photo
+      = image_tag(p.photo.url, class: 'img-responsive')
+      p
+        = p.symptoms.where(stype:false).map(&:desc).join().gsub(/\n/, '<br/>').html_safe
+
+p
+    span
+      | 以上就是针对
+    span
+      |
+      = @customer.call_name
+      = @item.color
+      = @item.brand
+      = "#{@item.show_type}"
+        
+      | 独家定制的护理方案，请同学过目，
+    span
+      | 如果OK，包拯即将展开拯救行动，尽快让宝贝重回同学手中哦~~      
+
+p
+  | 订单编码
+  = @order.number
+  | ，如查询订单状态请报编码联系客服呦！
+
+br
+
+p
+  = @template.footer
+
+.photo-list
+  - @template.photos.where(header: false).each do |p|
+    .photo
+      = image_tag(p.photo.url, class: 'img-responsive')

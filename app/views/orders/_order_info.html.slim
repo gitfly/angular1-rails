@@ -1,0 +1,12 @@
+= render 'shares/select', label: "物品种类", placeholder: "请选择物品种类", options: {'': '', "包包": :Bag, "皮带": :Belt, "皮鞋": :Shoe}, model: 'currentItem.type', name: 'order[item][type]', required: true
+= f.simple_fields_for Item.new do |i|
+  = i.input :brand, required: true, input_html: { 'ng-model': 'currentItem.brand' }
+  = i.input :style, required: true, input_html: { 'ng-model': 'currentItem.style' }
+= f.input :color, required: true, input_html: { 'ng-model': 'currentItem.color' }
+
+/= render 'shares/select', label: "品牌", placeholder: "请选择品牌", options: Item.group(:brand).map(&:brand), model: 'currentItem.brand', name: 'order[item][brand]', multiple: true
+/= render 'shares/select', label: "样式", placeholder: "请选择样式", options: Item.group(:style).map(&:style), model: 'currentItem.style', name: 'order[item][style]', multiple: true
+/= select2_input :color, "颜色", 'data-placeholder': "请选择颜色", collection: Color.colors, model: 'currentItem.colorId', name: 'color', multiple: true
+
+date-picker controller-name='CreateOrder' template-url=asset_path('orders/receive_date.html.slim')
+date-picker controller-name='CreateOrder' template-url=asset_path('orders/delivery_date.html.slim')

@@ -1,0 +1,182 @@
+.dropdown
+  button#dropdownMenu1.btn.btn-success.btn-xs.dropdown-toggle[
+    type="button" data-toggle="dropdown" aria-expanded="true"
+    ng-click='activityChange(!showActivities)'
+  ]
+    | 选择优惠活动
+    span.caret
+
+  ul.dropdown-menu.text-center.row.animate-zoom-out[
+    role="menu" aria-labelledby="dropdownMenu1" ng-show='showActivities'
+  ]
+    .col-lg-5.leftbar
+      .nav.nav-list
+        li[
+          role="presentation" ng-repeat='ac in normalAcs track by $index'
+          click-active
+          ng-click='selectActivity(orders, ac)'
+          ng-class="{'active': $index==0}"
+        ]
+          a
+            span
+              | {{ac.name}}
+            span
+              | {{ac.showCoupon}}
+        li.divider
+        li[
+          role="presentation" ng-repeat='ac in grouponAcs track by $index'
+          click-active
+          ng-click='selectActivity(orders, ac)'
+        ]
+          a
+            span
+              | {{ac.name}}--
+            span
+              | {{ac.showCoupon}}
+        li.divider
+        li[
+          role="presentation"
+          ng-click='selectSpecialActivity(orders)'
+          click-active
+        ]
+          a
+            span
+              | 特殊优惠
+        li.divider
+        li[
+          role='presentation' ng-click='selectActivity(orders)' 
+          click-active
+        ]
+          a
+            | 不参与任何活动
+    .col-lg-7.ptl.ac-right-content
+      .normal-activity ng-if='activity.atype==0'
+        div ng-if='activity.id'
+          p
+            | {{activity.name}}
+          p
+            | {{activity.showCoupon}}
+          p
+            | {{activity.showItemType}}
+          p
+            | {{activity.showAddup}}
+          p
+            | 截止日期：{{activity.endDate}}
+        button.btn.btn-success.mtl[
+          ng-click='confirmActivity(orders, activity)' 
+          ng-disabled='!activity.enable'
+        ]
+          | 确定
+      .special-activity.pts ng-if='activity.atype==10'
+        form name='aform'
+          .form-group.inputs
+            .inline-label.col-lg-4.prx.plx
+              label
+                abbr[title="required"]
+                  | *
+                | 折扣方式
+            .inline-input.col-lg-8.plx
+              select.form-control.select.select-default.select-block.ng-pristine.ng-valid.select2-offscreen[
+                placeholder="请选择该活动的折扣方式" ng-model="activity.discountManner"
+                ui-select2
+                type='number'
+                name='discountManner'
+              ]
+                option[value=""]
+                option[value=0]
+                  | 打折
+                option[value=1]
+                  | 减价
+              .error-message ng-show='aform.discountManner.$invalid && aform.discountManner.$dirty'
+                | 折扣方式不能为空
+            .clearfix
+
+          .form-group.inputs ng-if="showDiscount"
+            .inline-label.col-lg-4.prx.plx
+              label
+                abbr[title="required"]
+                  | *
+                | 折扣大小
+            .inline-input.col-lg-8.plx
+              input.form-control[
+                ng-model="activity.amount"
+                placeholder="折扣比例, 8折输入80"
+                name='amount'
+                type='number' min="10" max="100"
+                required
+              ]
+              .error-message ng-show='aform.amount.$invalid && aform.amount.$dirty'
+                | 折扣大小必须是10到100之间的数字
+            .clearfix
+
+          .form-group.inputs ng-if="!showDiscount"
+            .inline-input.col-lg-4.prx.plx
+              label
+                abbr[title="required"]
+                  | *
+                | 减免金额
+            .inline-input.col-lg-8.plx
+              input.form-control[
+                ng-model="activity.amount"
+                placeholder="请输入减免金额"
+                name='amount'
+                type='number' min="0"
+                required
+              ]
+              .error-message ng-show='aform.amount.$invalid && aform.amount.$dirty'
+                | 减免金额必须是数字
+            .clearfix
+          .form-group.inputs
+            .inline-input.col-lg-4.prx.plx
+              label
+                abbr[title="required"]
+                  | *
+                | 备注信息
+            .inline-input.col-lg-8.plx
+              textarea.form-control[
+                ng-model="activity.content"
+                placeholder="请输入优惠备注信息"
+                name='content'
+                type='string'
+                required
+              ]
+            .clearfix
+        button.btn.btn-success.btn-lg.mts[
+          ng-click='submitSepcialActivity(orders, activity)'
+          ng-disabled="!selectedOrders().length || !orderCanUseActivity() || aform.$invalid"
+        ]
+          | 确定
+      .no-activity ng-if='!activity.id && !activity.atype'
+        div
+          p
+            | 不参与任何活动
+        button.btn.btn-success.mtl[
+          ng-click="useNoActivity(orders)"
+          ng-disabled="!selectedOrders().length || !orderCanUseActivity()"
+        ]
+          | 确定
+      .groupon-activity ng-if='activity.atype==1 || activity.atype==3'
+        input.form-control#activity-code[
+          placeholder="请输入团购码"
+          ng-keypress="useGrouponCode($event, activity)"
+          ng-model='activity.grouponCode'
+          name='grouponCode'
+          required
+          ng-disabled="!activity.enable"
+        ]
+        div.ptl.row
+          .col-lg-4.mbl ng-repeat='code in activity.activityCodes track by $index'
+            .btn.btn-info.btn-sm.code
+              | {{code}}
+              span.fui-cross ng-click='removeGrouponCode($index, activity)'
+
+        button.btn.btn-success.btn-lg.mtl[
+          ng-click='confirmActivity(orders, activity)' 
+          ng-disabled='!activity.enable || (activity.atype==1 && !activity.activityCodes.length) || (activity.atype==3&&activity.activityCodes.length!=selectedOrders().length)'
+        ]
+          | 确定
+      .coupon-activity ng-if='activity.atype==2'
+      p.mtl ng-if='!activity.enable'
+        | 已选中订单暂不可使用该活动
+
+.clearfix

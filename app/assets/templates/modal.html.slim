@@ -1,0 +1,31 @@
+.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='']
+        h6.modal-title
+          | Modal header
+      .modal-body
+        form#new-order.simple_form.ng-pristine.ng-valid[novalidate="novalidate" action="/api/v1/orders" accept-charset="UTF-8" method="post"]
+          input[name="utf8" type="hidden" value="✓"]
+          input[type="hidden" name="authenticity_token" value=""]
+
+          .form-inputs
+            .form-group.optional
+              input.string.optional.form-control[autofocus="autofocus" placeholder="姓名" type="string" value="" name="customer[name]"]
+
+            .form-group.optional
+              input.string.optional.form-control[autofocus="autofocus" placeholder="电话号码" type="string" value="" name="customer[phone]"]
+            .form-group.optional
+              input.string.optional.form-control[autofocus="autofocus" placeholder="邮箱" type="email" value="" name="customer[email]"]
+
+            /.form-group.optional
+              input.string.optional.form-control[autofocus="autofocus" placeholder="邮箱" type="email" value="" name="customer[email]"]
+
+          /.form-actions
+            input.btn.btn-default.btn.btn-success.btn-lg.btn-block[type="submit" name="commit" value="登陆包拯"]
+      .modal-footer
+        a.btn.btn-default.btn-wide
+          | It’s ok
+        a.btn.btn-primary.btn-wide
+          | Turn it off now.

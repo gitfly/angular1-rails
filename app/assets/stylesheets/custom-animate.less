@@ -1,0 +1,361 @@
+.pulse {
+  animation-name: pulse;
+  -webkit-animation-name: pulse;
+  animation-duration: 2.5s;
+  -webkit-animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+
+.transition-properties(...) {
+  -webkit-transition: @arguments;
+  -moz-transition: @arguments;
+  -o-transition: @arguments;
+  transition: @arguments;
+}
+
+@short-animate-time: 0.3s;
+@mid-animate-time: 1s;
+@long-animate-time: 2s;
+
+.list-pulse.ng-enter {
+  animation: lightSpeedIn @short-animate-time;
+}
+
+.list-pulse.ng-leave {
+  animation: lightSpeedOut @short-animate-time;
+}
+
+.fade-in.ng-enter {
+  animation: fadeInDown @short-animate-time;
+}
+// .fade-in.ng-leave {
+//   animation: fadeOut 0.1s;
+// }
+
+.fade-in-left.ng-hide-add {
+  z-index: 9999;
+  animation: fadeInLeft @mid-animate-time;
+}
+
+.fade-in-left.ng-hide-remove {
+  z-index: 8888;
+  animation: fadeInLeft 0.3s;
+}
+
+.fade-in.ng-hide-add {
+  z-index: 9999;
+  animation: fadeOut .3s;
+}
+
+.fade-in.ng-hide-remove {
+  z-index: 8888;
+  animation: fadeIn .5s;
+}
+
+.rollIn.ng-hide-add {
+  animation: rollOut 0.8s;
+}
+
+.rollIn.ng-hide-remove {
+  animation: rollIn 1.2s;
+}
+
+.fade-in-left-big.ng-hide-add {
+  z-index: 8888;
+  animation: rollOut @mid-animate-time;
+}
+
+.fade-in-left-big.ng-hide-remove {
+  z-index: 9999;
+  animation: fadeInLeftBig .5s;
+}
+
+.bounceInRight.ng-hide-remove {
+  z-index: 9999;
+  animation: bounceInRight 0.6s;
+}
+
+.bounceInRight.ng-hide-add {
+  z-index: 8888;
+  animation: bounceOutRight 0.5s;
+}
+
+.fade-in-right-big.ng-hide-remove {
+  z-index: 9999;
+  animation: fadeInRight .3s;
+}
+
+.fade-in-right-big.ng-hide-add {
+  z-index: 8888;
+  animation: fadeOutRight .3s;
+}
+
+.bounce-in.ng-hide-add {
+  z-index: 9999;
+  animation: bounceIn @mid-animate-time;
+}
+.bounce-in.ng-hide-remove {
+  z-index: 8888;
+  animation: bounceOut @mid-animate-time;
+}
+.slide-in-left.ng-hide-add {
+  z-index: 9999;
+  animation: slideOutLeft @mid-animate-time;
+}
+.slide-in-left.ng-hide-remove {
+  z-index: 8888;
+  animation: slideOutRight @mid-animate-time;
+}
+
+.slide-in-left, .animate-slide-in-left {
+  position: absolute;
+}
+
+.animate-fade-left-right.ng-enter {
+  animation: fadeInLeft .3s;
+}
+.animate-fade-left-right.ng-leave {
+  animation: fadeOutRight .3s;
+}
+
+.slide-in-right.ng-hide-add {
+  animation: fadeOutRight .2s;
+}
+.slide-in-right.ng-hide-remove {
+  animation: fadeInRight .2s;
+}
+.fade-in-out.ng-hide-add {
+  animation: fadeOut .8s;
+}
+.fade-in-out.ng-hide-remove {
+  animation: fadeIn .3s;
+}
+
+.animate-zoom-out.ng-hide-remove {
+  z-index: 9999;
+  animation: zoomIn @short-animate-time;
+}
+
+.animate-zoom-out.ng-hide-add {
+  z-index: 8888;
+  animation: zoomOut @short-animate-time;
+}
+.animate-zoom-out.ng-enter {
+  z-index: 9999;
+  animation: zoomIn @short-animate-time;
+}
+
+.animate-zoom-out.ng-leave {
+  z-index: 8888;
+  animation: zoomOut @short-animate-time;
+}
+
+.slide-up-down.ng-enter {
+  z-index: 8888;
+  animation: slideInUp @short-animate-time;
+}
+.slide-up-down.ng-leave {
+  z-index: 8888;
+  animation: slideOutUp @short-animate-time;
+}
+
+.animate-slide-up-down.ng-enter {
+  z-index: 9999;
+  animation: slideInDown @mid-animate-time;
+}
+.animate-slide-up-down.ng-leave {
+  z-index: 8888;
+  animation: slideOutDown @mid-animate-time;
+}
+
+.animate-slide-in-left.ng-leave {
+  z-index: 8888;
+  animation: rollOut @mid-animate-time;
+}
+.animate-slide-in-left.ng-enter {
+  z-index: 9999;
+  animation: zoomIn @mid-animate-time;
+}
+
+.animate-zoom.ng-enter {
+  animation: zoomIn @short-animate-time;
+}
+
+.animate-zoom.ng-leave {
+  animation: zoomOut @short-animate-time;
+}
+
+.animate-bounce.ng-enter {
+  animation: rollIn @short-animate-time;
+}
+
+.animate-bounce.ng-leave {
+  animation: rollOut @short-animate-time;
+}
+
+.animate-pulse.ng-enter {
+  animation: flipInY 1s;
+}
+
+.animate-pulse.ng-leave {
+  animation: hinge 1s;
+}
+
+.animate-rubberBand.ng-enter {
+  animation: rubberBand @short-animate-time;
+}
+
+.animate-rubberBand.ng-leave {
+  animation: fadeOut @short-animate-time;
+}
+
+.bounce-in-left.ng-enter {
+  animation: flipInX 1s;
+}
+
+.bounce-in-left.ng-leave {
+  animation: flipInX 1s;
+}
+
+.wechat-qrcode {
+  padding: 25px 20px;
+  background: #fff;
+  z-index: 1000;
+  position: absolute;
+  top: -180px;
+  right: -70px;
+  height: 200px;
+  width: 200px;
+}
+
+
+/* ANIMATIONS
+============================================================================= */
+
+.page.ng-leave 	{ z-index:9999; }
+.page.ng-enter 	{ z-index:8888; }
+
+.page        { 
+	position:absolute; 
+}
+
+/* page specific animations ------------------------ */
+
+// .user-show.ng-enter, .user-edit.ng-leave 		{  
+	// animation: zoomIn 1s;
+// }
+// .user-show.ng-leave, .user-edit.ng-leave         {
+	// animation: hinge 1s;
+// }
+
+// .user-edit.ng-leave, .user-show.ng-leave        {
+//     -webkit-animation:slideOutLeft 0.5s both ease-in;
+// 	-moz-animation:slideOutLeft 0.5s both ease-in;
+// 	animation:slideOutLeft 0.5s both ease-in;   
+// }
+// 
+// .user-edit.ng-enter, .user-show.ng-enter 		{  
+//     -webkit-animation:slideInRight 0.5s both ease-in;
+// 	-moz-animation:slideInRight 0.5s both ease-in;
+// 	animation:slideInRight 0.5s both ease-in;    
+// }
+// 
+/* contact ---------------------- */
+.page-contact.ng-leave      {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation: rotateOutNewspaper .5s both ease-in;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation: rotateOutNewspaper .5s both ease-in;
+	transform-origin: 50% 50%;
+	animation: rotateOutNewspaper .5s both ease-in;
+}
+.page-contact.ng-enter 		{ 
+	-webkit-animation:slideInUp 0.5s both ease-in;
+	-moz-animation:slideInUp 0.5s both ease-in;
+	animation:slideInUp 0.5s both ease-in;  
+}
+
+/* rotate and fall */
+@-webkit-keyframes rotateFall {
+	0% { -webkit-transform: rotateZ(0deg); }
+	20% { -webkit-transform: rotateZ(10deg); -webkit-animation-timing-function: ease-out; }
+	40% { -webkit-transform: rotateZ(17deg); }
+	60% { -webkit-transform: rotateZ(16deg); }
+	100% { -webkit-transform: translateY(100%) rotateZ(17deg); }
+}
+@-moz-keyframes rotateFall {
+	0% { -moz-transform: rotateZ(0deg); }
+	20% { -moz-transform: rotateZ(10deg); -moz-animation-timing-function: ease-out; }
+	40% { -moz-transform: rotateZ(17deg); }
+	60% { -moz-transform: rotateZ(16deg); }
+	100% { -moz-transform: translateY(100%) rotateZ(17deg); }
+}
+@keyframes rotateFall {
+	0% { transform: rotateZ(0deg); }
+	20% { transform: rotateZ(10deg); animation-timing-function: ease-out; }
+	40% { transform: rotateZ(17deg); }
+	60% { transform: rotateZ(16deg); }
+	100% { transform: translateY(100%) rotateZ(17deg); }
+}
+
+/* scale up */
+@keyframes scaleUp {
+	from 		{ opacity: 0.3; transform: scale(0.8); }
+}
+@-moz-keyframes scaleUp {
+	from 		{ opacity: 0.3; -moz-transform: scale(0.8); }
+}
+@-webkit-keyframes scaleUp {
+	from 		{ opacity: 0.3; -webkit-transform: scale(0.8); }
+}
+
+/* slide in from the right */
+@keyframes slideInRight {
+	from 	{ transform:translateX(100%); }
+	to 		{ transform: translateX(0); }
+}
+@-moz-keyframes slideInRight {
+	from 	{ -moz-transform:translateX(100%); }
+	to 		{ -moz-transform: translateX(0); }
+}
+@-webkit-keyframes slideInRight {
+	from 	{ -webkit-transform:translateX(100%); }
+	to 		{ -webkit-transform: translateX(0); }
+}
+
+/* slide in from the bottom */
+@keyframes slideInUp {
+	from 	{ transform:translateY(100%); }
+	to 		{ transform: translateY(0); }
+}
+@-moz-keyframes slideInUp {
+	from 	{ -moz-transform:translateY(100%); }
+	to 		{ -moz-transform: translateY(0); }
+}
+@-webkit-keyframes slideInUp {
+	from 	{ -webkit-transform:translateY(100%); }
+	to 		{ -webkit-transform: translateY(0); }
+}
+
+/* slide in from the bottom */
+@keyframes slideOutLeft {
+	to 		{ transform: translateX(-100%); }
+}
+@-moz-keyframes slideOutLeft {	
+	to 		{ -moz-transform: translateX(-100%); }
+}
+@-webkit-keyframes slideOutLeft {
+	to 		{ -webkit-transform: translateX(-100%); }
+}
+
+/* rotate out newspaper */
+@-webkit-keyframes rotateOutNewspaper {
+	to { -webkit-transform: translateZ(-3000px) rotateZ(360deg); opacity: 0; }
+}
+@-moz-keyframes rotateOutNewspaper {
+	to { -moz-transform: translateZ(-3000px) rotateZ(360deg); opacity: 0; }
+}
+@keyframes rotateOutNewspaper {
+	to { transform: translateZ(-3000px) rotateZ(360deg); opacity: 0; }
+}

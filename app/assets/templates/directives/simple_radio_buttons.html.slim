@@ -1,0 +1,13 @@
+.form-group.simple-radio-buttons
+  .inline-label.col-sm-3 ng-if='showLabel'
+    label.pull-right for="{{name}}" style='padding-top: 7px;'
+      | {{showLabel||placeholder}}
+      abbr[title="required" ng-if='required']
+        | *:
+  .inline-input ng-class="{'col-md-12': !showLabel, 'col-sm-9': showLabel}"
+    button.btn.btn-default[
+      ng-repeat='(text, value) in options()'
+      ng-class="{'btn-danger': attribute==value}"
+      ng-click="setValue(value)"
+    ]
+      | {{text}}

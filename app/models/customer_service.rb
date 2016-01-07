@@ -1,0 +1,2 @@
+class CustomerService < User
+end

@@ -1,0 +1,28 @@
+app = window.app
+
+app.controller "barcodeList", ($scope, $modalInstance, data, Order, Printer) ->
+  $scope.barcodes = []
+  $scope.barcodesCount = 10
+
+  $scope.repeater = Array.apply(
+    null, {length: 4}
+  ).map(Number.call, Number)
+
+  $scope.cancel = ->
+    $modalInstance.dismiss('Canceled')
+    # $modalInstance.close(result)
+
+  $scope.getBarcodes = ->
+    Order.$get(
+      '/api/v1/orders/free_numbers_barcodes', {count: $scope.barcodesCount}
+    ).then ((results) ->
+      $scope.barcodes = results.barcodes
+    )
+
+  $scope.print = ->
+    Printer.print("<%= asset_path("orders/barcodes.html.slim")%>", {
+      repeater: $scope.repeater,
+      barcodes: $scope.barcodes
+    })
+
+  $scope.getBarcodes()

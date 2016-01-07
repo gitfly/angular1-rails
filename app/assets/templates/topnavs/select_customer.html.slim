@@ -1,0 +1,26 @@
+.select-customer
+  input.form-control.select#select-customer[autofocus placeholder='输入微信号或者电话号码选择用户'
+    ng-model='searchStr' ng-keypress="searchStrChange($event)" 
+    ng-change="searchCustomerStringChange(searchStr)"
+  ]
+  button.btn.btn-default.pull-left.create-customer ng-click='createNewCustomer(!createForm)' ng-class="{'btn-inverse': !createForm}"
+    span ng-if="!createForm"
+      span.fui-plus
+      | 新建用户
+    span  ng-if="createForm"
+      span.fui-cross
+      | 收起表单
+  .clearfix
+  ul.customer-options ng-show='showCustomerList'
+    li.pointer ng-repeat='cust in customers track by $index' ng-class="{'active': $index==0}" ng-click='customerSelected(cust)'
+      a.row.plx.prx
+        .col-lg-3.info
+          | {{cust.name}}
+        .col-lg-3.info
+          | {{cust.phone}}
+        .col-lg-3.info
+          | {{cust.weixin}}
+        .col-lg-3.info
+          | {{cust.weixinNickname}}
+      .clearfix
+  div ng-if="createForm" ng-include="'#{asset_path('customers/form.html.slim')}'"

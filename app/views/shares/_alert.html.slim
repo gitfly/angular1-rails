@@ -1,0 +1,5 @@
+#alerts
+  .alert#custom-alert ng-repeat='alert in alerts track by $index' ng-if='alert.show' class="alert-{{alert.type}}"
+    button class="close fui-cross" ng-click='alerts[$index].show=false'
+    p 
+      | {{alert.content}}

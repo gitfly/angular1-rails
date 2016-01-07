@@ -1,0 +1,13 @@
+.form-group.string.required.order_item_type
+  .inline-label.col-sm-2
+    label.string.required
+      - if defined?(required) && required
+        abbr[title="required"]
+          | *
+      = label
+  .col-sm-10.inline-input
+    - hash = { placeholder: placeholder, class: 'form-control select select-default select-block', 'ng-model': "#{model}", 'ui-select2': '{maximumSelectionLength: 2}', include_blank: false }
+    - if defined?(multiple) 
+      - hash.merge!(multiple: 'multiple')
+      - hash[:class] << ' multiselect multiselect-default'
+    = select_tag name, options_for_select(options), hash

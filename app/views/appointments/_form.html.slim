@@ -1,0 +1,29 @@
+= simple_form_for(@appointment, wrapper: :no_label, html: {novalidate: false}) do |f|
+  .form-inputs
+    = f.input :name, placeholder: "联系人", input_html: {required: true, data: {error: "联系人姓名不能为空", delay: 10}}
+    = f.input :phone, placeholder: "手机号码", input_html: {required: true, data: {error: "请输入11位手机号码", delay: 10}, pattern: "^[0-9]{11}$"}
+    - if (@appointment.atype || params[:atype]).to_i == 0
+      = f.simple_fields_for @address do |a|
+        .form-group.city-group.rails-helper.string.row.address-select
+          .col-xs-4.col-md-4.prs
+            = a.input_field :province, prompt: "省(直辖市)", collection: Province.order("created_at").pluck(:name), class: "province", required: true, data: {error: "省不能为空"}
+          .col-xs-4.col-md-4.prs.pls
+            = a.input_field :city, prompt: "选择市", collection: Province.find(2).cities.pluck(:name), class: "city", required: true, data: {error: "市不能为空"}
+          .col-xs-4.col-md-4.pls
+            = a.input_field :district, prompt: "选择区", collection: Province.find(2).cities.first.districts.pluck(:name), class: "district", required: true, data: {error: "区不能为空"}
+        = a.input :details, placeholder: "详细地址, 如: 青年路小悦中心2号楼912", input_html: {required: true, data: {error: "详细地址不能为空"}}
+      = f.input :date, placeholder: "时间", collection: Appointment.available_dates, prompt: "取货日期", input_html: {required: true, data: {error: "取货日期不能为空"}}
+
+    - else
+
+      = f.simple_fields_for @express do |exp|
+        = exp.input :company_type, collection: Express::CompanyType, prompt: "请选择快递公司", input_html: {required: true, data: { error: "不能为空" }}
+        = exp.input :number, placeholder: "快递单号", input_html: {required: true, data: { error: "不能为空" }}
+    = f.input :atype, :input_html => { value: @appointment.atype || params[:atype] }, as: :hidden
+    = f.input :code, :input_html => { value: @customer.weixin.try(:code) || params[:code] }, as: :hidden
+
+  .form-actions.button-block.mth.pth
+    = f.button :submit, class: "center-block btn btn-default btn-transparent", data: { confirm: "确认提交预约信息?" }
+
+javascript:
+  $('#new_appointment').validator()

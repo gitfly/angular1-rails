@@ -1,0 +1,2 @@
+class Solutionist < User
+end

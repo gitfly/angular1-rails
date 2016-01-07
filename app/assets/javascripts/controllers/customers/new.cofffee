@@ -1,0 +1,3 @@
+app = window.app
+
+app.controller "CreateCustomer", ($scope, $http, Order, Customer, ConsumptionRecord, Service, $rootScope) ->

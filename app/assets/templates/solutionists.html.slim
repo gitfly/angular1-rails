@@ -1,0 +1,74 @@
+/script type="text/ng-template" id="nodes_renderer.html"
+  div
+    div.tag-title.pointer.pull-left[hover-show target='.handle a']
+      .pull-left.title
+        .text ng-show='!node.edit' ng-click='toggleNode(this)'
+          span ng-class="{'fui-triangle-right-large': collapsed, 'fui-triangle-down': !collapsed}"
+          span
+            |  {{node.title}} 
+        .edit ng-show='node.edit'
+          input.form-control.pull-left[ng-model='node.title' input-visible]
+          button.pull-left.btn.btn-success ng-click='submitNewNode(node, this)'
+            span.fui-check
+          button.pull-left.btn.btn-danger[ng-click='cancelNewNode(node, this)']
+            span.fui-cross
+      .pull-right.handle
+        a.mrm[ng-click='newSubItem(this)' tooltip title='添加一个新的子节点']
+          span.fui-plus-circle.sign
+        a.edit.mrm[ng-click='node.edit = !node.edit' tooltip title='编辑当前节点']
+          span.fui-new.sign
+        a.mrm[ng-click='removeThisNode(this)' tooltip title='删除当前节点']
+          span.fui-cross-circle.sign
+    div.pull-left[ui-tree-handle]
+    .clearfix
+    ol[ui-tree-nodes="" ng-model="node.nodes" ng-show='!collapsed']
+      li[ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"]
+
+/#solutionist
+  .pull-left.content-block.mrh
+    #solutionist-header.mbl
+      strong.title
+        | 症状库对应关系
+      button.btn.btn-info.btn-sm.pull-right ng-click='collapseAll()'
+        | 全部收起
+      button.btn.btn-warning.btn-sm.mrh.pull-right ng-click='expandAll()'
+        | 全部展开
+      .clearfix
+
+    div#solutionist_list[ui-tree data-drag-enabled=false]
+      ol#tree-root[ui-tree-nodes="" ng-model="data"]
+        li[ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"]
+  .pull-left.content-block.descs
+    .title
+      strong.pull-left
+        | 话术库
+      input.form-control.pull-right[
+        placeholder="使用关键字搜索话术"
+        ng-model='searchStr'
+        ng-change='searchStringChange(searchStr)'
+      ]
+    ul.nav.nav-tabs.nav-append-content.mtl
+      li.active[click-active ng-click='setDescType(0)']
+        a
+          | 症状描述
+      li[click-active ng-click='setDescType(1)']
+        a
+          | 工艺描述
+      li[click-active ng-click='setDescType(2)']
+        a
+          | 效果描述
+      li[click-active ng-click='setDescType(3)']
+        a
+          | 效果方案话术
+      button.btn.btn-info.pull-right.btn-sm ng-click="addNewDesc()"
+        span.fui-plus
+        | 添加新话术
+    .tab-content
+      .tab-pane ng-class="{'active': descType==0}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      .tab-pane ng-class="{'active': descType==1}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      .tab-pane ng-class="{'active': descType==2}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"
+      .tab-pane ng-class="{'active': descType==3}"
+        div ng-include="'#{asset_path('solutionists/descs.html.slim')}'"

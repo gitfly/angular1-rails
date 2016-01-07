@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认结束订单
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('complete')"
+    ng-class="{disabled: order.nextStatus!='complete'}"
+  ]
+   | 确认结束订单
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='complete'"
+  ]
+    | 取消确认结束订单

@@ -1,0 +1,213 @@
+.modal.order-settlement ng-if='compensateForm'
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showCompensateForm(false)']
+        h6.modal-title
+          span.mrh
+            | 赔付 {{order.number}}
+          span
+            | {{order.showPaid}}
+      form name='rForm'
+        .modal-body.ptl
+          .form-inputs
+            .form-group.row
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 赔付金额
+              .inline-input.col-lg-10
+                input.form-control.color-red[
+                  ng-model='compensate.amount'
+                  placeholder="赔付金额"
+                  name='amount'
+                  type='number'
+                  min=1
+                  required
+                ]
+            .form-group.row
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 赔付方式
+              .inline-input.col-lg-10
+                select#payment_method.form-control.select.select-default.select-block.select2-offscreen[
+                  name="pm" required 
+                  type='number'
+                  placeholder="请选择付款方式" 
+                  ng-model="compensate.pm" ui-select2="" 
+                ]
+                  option[value=""]
+                  - ConsumptionRecord::PaymentMethod.each do |k, v|
+                    option[value=v]
+                      = k
+
+            .form-group.row
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 赔付原因
+              .inline-input.col-lg-10
+                select#cancel_reason.form-control.select.select-default.select-block.select2-offscreen[
+                  name="cancelR" required 
+                  type='number'
+                  placeholder="请选择订单退款原因" 
+                  ng-model="compensate.cancelR" ui-select2="" 
+                  ng-change='compensateReasonChange(compensate)'
+                ]
+                  option[value=""]
+                  option[
+                    ng-repeat='r in compensateReasons track by $index'  
+                    value="{{$index}}"
+                  ]
+                    | {{r}}
+            .form-group.row ng-if='compensate.cancelR==compensateReasons.length-1'
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 其他原因
+              .inline-input.col-lg-10
+                textarea.form-control[
+                  ng-model='compensate.reason'
+                  placeholder="请填写特殊的赔付订单的原因"
+                  required
+                  type='text'
+                  name='cancelReason'
+                ]
+
+            .form-group.row
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 送货方式
+              .inline-input.col-lg-10
+                select#delivery_manner.form-control.select.select-default.select-block.select2-offscreen[
+                  name="deliveryManner" required 
+                  placeholder="请选择送货方式" 
+                  ng-model="order.deliveryManner" ui-select2="" 
+                  type='number'
+                ]
+                  option[value=""]
+                  - Order::DeliveryManner.each do |k, v|
+                    option[value=v]
+                      = k
+
+            .form-group.row ng-if='order.deliveryManner==1'
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 朋友姓名
+              .inline-input.col-lg-4
+                input.form-control[
+                  ng-model='order.friend.name'
+                  placeholder="请填写朋友的姓名"
+                  name='cancelReason'
+                  type='text'
+                  required
+                ]
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 朋友电话
+              .inline-input.col-lg-4
+                input.form-control[
+                  ng-model='order.friend.phone'
+                  placeholder="请填写朋友的电话"
+                  name='cancelReason'
+                  type='text'
+                  required
+                ]
+
+            .form-group.row ng-if='order.deliveryManner==2 || order.deliveryManner==3'
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 收件人姓名
+              .inline-input.col-lg-4
+                input.form-control[
+                  ng-model='order.deliveryName'
+                  placeholder="请填写朋友的姓名"
+                  name='deliveryName'
+                  type='text'
+                  required
+                ]
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 收件人电话
+              .inline-input.col-lg-4
+                input.form-control[
+                  ng-model='order.deliveryPhone'
+                  placeholder="请填写朋友的电话"
+                  name='deliveryPhone'
+                  required
+                  type='text'
+                ]
+            .form-group.row ng-if='order.deliveryManner==2 || order.deliveryManner==3'
+              .inline-input.col-lg-2
+                label.string
+                  abbr[title="required"]
+                    | *
+                  | 收件人地址
+              .inline-input.col-lg-10
+                .row
+                  .col-lg-2.prx
+                    input#order_province.form-control[
+                      ng-model="order.deliveryAddress.province" 
+                      placeholder="省" type="text" name="address[province]"
+                    ]
+                  .col-lg-2.plx.prx
+                    input#order_city.form-control[
+                      ng-model="order.deliveryAddress.city" 
+                      placeholder="市" type="text" name="address[city]"
+                    ]
+                  .col-lg-2.plx.prx
+                    input#order_district.form-control[
+                      ng-model="order.deliveryAddress.district" 
+                      placeholder="区" type="text" name="address[district]"
+                    ]
+                  .col-lg-6.plx
+                    input#order_details.form-control[
+                      ng-model="order.deliveryAddress.details" 
+                      placeholder="具体地址:例如小悦中心2号楼912" 
+                      type="text" name="address[details]"
+                      required
+                    ]
+                .row.ptl
+                  .col-lg-12
+                    label.radio.pointer ng-click='useAddress({})'
+                      input[
+                        type="radio"
+                        data-toggle="radio" 
+                        class="custom-radio"
+                      ]
+                      span[
+                        ng-class="{'icon-checked': !order.deliveryAddress.id, 'icon-unchecked': order.deliveryAddress.id}"
+                      ]
+                      | 使用新地址
+                  .col-lg-12 ng-repeat='address in customer.addresses' ng-if='address.showAddress'
+                    label.radio.pointer ng-click='useAddress(address)'
+                      input[
+                        type="radio"
+                        data-toggle="radio" 
+                        class="custom-radio"
+                      ]
+                      span[
+                        ng-class="{'icon-checked': address.id==order.deliveryAddress.id, 'icon-unchecked': address.id!=order.deliveryAddress.id}"
+                      ]
+                      | {{address.showAddress}}
+
+        .modal-footer.pbh
+          a.btn.btn-default.btn-wide ng-click='showCompensateForm(false)'
+            | 返回
+          a.btn.btn-primary.btn-wide ng-click='submitCompensate(order)' ng-disabled='rForm.$invalid'
+            | 确认退款

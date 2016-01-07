@@ -1,0 +1,46 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  $stateProvider.state("create",
+    url: '/solutionists/create'
+    controller: "createSolutionist"
+    templateUrl: "<%= asset_path("solutionists/create.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", "CounselorManager", "Solutionist"]
+      }
+    }
+
+  ).state("symptoms",
+    url: '/solutionists/symptoms'
+    controller: "symptomsCtrl"
+    templateUrl: "<%= asset_path("solutionists/symptoms.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", "CounselorManager"]
+      }
+    }
+
+  ).state("soluTemplates",
+    url: "/solutionists/soluTemplates"
+    controller: "soluTemplates"
+    templateUrl: "<%= asset_path("solutionists/solu_templates.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", "CounselorManager"]
+      }
+    }
+
+  ).state("descriptions",
+    url: "/solutionists/descriptions"
+    controller: "descriptionsCtrl"
+    templateUrl: "<%= asset_path("solutionists/descriptions.html.slim") %>"
+    data: {
+      permissions:{
+        only: ["Admin", "CounselorManager"]
+      }
+    }
+  )
+  return
+

@@ -1,0 +1,74 @@
+
+table.table.table-striped.table-hover.table-condensed.table-bordered ng-if="overdues"
+	thead
+      tr 
+        th 
+          | 应完工时间
+        th 
+          | 预计完工时间
+        th 
+          | 超期天数
+        th 
+          | 超期原因
+        th 
+          | 确认人    
+    tbody   
+      tr.fade-in ng-repeat='overdue in overdues' 
+        td
+          | {{overdue.originalDate}}
+        td
+          | {{overdue.expectedDate}}        
+        td
+          | {{overdue.overDays}} 
+        td
+          | {{overdue.reason}}  
+        td
+          | {{overdue.operatorId}}
+
+div ng-if="isOverdue()" 
+	.row.mtl
+		.inline-input.col-md-6    
+			.col-md-3.plx.prx  
+				lable
+					| 应完成时间: 
+			.col-md-5
+				lable
+					| {{finish_date}} 
+			.col-md-4		
+				lable
+					|  已超期{{overdues.length + 1}}次
+				
+	.row.mtl
+		.inline-input.col-md-8   
+			.col-md-3.plx.prx  
+				lable
+					| 预计完成时间: 
+			.col-md-5
+				.row
+				  input.form-control.ng-pristine.ng-valid.required.hasDatepicker[
+					placeholder="预计完成时间如 2015-04-21" 
+					date-picker 
+					ng-model="overdue.expected_date" 
+					ng-blur="getOverDays()" 
+				  ]
+
+
+			.col-md-4		
+				lable ng-if="overdue_days"
+					|  预计超期{{overdue_days}}天
+						
+	.row.mtl
+		.inline-input.col-md-8   
+			.col-md-2.plx.prx  
+				lable
+					| 超期原因: 
+			.col-md-8
+				textarea.required.form-control.pull-right ng-model="overdue.reason"
+	.row.mtl
+		.inline-input.col-md-8   
+			.col-md-2.plx.prx  
+				lable
+					| 确认人: 
+			.col-md-8
+				button.btn.btn-success ng-click="createOverdue(overdue)"
+					|确认			

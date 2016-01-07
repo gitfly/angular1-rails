@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认订单已经完成生产
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('finish_product')"
+    ng-class="{disabled: order.nextStatus!='finishProduct'}"
+  ]
+    | 确认生产完成
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='finish_product'"
+  ]
+    | 取消确认生产完成

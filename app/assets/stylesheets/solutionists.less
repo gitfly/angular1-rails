@@ -1,0 +1,289 @@
+// Place all the styles related to the solutionists controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'less/flat-ui-pro';
+
+#solutionist {
+  .content-block {
+    #solutionist-header {
+      .title {
+        font-size: 18px;
+      }
+      .button.btn {
+      }
+    }
+  }
+  .descs {
+    .tab-content {
+      padding: 0px;  
+    }
+    table.desc-list {
+    }
+    .title {
+      font-size: 18px;
+      height: 35px;
+			input {
+				width: 60%;
+			}
+		}
+    tr.consumption.ng-leave {
+      animation: fadeOutRightBig .3s;
+    }
+    .consumption {
+      td {
+        border-top-width: 0px;
+        border-bottom: 2px dashed @gray-light;
+        .remove {
+          display: none;  
+        }
+        &:hover {
+          background: @clouds;
+          .remove {
+            display: block;  
+          }
+        }
+        .label-default {
+          background: @gray-light;
+        }
+        .label {
+          color: #fff;
+          display: inline-block;
+          cursor: pointer;
+          margin-bottom: 5px;
+          font-size: 14px;
+          &:hover {
+            background: @brand-success;  
+          }
+        }
+        .content {
+          padding: 20px 0px;
+        }
+        .tags {
+          margin-bottom: 15px;
+          span.remove {
+            display: none;  
+            top: 40px;
+            .transition(.3s, ease);
+            &:hover {
+              font-size: 24px;  
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#solutionist_list {
+  width: 100%;
+  height: 3000px;
+  .angular-ui-tree-handle {
+    cursor: pointer;
+  }
+  #tree-root {
+    .list-pulse {
+      position: relative;  
+    }
+    span.fui-triangle-right-large {
+      font-size: 14px;
+      position: relative;
+      top: 2px;
+    }
+    span.fui-triangle-down {
+      font-size: 18px;
+      position: relative;
+      top: 4.5px;
+    }
+    .sign {
+      position: relative;
+      top: 2.5px;
+      font-size: 16px;
+    }
+    .tag-title {
+      min-width: 250px;
+      height: 40px;
+      border: 1px solid @gray-light;
+      border-radius: 4px;
+      padding: 2px 20px 5px 15px;
+      margin-bottom: 5px;
+      width: 100%;
+      &:hover {
+        background: @clouds;  
+      }
+      .title {
+        width: 70%;
+        padding-top: 3px;
+        .edit {
+          margin-top: -6px;
+          button {
+            margin-left: 15px;
+            padding: 3px 15px;
+            margin-top: 6px;
+          }
+          input.form-control {
+            width: 250px;
+            height: 40px;
+            border-width: 1px;
+          }
+        }
+      }
+      .handle {
+        margin-right: 20px;
+        padding-top: 4px;
+        a {
+          display: none;
+        }
+        span.fui-cross-circle {
+          color: @brand-danger;
+        }
+        span.fui-new {
+          color: @brand-success;
+        }
+      }
+    }
+  }
+}
+
+.templates {
+  .tab-content {
+    padding: 20px 0px;
+  }
+  .template-content {
+    position: fixed;  
+    top: 75px;
+    right: -15px;
+    z-index: 999;
+    .thumbnail {
+      height: 86px;
+      cursor: pointer;
+      text-align: center;
+      padding: 0px;
+      img {
+        height: 82px;  
+        width: 82px;  
+      }
+      span {
+        font-size: 45px;
+        color: @gray-light;
+      }
+    }
+  }
+  textarea.template {
+    height: 86px;
+  }
+  .submit {
+    .btn {
+      width: 100%;
+    }  
+  }
+}
+
+.solutionist-symptoms {
+  .panel {
+    margin: 30px 0xp;
+    padding: 0px;
+    .panel-heading {
+      .panel-title {
+        font-size: 16px;
+        padding-top: 8px;
+      }
+      input {
+        height: 35px;
+        border: 0px;
+      }
+      .btn {
+        padding: 8px 15px;  
+      }
+    }
+    .item-list {
+      font-size: 14px;
+      padding: 10px 15px;
+      height: 45px;  
+      border-radius: 0px;
+      margin-bottom: 0px;
+      li + li:before{
+        display: none;
+      }
+      a {
+        cursor: pointer;
+      }
+      background: @clouds;
+    }
+    .panel-body {
+      overflow: scroll;
+      // height: 100%;
+      width: 100%;
+      padding: 30px 40px;
+      .thumbnail.create {
+        line-height: 110px;
+        span {
+          transition: .5s ease-out;
+          font-size: 45px;
+          color: #fff;
+        }
+        &:hover {
+          span {
+            font-size: 24px;  
+          }
+        }
+      }
+      .delete {
+        height: 40px;  
+        margin-top: -55px;
+        text-align: center;
+        .border-bottom-radius(4px);
+        background: @brand-primary;
+        span {
+          color: #fff;  
+          font-size: 24px;
+        }
+      }
+      .thumbnail {
+        cursor: pointer;
+        padding: 0px 20px;
+        height: 120px;
+        line-height: 100px;
+        background: @silver;
+        margin: 15px 0px;
+        text-align: center;
+        span {
+          // .transition(.3s, ease-out);
+        }
+        input{
+          width: 100%;
+          line-height: 30px;
+          .border-bottom-radius(6px);
+          .border-top-radius(6px);
+          border: 2px solid @silver;
+          color: @brand-primary;
+          font-weight: bold;
+        }
+        &:hover {
+          span {
+            font-size: 16px;  
+          }
+        }
+        span {
+          font-size: 13px;
+          color: #333;
+          display: inline-block;
+          vertical-align: middle;
+          line-height: normal;
+        }
+      }
+    }
+  }
+}
+
+.tags-block {
+  padding-top: 40px;
+  .label {
+    &:hover {
+      background: @brand-primary;  
+    }
+    font-size: 14px;
+    cursor: pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }  
+}

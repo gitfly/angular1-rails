@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认门店已接收订单所对应的物品
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('store_receive')"
+    ng-class="{disabled: order.nextStatus!='storeReceive'}"
+  ]
+    | 确认门店接收
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='store_receive'"
+  ]
+    | 取消确认门店接

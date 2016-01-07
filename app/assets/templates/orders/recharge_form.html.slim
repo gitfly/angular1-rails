@@ -1,0 +1,91 @@
+.form-inputs
+  .form-group.string.required.row
+    .inline-label.col-lg-2
+      label.string
+        abbr[title="required"]
+          | *
+        | 充值金额
+    .inline-input.col-lg-4
+      input.form-control[
+        ng-model='recharge.amount'
+        placeholder="请输入充值金额"
+        ng-change='rechargeAmountChange(recharge)'
+        required 
+        name='amount'
+        min=1
+        type='number'
+      ]
+      .error-message ng-show='rForm.amount.$invalid && rForm.amount.$dirty'
+        | 充值金额必须为大于0的整数
+
+    .inline-label.col-lg-2
+      label.string
+        | 赠送金额
+    .inline-input.col-lg-4
+      input.form-control[
+        ng-model='recharge.bonus'
+        placeholder="请输入充值金额"
+        type='number'
+        name='bonus'
+        min=0
+        required
+      ]
+      .error-message ng-show='rForm.bonus.$invalid && rForm.bonus.$dirty'
+        | 赠送金额必须为大于0的整数
+
+  .form-group.string.required.row
+    .inline-label.col-lg-2
+      label.string
+        abbr[title="required"]
+          | *
+        | 会员折扣
+    .inline-input.col-lg-4
+      input.form-control[
+        ng-model='recharge.discount'
+        type='number'
+        max='1.0' min='0'
+        name='discount'
+        placeholder="例如：8折输入0.8"
+      ]
+      .error-message ng-show='rForm.discount.$invalid && rForm.discount.$dirty'
+        | 折扣必须是0到1之间的小数
+
+    .inline-label.col-lg-2
+      label.string
+        abbr[title="required"]
+          | *
+        | 付款方式
+    .inline-input.col-lg-4
+      select#payment_method.form-control.select.select-default.select-block.select2-offscreen[
+        name="payment_method" required 
+        placeholder="请选择付款方式" 
+        ng-model="recharge.pm" 
+        ui-select2=""
+      ]
+        option[value=""]
+        - ConsumptionRecord::RechargePM.each do |k, v|
+          option[value=v]
+            = k
+    .clearfix
+
+  .form-group.string.required.row
+    .inline-label.col-lg-2
+      label.string
+        abbr[title="required"]
+          | *
+        | 充值总金额
+    .inline-input.col-lg-4
+      input.form-control.color-red[
+        ng-model='recharge.total'
+        placeholder="请输入充值金额"
+        type='number'
+        ng-disabled='true'
+      ]
+
+  .form-group.text.optional.consumption_record_remark.row
+    .inline-label.col-lg-2
+      label.text.optional[for="consumption_record_remark"]
+        | 备注信息
+    .inline-input.col-lg-10
+      textarea#consumption_record_remark.text.optional.form-control.ng-pristine.ng-valid[ng-model="recharge.content" placeholder="请输入本次充值的备注信息" name="recharge[content]"]
+  .clearfix

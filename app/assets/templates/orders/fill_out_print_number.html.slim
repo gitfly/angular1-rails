@@ -1,0 +1,18 @@
+.small-input.form-inputs
+  .form-group.string.required
+    .inline-label.col-lg-2.prx
+      label
+        |  打印份数
+        abbr[title="required"]
+          | *
+      
+    .inline-input.col-lg-10.plx
+      textarea.string.form-control[
+        ng-model="portion" 
+        placeholder="输入打印份数"
+        name="portion"
+        ng-pattern='/^\d+$/'
+        required
+      ]
+      .error-message ng-show='printModal.reason.$invalid && printModal.reason.$dirty'
+        | 打印份数不能为空

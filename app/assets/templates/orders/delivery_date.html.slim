@@ -1,0 +1,15 @@
+/.form-group
+  .input-group
+    span.input-group-btn
+      button.btn[type="button"]
+        span.fui-calendar
+    input.form-control[type="text" value=Date.today+15.days placeholder="送货日期" name="order[delivery_date]"]
+
+.form-group.required
+  .inline-label.col-sm-3 ng-if='showLabel'
+    label.pull-right for="{{name}}" style='padding-top: 7px;'
+      | {{showLabel||placeholder||'送货日期'}}
+      abbr[title="required" ng-if='required'] 
+        | *:
+  .inline-input ng-class="{'col-md-12': !showLabel, 'col-sm-9': showLabel}"
+    input#order_delivery_date.string.required.form-control.ng-pristine.ng-valid[placeholder="送货日期" type="text" name="order[delivery_date]" value=Date.today+15.days ng-model='currentOrder.deliveryDate']

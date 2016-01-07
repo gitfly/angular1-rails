@@ -1,0 +1,33 @@
+.form-group
+  .back
+    a ng-click="goBack()"
+      span.fui-arrow-left
+      span 返回
+  .inline-input
+    input.form-control#query-customer-name[
+      placeholder="电话进行搜索" 
+      type="search" 
+      ng-change='queryByCustomerName(customerStr)' 
+      ng-model='customerStr'
+    ]
+.customers
+  .each-customer [
+    click-active='' 
+    ng-repeat='customer in customers track by $index' 
+    ng-class='{active: $index==currentIndex}'
+    ng-click='selectCustomer($index)'
+  ]
+    div
+      .avatar.pull-left
+        img ng-src='{{customer.avatarUrl}}'
+      .info.pull-left
+        .name
+          | {{customer.name}}
+        .email
+          | {{customer.phone}}
+      .clearfix
+.add-customer ng-show='newCustomerButton'
+  span 用户不存在，请先创建用户
+  /.btn.btn-info ui-sref='.newCustomer'
+    span.fui-plus
+    span 新建用户

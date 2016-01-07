@@ -1,0 +1,45 @@
+app = window.app
+
+app.controller "fetchDeliveryDetailCtrl", (
+  $scope,
+  Printer,
+  FetchDeliveryDetail
+  
+) ->
+ 
+  $scope.selectByDate = (from) ->
+    $scope.export_from = from
+    
+    FetchDeliveryDetail.query({from:from }).then ((results) ->
+      $scope.customers = results.customers
+      $scope.from = results.from
+      $scope.items = results.items
+      $scope.customers_num = results.customersNum
+      $scope.items_num = results.itemsNum
+
+
+      return
+    ), (error) ->
+      return
+
+  $scope.printFetchDelivery = () ->
+    Printer.print("<%= asset_path("orders/fetch_delivery_for_print.html.slim")%>", {
+      customers: $scope.customers,
+      time: $scope.export_from,
+      items_num: $scope.items_num,
+      customers_num: $scope.customers_num
+    })
+
+  $scope.selectByDate()
+
+
+  
+
+
+
+
+
+
+
+
+

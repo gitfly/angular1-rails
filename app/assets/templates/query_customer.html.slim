@@ -1,0 +1,32 @@
+.autocomplete-input#query-customer
+  .form-group.required
+    /.inline-label.col-sm-2
+      label.tel.required[for="order_receive_date"]
+        abbr[title="required"]
+          | *
+        | 顾客姓名
+    .col-sm-10.inline-input
+      input.form-control#search-customer placeholder="输入顾客姓名、电话或邮箱" type="search" ng-change='inputValueChange(queryStr)' ng-model='queryStr'
+
+  ul.dropdown-menu.search-dropdown [role="menu" ng-show='showSearchOptions'] 
+    li.customer-info ng-repeat='customer in customers track by $index'
+      a ng-click='clickSearchOption($index)'
+        .pull-left.avatar
+          img ng-src="{{customer.avatarUrl}}"
+        .pull-left.info
+          .name.pull-left
+            | {{customer.name}}
+          .phone.pull-left
+            = image_tag('phone.png', size: '13x24')
+            | {{customer.phone}}
+          /p 
+            | {{customer.email}}
+          .clearfix
+        .clearfix
+    li.add-new-customer ng-show='showAddNewCustomer' ng-click='addNewCustomerClicked()'
+      a
+        .pull-left.hint
+          | 客户不存在
+        .btn.btn-info.pull-left
+          span.fui-plus
+          | 添加新客户

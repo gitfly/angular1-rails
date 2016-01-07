@@ -1,0 +1,110 @@
+.order-logs style='width: 118%' ng-dblclick="hideLogs(false)"
+  .title.text-center
+    span
+      | 订单：
+    strong
+      | {{order.number}}
+    span
+      | &nbsp&nbsp&nbsp日志
+  .logs
+    .log ng-repeat='log in logs'
+      .log-title
+        span
+          strong
+            | {{log.userName}}&nbsp&nbsp于
+          | {{log.showTime}}&nbsp&nbsp
+          | {{log.showType}}
+      .order-change ng-repeat='(k, v) in log.changedValues'
+        strong
+          | {{k}}：
+        div
+          span.mll
+            | {{v[0]||"空"}}
+            | &nbsp&nbsp->&nbsp&nbsp
+            | {{v[1]||"空"}}
+
+ul.nav.nav-list.nav-list-bricks.row.order-tab style='overflow: scroll;height: 580px;'
+  li style='height: 40px;'
+    a#span-no-margin
+      .btn.btn-danger.btn-xs.pull-left.mrl ng-click="showOrderForm(!orderForm)"
+        span ng-if='orderForm'
+          | 收起表单
+        span ng-if='!orderForm'
+          | 创建新订单
+
+      .btn.btn-success.btn-xs.pull-left ng-if='order.id || !orderForm'
+        span ng-if='orderForm && order.id'
+          span ng-if='!showLogs' ng-click="hideLogs(true)"
+            | 显示日志
+          span ng-if='showLogs' ng-click="hideLogs(false)"
+            | 收起日志
+        span[
+          ng-if='!orderForm'
+          ng-click="showOrderForm(!orderForm, true)"
+        ]
+          span
+            | 创建预订单
+
+  li[ng-class="{'active': orderType=='all'}" ng-click="getOrders('all')"]
+    a
+      | 全部订单
+      span.fui-arrow-right.pull-left
+  li[ng-class="{'active': orderType=='unpaid'}" ng-click="getOrders('unpaid')"]
+    a 
+      | 未支付订单
+      span.fui-arrow-right.pull-left
+  li[ng-class="{'active': orderType=='paid'}" ng-click="getOrders('paid')"]
+    a 
+      | 已支付订单
+      span.fui-arrow-right.pull-left
+  li[ng-class="{'active': orderType=='uncompleted'}" ng-click="getOrders('uncompleted')"]
+    a 
+      | 未完成订单
+      span.fui-arrow-right.pull-left
+  li[ng-class="{'active': orderType=='completed'}" ng-click="getOrders('completed')"]
+    a 
+      | 已完成订单
+      span.fui-arrow-right.pull-left
+  li[ng-class="{'active': orderType=='pre'}" ng-click="getOrders('pre')"]
+    a 
+      | 预订单
+      
+      span.fui-arrow-right.pull-left
+
+  .user-info.row.mtl.ptl
+    .col-lg-12.mbs
+      .btn.btn-success.btn-xs.pull-left[
+        ng-click='showRecharge(true)'
+      ]
+        | 充值
+      .btn.btn-danger.btn-xs.pull-left[
+        ng-if="customer.id" ng-click="showEditCustomer(true)"
+        style='margin-left: 60px;'
+      ]
+        | 编辑
+      .clearfix
+      /div ng-include="'#{asset_path('orders/edit_customer_form.html.slim')}'"
+      
+
+    p.col-lg-12
+      | 用户姓名：
+      | {{customer.name}}
+    p.col-lg-12
+      | 用户来自：客服手机{{customer.serviceNumber}}
+    p.col-lg-12
+      | 客户敏感：{{customer.showSensitivity}}
+    p.col-lg-12
+      | 用户电话：
+      | {{customer.phone}}
+    p.col-lg-12 ng-if='customer.weixin'
+      | 用户微信：
+      | {{customer.weixin}}
+    p.col-lg-12
+      | 微信昵称：
+      | {{customer.weixinNickname}}
+    p.col-lg-12
+      | 用户类型：
+      | {{customer.customerType}}
+    p.col-lg-12
+      | 账户余额：
+      | {{customer.balance}} 元

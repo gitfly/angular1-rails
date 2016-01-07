@@ -1,0 +1,5 @@
+.activity-list.row.ptl
+  .list ng-class="{'col-md-8': showForm, 'col-md-12': !showForm}"
+    div ng-include="'#{asset_path('operations/activity_list.html.slim')}'"
+  .col-md-4.form ng-if='showForm'
+    div ng-include="'#{asset_path('operations/activity_form.html.slim')}'"

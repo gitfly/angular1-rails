@@ -1,0 +1,13 @@
+.confirm-block.text-center.mbh
+  h6.mbh
+     | 点击下面的按钮确认要把该订单送去工厂
+  button.animate-zoom-out.btn.btn-success.btn-lg.mrh[
+    ng-click="confirmStatusFor('send_to_factory')"
+    ng-class="{disabled: order.nextStatus!='sendToFactory'}"
+  ]
+    | 确认送去工厂
+  button.btn.btn-danger.animate-zoom-out.btn-lg[
+    ng-click="cancelCurrentStatus()"
+    ng-if="order.showStatus=='send_to_factory'"
+  ]
+    | 取消确认送去工厂

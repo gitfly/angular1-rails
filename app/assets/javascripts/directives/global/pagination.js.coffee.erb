@@ -1,0 +1,77 @@
+app = angular.module("pagination", [])
+
+app.directive 'ngPagination', () ->
+  restrict: "EA"
+  replace: true
+  scope: {},
+  templateUrl: (elem, attrs) ->
+    return attrs.template || "<%= asset_path('pagination.html.slim')%>"
+
+  link: ($scope, $element, $attrs) ->
+    $scope.tagsNumber = parseInt($attrs.tagsNumber || 15)
+    $scope.perPage = parseInt($attrs.perPage || 30)
+
+  controller: ($scope, $element, $state, $stateParams) ->
+
+    # ----------------------------local functions--------------------------------------------------
+    currentPagesCount = ->
+      pc = pagesCount()
+
+      if pc < $scope.tagsNumber
+        return pc
+      else
+        if ($scope.pageOffset+1) * $scope.tagsNumber > pc
+          (pc % $scope.tagsNumber) || $scope.tagsNumber
+        else
+          $scope.tagsNumber
+
+    pagesCount = () ->
+      count = parseInt($scope.$parent.currentCount / $scope.perPage)
+      if $scope.$parent.currentCount % $scope.perPage
+        return count + 1
+      else
+        return count
+
+    offsetCount = () ->
+      parseInt(pagesCount()/ $scope.tagsNumber)
+
+
+
+    # ----------------------------$scope functions--------------------------------------------------
+    $scope.gotoPage = (pageNum) ->
+      $scope.currentPage = pageNum+$scope.tagsNumber*$scope.pageOffset
+      params = angular.extend({}, $stateParams, {
+        page: $scope.currentPage,
+        offset: $scope.pageOffset,
+        perPage: $scope.perPage
+      })
+      $scope.$parent.getPageData(params)
+
+    # page Array used for generating a pagination
+    $scope.getPageArray = () ->
+      return new Array(currentPagesCount())
+
+    # perform query when the next pagination button clicked
+    $scope.next = ()->
+      if $scope.pageOffset < offsetCount()
+        $scope.pageOffset += 1
+        $scope.gotoPage(1)
+
+    # perform query when the previous pagination button clicked
+    $scope.previous = ()->
+      unless $scope.pageOffset <= 0
+        $scope.pageOffset -= 1
+        $scope.gotoPage(1)
+
+    $scope.gotoFirstPage = () ->
+      $scope.pageOffset = 0
+      $scope.gotoPage(1)
+
+    $scope.gotoLastPage = () ->
+      $scope.pageOffset = offsetCount()
+      $scope.gotoPage(currentPagesCount())
+
+    $scope.$watch('$parent.params', (newValue, oldValue) ->
+      $scope.currentPage = parseInt(newValue.page)
+      $scope.pageOffset = parseInt(newValue.offset)
+    , true)

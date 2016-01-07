@@ -1,0 +1,2 @@
+class Clothing < Item
+end

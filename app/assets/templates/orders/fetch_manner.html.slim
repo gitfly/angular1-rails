@@ -1,0 +1,140 @@
+.pointer.well.info-block ng-dblclick="showFetchManner(!editFetchManner)" style='min-height: 74.5px;'
+  p
+    span
+      | 取货方式：
+      | {{pickupManners[order.pickupManner]}}
+    span.mll ng-if='order.fetchDate&&order.pickupManner==1'
+      span.mrs
+        | {{order.fetchDate}} 
+      span
+        | {{order.fetchHourStart}}
+      span.mls.mrs ng-if="order.fetchHourStart&&order.fetchHourEnd&&order.pickupManner==1"
+        | 到
+      span
+        | {{order.fetchHourEnd}}
+    a.pull-right.pointer[
+      ng-click="showFetchManner(!editFetchManner)"
+    ]
+      span 
+        | {{editFetchMannerText(editFetchManner)}}
+
+  p ng-if='order.pickupManner!=1 && !editFetchManner'
+    span.gray
+      | 提示：双击该区域可以编辑取货方式和地址信息
+
+  p ng-if='order.pickupManner==1'
+    span
+      | 地址：
+      span.mrs
+        | {{fetchAddress.province}}
+      span.mrs
+        | {{fetchAddress.city}}
+      span.mrs
+        | {{fetchAddress.district}}
+      span
+        | {{fetchAddress.details}}
+    span.mll
+      | 收件人：
+      span
+        | {{fetchAddress.name}}({{fetchAddress.phone}})
+  div.mbs ng-if='editFetchManner'
+    span.mrs
+      | 选择取货方式：
+    button.btn.btn-xs.btn-default.btn-manner.mrs[
+      ng-repeat='(k, v) in pickupManners track by $index' 
+      ng-class="{'btn-danger': k==order.pickupManner}"
+      ng-click="setManner(k, 'pickupManner')"
+    ]
+      | {{v}}
+    .form-inputs.small-input ng-if='order.pickupManner==1'
+      .form-group.row.mbl.mtl
+        .inline-input.col-md-6
+          input.form-control[
+            ng-model="fetchAddress.name" 
+            placeholder="收件人姓名" 
+            type="text" name="addressFetchDate"
+          ]
+
+        .inline-input.col-md-6
+          input.form-control.col-md-5[
+            type="text" ng-model='fetchAddress.phone' 
+            placeholder="收件人电话"
+          ]
+      .form-group.row.mbl.mtl
+        .inline-input.col-md-5
+          input.form-control[
+            ng-model="order.fetchDate" 
+            placeholder="取货日期" 
+            ng-change='fetchDateChange(order.fetchDate)'
+            type="text" name="addressFetchDate"
+            date-picker
+            required
+          ]
+
+        .inline-input.col-md-3.plx.prx
+          input.form-control.col-md-5[
+            type="text" ng-model='order.fetchHourStart' 
+            placeholder="几点"
+            time-picker
+          ]
+        .col-md-1.pts.plx.prx style='width: 18px;'
+          span
+            | 到
+        .inline-input.col-md-3.plx.prx
+          input.form-control.col-md-5[
+            type="text" ng-model='order.fetchHourEnd' 
+            placeholder="几点"
+            time-picker
+          ]
+        .col-lg-12.ptl ng-if='order.fetchDate'
+          strong
+            | {{order.fetchDate}} 当天已有{{getSendOrderCount}}个订单需要取送
+          
+      .form-group.row.mbl
+        .inline-input.col-md-2.prx
+          input.form-control[
+            ng-model="fetchAddress.province" 
+            placeholder="省" type="text" name="address_province"
+          ]
+        .inline-input.col-md-2.plx.prx
+          input.form-control.col-md-2[
+            ng-model="fetchAddress.city" 
+            placeholder="市" type="text" name="address_city"
+          ]
+        .inline-input.col-md-2.plx.prx
+          input.form-control.col-md-2[
+            ng-model="fetchAddress.district" 
+            placeholder="区" type="text" name="address_district"
+          ]
+        .inline-input.col-md-6.plx
+          input.form-control.col-md-6[
+            ng-model="fetchAddress.details" 
+            placeholder="详细地址" required
+            type="text" name="address_details"
+          ]
+      .row style='margin-top: -10px;'
+        .col-lg-12
+          label.pointer.radio[
+            ng-repeat='add in addresses track by $index' 
+            ng-click="selectAddress(add, 'fetchAddress')"
+            ng-if='add.showAddress.length'
+          ]
+            input.custom-radio[
+              type="radio" name="group1" 
+              value="1" data-toggle="radio"
+            ]
+            span.icons
+              span.icon-unchecked
+              span.icon-checked
+            | 历史地址{{$index+1}}：
+            span
+              | {{add.showAddress}}
+          label.pointer.radio ng-click="selectAddress({}, 'fetchAddress')"
+            input.custom-radio[
+              type="radio" name="group1" 
+              value="1" data-toggle="radio"
+            ]
+              span class="icons"
+                span class="icon-unchecked"
+                span class="icon-checked"
+              | 使用新地址

@@ -1,0 +1,51 @@
+app = angular.module("simpleRadioButtons", [])
+
+app.directive 'simpleRadioButtons', ->
+  restrict: "EA"
+  replace: true
+  require: '^form'
+  scope: {
+    name: '@'
+    datas: '&'
+    label: '@'
+    options: '&'
+    errorMsg: '@'
+    queryKey: '@'
+    attribute: '='
+    optionsUrl: '@'
+    queryParams: '='
+    placeholder: '@'
+    defaultOption: '&'
+  },
+
+  templateUrl: (elem, attrs) ->
+    "<%= asset_path('directives/simple_radio_buttons.html.slim')%>"
+
+  link: ($scope, $element, $attrs, formCtrl) ->
+    $scope.form = formCtrl
+    $scope.multiple = $attrs.hasOwnProperty('multiple')
+    $scope.required = !angular.isUndefined($attrs.required)
+    $scope.textarea = !angular.isUndefined($attrs.textarea)
+    $scope.modelName = $attrs.attribute.split('.')[0]
+    $scope.attributeName = $attrs.attribute.split('.')[1]
+    if angular.isUndefined($scope.attribute) && !angular.isUndefined($scope.defaultOption())
+      $scope.attribute = $scope.defaultOption()
+
+    if $scope.label == 'false'
+      $scope.showLabel = false
+    if angular.isUndefined($scope.label)
+      modelData = $scope.simpleFormModel[$scope.modelName]
+      if modelData
+        data = modelData[$scope.attributeName]
+        if data
+          $scope.showLabel = data.label
+      $scope.showLabel ||= $scope.attributeName
+    else
+      $scope.showLabel = $scope.label
+
+    $scope.showPlaceholder = $scope.placeholder || "请填写#{$scope.showLabel}"
+
+  controller: ($scope, $element, GlobalObject, listFilter, SimpleFormModel) ->
+    $scope.simpleFormModel = SimpleFormModel
+    $scope.setValue = (val) ->
+      $scope.attribute = val

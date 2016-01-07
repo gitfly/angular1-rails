@@ -1,0 +1,81 @@
+.effect-result
+  .col-md-3.left-info
+    .bs-callout.bs-callout-info
+      .title
+        div
+          span.mrs.square
+            | ◼︎
+          | 顾问姓名：
+          strong
+            | {{counselor.name}}
+  .col-md-6.well style='margin-top: 20px;'
+    div.text-center.pth.mth.pbh.mbh ng-if='!photos.length'
+      a.pointer ui-sref='orders.show.photos' 
+        strong
+          | 请先上传修复照片
+
+    div.text-center.pth.mth.pbh.mbh ng-if='photos.length && !afterPhotosCompleted()'
+      a.pointer ui-sref='orders.show.effectPhoto' 
+        strong
+          | 请先完成效果拍照
+
+    div.handle-buttons ng-if='photos.length && afterPhotosCompleted()'
+      div
+        a.pull-left.btn.btn-info.btn-xs ng-href="/orders/{{currentOrder.id}}/effect_result" target='_blank'
+          | 点击预览方案
+        button.pull-right.btn.btn-success.btn-xs[click-to-select target='.blue-print']
+          | 点击选中方案
+        .clearfix
+
+      .blue-print[dblclick-to-select]
+        h6.title.mbl.mtl
+          div.text-center
+            strong
+              | 【包拯好了】
+              | {{customer.callName}}的
+              | {{itemTitle()}}
+              | 拯好了
+        .photos
+          .photo.center-block.pbl ng-repeat='photo in template.photos' ng-if='photo.header'
+            a ng-if='photo.header'
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+
+        p
+          | {{template.header}}
+        p
+          | {{customer.callName}}你的
+          strong.mlx.mrx
+            | {{itemTitle()}}
+          | 拯好了！
+          | 包大人喊你回来看【包拯好了】
+
+        .photos.order-photo
+          .photo.mbh ng-repeat='photo in photos track by $index' ng-if='photo.used'
+            a
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+            a.after
+              img.img-responsive ng-src="{{afterPhotos[$index].originalUrl}}"
+
+            /a ng-repeat='p in photo.childPhotos'
+              img ng-src="{{p.originalUrl}}"
+            /.symptoms.mtl ng-repeat='symptom in photo.symptoms track by $index'
+              p ng-bind-html="pageHtml(symptom.desc)"
+
+        p
+          | 订单编码
+          strong
+            | {{currentOrder.number}}，
+          | 如查询宝贝状态请报编码联系客服呦！
+
+        p.mtl
+          | {{template.footer}}
+        .photos.mtl
+          .photo.pbs ng-repeat='photo in template.photos' ng-if='!photo.header'
+            a ng-if='!photo.header'
+              img.img-responsive ng-src="{{photo.originalUrl}}"
+
+      .mth.handle-buttons
+        a.pull-left.btn.btn-info.btn-xs href='/orders/{{order.id}}/effect_result' target='_blank'
+          | 点击预览方案
+        button.pull-right.btn.btn-success.btn-xs[click-to-select target='.blue-print']
+          | 点击选中方案

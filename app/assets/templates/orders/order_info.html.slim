@@ -1,0 +1,15 @@
+ul.nav.nav-tabs.nav-append-content
+  li.active[click-active]
+    a ui-sref='.basicInfo'
+      | 基本信息
+  li[click-active ng-if="currentOrder.late"]
+    a ui-sref='.overdue({orderId: currentOrder.id})'
+      | 超期
+  li[click-active]
+    a ui-sref='.status'
+      | 状态
+        
+.tab-content
+  .tab-pane.active[ui-view]
+
+div ng-include="'#{asset_path('partials/consume.html.slim')}'" ng-controller='consumeCtrl as con'

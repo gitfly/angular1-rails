@@ -1,0 +1,171 @@
+app = window.app
+
+app.controller('rootCtrl', (
+  $scope,
+  $timeout,
+  $location,
+  $anchorScroll,
+  $window,
+  $rootScope,
+  $document,
+  $sce,
+  Rails,
+  $state,
+  $stateParams,
+  Orders
+  dialogs
+  Order
+) ->
+
+  $scope.$on('$stateChangePermissionDenied', (event, toState, toParams, fromState, fromParams) ->
+    $state.go("401")
+  )
+
+  $scope.keyDown = (event) ->
+    # modifier_key = event.ctrlKey || event.metaKey
+    switch event.keyCode
+      when 27 then $scope.$broadcast('escKeyDown', {keyEvent: event})
+      when 37
+        $scope.$broadcast('leftKeyDown', {keyEvent: event})
+      when 39
+        $scope.$broadcast('rightKeyDown', {keyEvent: event})
+      else
+        return true
+
+    # if event.keyCode == 37
+    #   $scope.$broadcast('leftKeyDown', {keyEvent: event})
+    # else
+
+  # $rootScope.$on '$stateChangeStart', (event, toState, toParams, fromState, fromParams) ->
+    # console.log $rootScope.toState
+    # unless toState.name == 'accessToken' || toState.name == '401'
+    #   $rootScope.toState = toState
+    #   $rootScope.toParams = toParams
+    #   $rootScope.fromState = fromState
+    #   $rootScope.fromParams = fromParams
+
+  $scope.showAlert = false
+  $scope.dismissAlert = (value) ->
+    $scope.showAlert = !value
+
+  $scope.currentUser = Rails.currentUser
+
+  $scope.currentCustomer = {}
+  $scope.updateCustomer = (customer) ->
+    $scope.currentCustomer = customer
+
+  $scope.currentOrder = {}
+  $scope.currentOrderId = 0
+  $scope.updateOrder = (order) ->
+    $scope.currentorder = order
+
+  $scope.alerts = []
+
+  $scope.alertWith = (content, type='success', time=4000) ->
+    $scope.alerts.push({
+      content: content,
+      type: type,
+      show: true
+    })
+    index = $scope.alerts.length-1
+    $timeout ->
+      $scope.alerts[index]
+      $scope.alerts[index].show = false
+    , time
+
+  $scope.changeCreateFormStatus = (value) ->
+    unless $scope.createFormExists
+      $scope.createFormExists = true
+    $scope.showCreateForm = value
+
+  $scope.showRechargeForm = (status, customer) ->
+    $scope.$broadcast('showRechargeForm', {
+      status: status,
+      customer: customer
+    })
+
+  $scope.showConsumeForm = (status, customer) ->
+    $scope.$broadcast('showConsumeForm', {
+      status: status,
+      customer: customer
+    })
+
+  # highlight matched words
+  $scope.highlight = (text, search) ->
+    if text
+      text = text.replace(/\n/g,"<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+    return $sce.trustAsHtml(text)  unless search
+    $sce.trustAsHtml text.replace(new RegExp(search, "gi"), "<span class=\"highlightedText\">$&</span>")
+
+  $scope.scrollToById = (id, options={}) ->
+    offset = options.offset || 0
+    duration = options.duration || 600
+    someElement = angular.element(document.getElementById(id))
+    if someElement.length
+      $document.scrollToElement(someElement, offset, duration)
+
+  $scope.scrollToByClass = (classes, options={}) ->
+    offset = options.offset || 0
+    duration = options.duration || 600
+    someElement = angular.element(document.getElementsByClassName(classes)[0])
+    if someElement.length
+      $document.scrollToElement(someElement, offset, duration)
+
+  $scope.scrollToTop = (duration=500) ->
+    $scope.scrollToById('content')
+
+  $scope.scrollToBottom = (duration=500) ->
+    $scope.scrollToById('footer')
+
+  $scope.orders = []
+  $scope.currentCount = 0
+  $scope.currentOrder = {}
+  $scope.item = {style: "女款"}
+  $scope.lastStateName = 'orders.show.info'
+  $scope.needRequestOrders = true
+
+  $scope.setLastState = (state) ->
+    $scope.lastStateName = state
+
+  $scope.requestOrdersChange = (val) ->
+    $scope.needRequestOrders = val
+
+  $scope.setOrders = (results) ->
+    $scope.orders = new Orders(results.orders)
+    $scope.currentCount = results.count
+
+  $scope.setOrdersCounts = (results) ->
+    $scope.leftbarItems = results.leftbarItems
+    $scope.currentStatus = $stateParams.status
+  
+  $scope.setCurrentOrderId = (id) ->
+    $scope.currentOrderId = id
+
+  $scope.unshiftLog = (log) ->
+    $scope.logs.unshift(log)
+
+  $scope.concatLogs = (logs) ->
+    _.each(logs, (log) ->
+      $scope.logs.unshift(log)
+    )
+
+  $scope.deleteOrder = (order, index) ->
+    dlg = dialogs.create(
+      "<%= asset_path("orders/delete_dialog.html.slim")%>",
+      'orderDelete',{order: order}, { size: 'md' }
+    )
+    dlg.result.then ((name) ->
+      $scope.orders.delete(index)
+      $scope.alertWith("订单删除成功")
+      return
+    ), ->
+      return
+
+  $scope.setCurrentOrder = (results) ->
+    console.log results
+    $scope.currentOrder = results
+    $scope.currentOrderId = results.id
+    $scope.customer = results.customer
+    $scope.item = results.item
+    $scope.logs = results.logs
+)

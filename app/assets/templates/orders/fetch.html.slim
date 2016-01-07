@@ -1,0 +1,104 @@
+.modal.fetch-info ng-show='showAddress'
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.rotate_90def.close.fui-cross[aria-hidden="true" data-dismiss="modal" ng-click="showAddressModal(false)" type="button"]
+        .modal-title.text-center
+          | 填写取货地址和时间
+      .modal-body
+        .addresses.well
+          .address ng-repeat='address in addresses'
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click="selectAddress(address)"
+              span 
+                | {{address.province}}
+              span 
+                | {{address.city}}
+              span 
+                | {{address.district}}
+              span 
+                | {{address.details}}
+          .new-address
+            label.radio
+              input type="radio" name="group1" value="1" data-toggle="radio" ng-click='selectAddress(newAddress)'
+              | 使用新地址
+          form ng-show='showAddressForm'
+            .form-group.string.required.order_address_province ng-if="currentOrder.pickupManner!=0"
+              .inline-input
+                input#order_province.short.string.required.form-control.ng-pristine.ng-valid[ng-model="newAddress.province" maxlength="255" placeholder="省" size="255" type="text" name="address[province]"]
+                input#order_city.string.short.required.form-control.ng-pristine.ng-valid[ng-model="newAddress.city" maxlength="255" placeholder="市" size="255" type="text" name="address[city]"]
+                input#order_district.string.short.required.form-control.ng-pristine.ng-valid[ng-model="newAddress.district" maxlength="255" placeholder="区" size="255" type="text" name="address[district]"]
+              input#order_details.string.required.form-control.ng-pristine.ng-valid[ng-model="newAddress.details" maxlength="255" placeholder="具体地址" size="255" type="text" name="address[details]"]
+
+        br
+        .fetch-time
+          ul.nav.nav-tabs.nav-append-content
+            li.active[click-active  ng-click='showDetailTime(true)']
+              a
+                | 具体的预约时间
+            li[click-active  ng-click='showDetailTime(false)']
+              a
+                | 无法确定具体时间
+          .tab-content
+            .tab-pane ng-show='detailTime'
+              .block.pull-left
+                .form-group.pull-left
+                  input.form-control.pull-left[ng-model="fetchTime.month"]
+                  label.pull-left
+                    | 月
+                .form-group.pull-left
+                  input.pull-left.form-control[ng-model="fetchTime.day"]
+                  label.pull-left
+                    | 日
+              .block.pull-left
+                .form-group.pull-left
+                  input.form-control.pull-left[ng-model="fetchTime.from"]
+                  label.pull-left
+                    | 点到
+                .form-group.pull-left
+                  input.pull-left.form-control[ng-model="fetchTime.to"]
+                  label.pull-left
+                    | 点
+              .clearfix
+            .tab-pane ng-show='!detailTime'
+              .block
+                label class="checkbox" for="checkbox1"
+                  input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" class="custom-checkbox" ng-model='fetchTime.workday'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 工作日
+
+                label class="checkbox" for="checkbox2"
+                  input type="checkbox" value="" id="checkbox2" data-toggle="checkbox" class="custom-checkbox" ng-model='fetchTime.weekend'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 周末
+              .block
+                label class="checkbox" for="checkbox3"
+                  input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" class="custom-checkbox" ng-model='fetchTime.morning'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 上午
+
+                label class="checkbox" for="checkbox4"
+                  input type="checkbox" value="" id="checkbox4" data-toggle="checkbox" class="custom-checkbox" ng-model='fetchTime.afternoon'
+                  span class="icons"
+                    span class="icon-unchecked"
+                    span class="icon-checked"
+                  span 下午
+
+              /label class="checkbox" for="checkbox5"
+                input type="checkbox" value="" id="checkbox5" data-toggle="checkbox" class="custom-checkbox" ng-model='fetchTime.allday'
+                span class="icons"
+                  span class="icon-unchecked"
+                  span class="icon-checked"
+                span 全天
+              .clearfix
+                  
+      .modal-footer
+        a.btn.btn-default.btn-wide[ng-click="showAddressModal(false)"]
+          | 取消
+        input.btn.btn-default.btn.btn-success.btn-wide[type="submit" name="commit" value="确认"  ng-click='submitAddressAndTime(newAddress, fetchTime)']

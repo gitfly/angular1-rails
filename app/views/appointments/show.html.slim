@@ -1,0 +1,57 @@
+.appointments.appointments-show
+  .row
+    .row
+      .col-xs-12.col-md-12
+        - if @appointment.atype.zero?
+          = image_tag('mobile-appointed.png', class: 'img-responsive mtm center-block')
+        - else
+          = image_tag('mobile-express-success.png', class: 'img-responsive mtm center-block')
+
+  .mtl.appointment-bg
+    .col-xs-12.col-md-12
+      = image_tag('mobile-paper-bg.png', class: 'img-responsive mtm center-block')
+  .row.appointment-info
+    .col-xs-12
+      .col-xs-12
+        h5.text-center.mbl 预约信息
+        .row.pbs.pts
+          .col-xs-4.text-right
+            | 联系人
+          .col-xs-8
+            = @appointment.name
+        .row.pbs.pts
+          .col-xs-4.text-right
+            | 电话
+          .col-xs-8
+            = @appointment.phone
+        - if @appointment.atype.zero?
+          .row.pbs.pts
+            .col-xs-4.text-right
+              | 地址
+            .col-xs-8
+              = @obj.show_address
+          .row.pbs.pts
+            .col-xs-4.text-right
+              | 预约时间
+            .col-xs-8
+              = @appointment.show_date
+        - elsif @appointment.atype == 1
+          .row.pbs.pts
+            .col-xs-4.text-right
+              | 快递公司
+            .col-xs-8
+              = @obj.company_name
+          .row.pbs.pts
+            .col-xs-4.text-right
+              | 快递单号
+            .col-xs-8
+              = @obj.number
+        - unless @appointment.finished
+          .row.pbs.pts
+            .col-xs-9
+            .col-xs-3 style='margin-top:5%;'
+              = link_to "修改", edit_appointment_path(@appointment)
+
+  /.row.text-center.share-button-block
+    .col-xs-12.col-md-12
+      = link_to "再下一单", welcome_appointments_path(code: @code), class: "btn btn-default btn-transparent"

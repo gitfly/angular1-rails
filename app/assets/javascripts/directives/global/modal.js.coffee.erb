@@ -1,0 +1,10 @@
+app = angular.module("modal", [])
+
+app.directive 'modal', () ->
+  restrict: "AE"
+  replace: true
+  controller: '@'
+  name: 'controllerName'
+  templateUrl: (elem, attrs) ->
+    return attrs.template || "<%= asset_path('modal.html.slim')%>"
+  link: ($scope, elem, attrs) ->

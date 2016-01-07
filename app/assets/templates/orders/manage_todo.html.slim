@@ -1,0 +1,89 @@
+div
+  ul
+    li.todo-done
+      .todo-content
+        .todo-name
+          span.mrl
+            | 开单
+          small
+            | {{order.showCreatedAt}}
+    li ng-if='order.pickupManner==2' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl 
+            | 取货
+    li ui-sref='.uploadPhoto' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 拍照上传
+    li ui-sref='.diagnose' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 顾问诊断
+    li ui-sref='.bluePrint' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 方案
+    li ui-sref='.verifyOrder' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 订单确认
+    li ui-sref='.sendToFactory' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 送去工厂
+    li ui-sref='.factoryReceive' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 工厂确认接收
+    li ui-sref='.producing' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 生产中
+    li ui-sref='.finishProduct' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 生产完成
+    li ui-sref='.storeReceive' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 门面确认接收
+    li ui-sref='.qualityTesting' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 质检
+    li ui-sref='.effectPhoto' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 效果拍照
+    li ui-sref='.effectResult' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 效果方案
+    li ui-sref='.delivery' ui-sref-active='active' ng-if="order.deliveryManner=='2' || order.deliveryManner=='3'"
+      .todo-content
+        .todo-name
+          span.mrl
+            | 派送
+    li ui-sref='.finishDelivery' ui-sref-active='active'  ng-if="order.deliveryManner=='2' || order.deliveryManner=='3'"
+      .todo-content
+        .todo-name
+          span.mrl
+            | 派送完成
+    li ui-sref='.complete' ui-sref-active='active'
+      .todo-content
+        .todo-name
+          span.mrl
+            | 订单结束

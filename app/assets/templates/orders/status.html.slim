@@ -1,0 +1,19 @@
+.order-logs
+  div.mbl
+    strong style='margin-left: 20px'
+      | 订单 {{currentOrder.number}} 状态更新
+  .order-log.mbs[ng-repeat='log in orderLogs track by $index']
+    strong.mrl
+      | {{log.userName}}
+    span ng-if="log.handleType=='Update'"
+      span
+        | {{log.showType}}
+        | 了：
+      span.mrl
+        | {{log.showAttrs}}
+    span ng-if="log.handleType=='Create'"
+      span
+        | {{log.showType}}
+        | 了订单
+    span.pull-right
+      | {{log.showTime}}

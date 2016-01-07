@@ -1,0 +1,26 @@
+.modal-header.pts.pbs
+  button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='cancel()']
+  .modal-title
+    span.mrh style='font-size: 14px;'
+      | 取消预约
+
+form[
+  novalidate="novalidate" accept-charset="UTF-8" 
+  method="post" name="cancelForm"
+]
+  .modal-body
+    simple-radio-buttons.col-md-12.cancel-type[
+      options='{ "联系不上": 0, "包拯取消": 1, "客户取消": 2 }' required
+      attribute='appointment.cancelType' name='cancelAppointment' label="取消原因"
+    ]
+    simple-input.col-md-12[
+      attribute='appointment.cancelReason' 
+      name='appointmentCancelReason'
+      textarea label="取消说明"
+    ]
+    .clearfix
+  .modal-footer style='padding: 0px 80px 60px 20px;'
+    a.btn.btn-default.btn-wide.pull-left ng-click='cancel()' style='margin-left: 200px;'
+      | 取消
+    a.btn.btn-primary.btn-wide ng-click='submit(appointment)' ng-disabled='angular.isUndefined(appointment.cancelType)'
+      | 确认

@@ -1,0 +1,46 @@
+@import 'mobile_bootstrap.less';
+
+@font-color: #8cc199;
+@base-background: #292929;
+
+html, body{
+  height:100%;
+}
+
+body {
+  background: @base-background;
+  color: @font-color;
+}
+
+.text-center {
+	text-align: center;
+}
+.text-right {
+	text-align: right;
+}
+
+
+.btn-transparent {
+	background: Transparent;
+	&:focus, &:active {
+		background: Transparent;
+	}
+}
+.full-height {
+	height: 100%;	 
+}
+
+.form-group .help-block.with-errors {
+  font-size: 11px;  
+  margin: 10px 0px 0px;
+  .list-unstyled {
+    margin: 0px;
+  }
+}
+
+.form-actions {
+  input.btn.disabled {
+    background: @gray;
+    color: #888;
+  }
+}

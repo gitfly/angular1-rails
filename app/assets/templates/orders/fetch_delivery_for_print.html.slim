@@ -1,0 +1,78 @@
+= stylesheet_link_tag 'printer', media: "all"
+
+h4.text-center
+  | 包拯工作室取送单
+  | {{ time}}
+h4.text-center
+  | 今日客户{{customers_num}}位  今日物品{{items_num}}件 
+table.table.table-striped.table-hover.table-condensed.table-bordered style='width:1100px;font-size: 15px;' 
+    thead
+      tr
+        th 客户
+        th 电话
+        th 类型
+        th 地址
+        th 总计
+        th 订单号
+        th 单价
+        th 物品信息
+        th 取送时间
+        th 备注
+
+    tbody ng-repeat='customer in customers'
+      tr.fade-in colspan="{{customer.orders.length + 1}}"
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="customer.orders[0].pre"] 
+          |  {{customer.orders[0].fetchAddress.name}}
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="!customer.orders[0].pre"] 
+          |  {{customer.orders[0].deliveryAddress.name}}  
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="customer.orders[0].pre"]
+          |  {{customer.orders[0].fetchAddress.phone}}  
+
+        td [rowspan="{{customer.orders.length + 1}}"
+          ng-if="!customer.orders[0].pre"]
+          |  {{customer.orders[0].deliveryAddress.phone}}  
+
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="customer.orders[0].pre"] 
+          |  取
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="!customer.orders[0].pre"] 
+          |  送   
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="customer.orders[0].pre" style="width:350px;"
+          ] 
+          | {{customer.orders[0].fetchAddress.district}}
+          | ---{{customer.orders[0].fetchAddress.details}}
+        td [rowspan="{{customer.orders.length + 1}}" 
+          ng-if="!customer.orders[0].pre" style="width:350px;"
+          ] 
+          | {{customer.orders[0].deliveryAddress.district}}
+          | ---{{customer.orders[0].deliveryAddress.details}}  
+        td rowspan="{{customer.orders.length + 1}}" 
+          | {{customer.money}} 元
+
+        
+      tr.fade-in ng-repeat='order in customer.orders'
+        td 
+          |{{order.number}}
+        td 
+          |{{order.showRemainMoney}} 元
+                
+        td 
+          | {{order.showColor}}
+          | {{order.showItemType}}
+
+        td ng-if="order.pre" style="width:140px;" 
+          | {{order.fetchDateDetail}}
+
+        td ng-if="!order.pre" style="width:140px;" 
+          | {{order.deliveryDateDetail}}
+        td 
+          |      
+   
+           

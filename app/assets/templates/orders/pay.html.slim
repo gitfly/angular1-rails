@@ -1,0 +1,57 @@
+/.pay-order.row
+  .col-md-5.customer-info ng-include="'#{asset_path('orders/member_info_for_pay.html.slim')}'"
+  .col-md-7.order-to-pay ng-include="'#{asset_path('orders/orders_to_pay.html.slim')}'"
+/div ng-include="'#{asset_path('orders/bills.html.slim')}'"   
+
+
+.pay-header.col-lg-12 ng-show="payTools && selectedOrders().length"
+  strong.pull-right.fui-cross ng-click='showPayTools(false)'
+  button.btn.btn-danger.btn-sm.mlh
+    span.fui-plus
+    | 新建订单
+  button.btn.btn-success.btn-xs.mlh[
+    ng-click='printServiceOrder()'
+    ng-disabled='!selectedOrders().length'
+  ]
+    | 打印服务单
+  button.btn.btn-success.btn-xs.mlh[
+    ng-click='printFlowTable(selectedOrders()[0])'
+    ng-disabled='selectedOrders().length !=1'
+  ]
+    | 打印流程单
+  button.btn.btn-success.btn-xs.mlh[
+    ng-click='printBarcode()'  
+  ]
+    | 打印条形码
+  button.btn.btn-danger.btn-xs.mlh[
+    ng-click="showCancelForm(true)"
+    ng-disabled='order.pre || order.cancel || selectedOrders().length!=1'
+  ]
+    | 取消订单
+  button.btn.btn-danger.btn-xs.mlh[
+    ng-click="showRefundForm(true)"
+    ng-disabled="order.pre || !order.paid||selectedOrders().length!=1||order.refunded"
+  ]
+    | 退款
+  button.btn.btn-danger.btn-xs.mlh[
+    ng-click='showCompensateForm(true)'
+    ng-disabled='order.pre || order.compensated||selectedOrders().length!=1'
+  ]
+    | 赔付
+  strong.mlh
+    | 已选中 {{selectedOrders().length}} 个订单
+
+div ng-include="'#{asset_path('orders/cancel_modal.html.slim')}'"
+div ng-include="'#{asset_path('orders/compensate_modal.html.slim')}'"
+div ng-include="'#{asset_path('orders/refund_modal.html.slim')}'"
+
+.pay-order.fill
+  .col-md-10.col-lg-10.order-to-pay.pbh.mbh ng-class="{'order-form': orderForm}"
+    .row ng-include="'#{asset_path('orders/orders_to_pay.html.slim')}'"
+  .col-md-2.col-lg-2.customer-info[
+    ng-class="{'display-log':  showLogs && (orderForm && order.id)}"
+    ng-include="'#{asset_path('orders/pay_customer.html.slim')}'"
+  ]
+
+/.col-lg-12
+  div ng-include="'#{asset_path('orders/barcode.html.slim')}'"

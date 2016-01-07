@@ -1,0 +1,25 @@
+.form-group.row.simple-input.order-delivery-date
+  .inline-label.col-sm-3 ng-if='showLabel'
+    label.pull-right for="{{name}}" style='padding-top: 7px;'
+      | {{showLabel||placeholder||'送货日期'}}
+      abbr[title="required"] 
+        | *:
+  .inline-input ng-class="{'col-md-12': !showLabel, 'col-sm-9': showLabel}"
+    .row
+      input.form-control.pull-left[
+        ng-model="order.deliveryDate" placeholder="送货日期" type="text"
+        date-picker required name="addressdeliveryDate"
+      ]
+      input.form-control.pull-right[
+        type="text" ng-model='order.deliveryHourEnd'
+        placeholder="最晚时间" time-picker 
+        ng-change='formatDeliveryDateDetail()'
+      ]
+      strong.pull-right style='margin-top:11px'
+        | 到
+      input.form-control.pull-right[
+        type="text" ng-model='order.deliveryHourStart' 
+        placeholder="最早时间" time-picker
+        ng-change='formatDeliveryDateDetail()'
+      ]
+    .clearfix

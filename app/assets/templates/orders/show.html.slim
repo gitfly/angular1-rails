@@ -1,0 +1,72 @@
+nav.show-order-nav.row.navbar.navbar-inverse.navbar-embossed role="navigation"
+  .navbar-header
+    .navbar-brand
+      | 订单 {{currentOrder.number}}
+  .collapse.navbar-collapse#navbar-collapse-03
+    ul.nav.navbar-nav
+      li ui-sref-active='active' ui-sref='.info' 
+        a
+          | 订单信息
+      li ui-sref-active='active' ui-sref='.diagnose' 
+        a
+          | 顾问诊断
+      li ui-sref-active='active' ui-sref='.photos' 
+        a
+          | 方案照片
+      /li ui-sref-active='active' ui-sref='.bluePrint' 
+        a 
+          | 修复方案
+      /li ui-sref-active='active' ui-sref='.verifyOrder' 
+        a 
+          | 订单确认
+      li ui-sref-active='active' ui-sref='.effectPhoto' 
+        a 
+          | 效果拍照
+      li ui-sref-active='active' ui-sref='.effectResult' 
+        a 
+          | 效果方案发送顾问
+      li ui-sref-active='active' ui-sref='.sendEffectResult' 
+        a 
+          | 效果方案发送顾客
+      li ui-sref-active='active' ui-sref='.confirmEffectResult' 
+        a 
+          | 确认效果方案
+      li ui-sref-active='active' ui-sref='.confirmDeliveryManner' 
+        a 
+          | 确认送货方式
+      li ui-sref-active='active' ui-sref='.confirmCustomerReceipt' 
+        a 
+          | 确认顾客收货
+
+    a.pull-right.pointer ng-click='hideOrder()'
+      i.icon.ion-arrow-right-c
+
+.show-order.full-height.full-width
+  ui-view
+
+.show-order-footer.full-width
+  .status-content
+    button.status
+      strong
+        | 当前状态：
+        | {{currentOrder.showStatusZh}}
+        /| {{currentOrder.showStatusZh}}---{{originalStatus}}---{{finalStatus}}---{{currentOrder.showStatus}}
+  .pull-right
+    button.btn.btn-success.animate-zoom-out.position-absolute.status-button[
+      style='right: 0px;'
+      ng-click="gotoNextStatus()"
+      ng-if="currentOrder.showStatus === originalStatus"
+      ng-disabled='!showStatusButton'
+    ]
+      span.fui-check
+      span
+        | 确认{{currentOrder.showNextStatusZh}}
+
+    button.btn.btn-danger.animate-zoom-out.position-absolute.status-button[
+      ng-click="backToLastStatus()"
+      ng-if="currentOrder.showStatus === finalStatus"
+      ng-disabled='!showStatusButton'
+    ]
+      span.fui-cross
+      span
+        | 取消{{currentOrder.showStatusZh}}

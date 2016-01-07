@@ -1,0 +1,21 @@
+.modal.order-settlement ng-if='payForm'
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close.fui-cross[type="button" data-dismiss="modal" aria-hidden="true" ng-click='showPayForm(false)']
+        h6.modal-title
+          span.mrh
+            | 订单结算
+          span.mrl
+            | {{customer.name}}
+          span.mrl
+            | {{customer.customerType}}
+          span
+            | 账户余额 {{customer.balance}} 元
+      .modal-body
+        div ng-include="'#{asset_path('orders/payoff_form.html.slim')}'"
+      .modal-footer.pbh
+        a.btn.btn-default.btn-wide ng-click='showPayForm(false)'
+          | 取消
+        a.btn.btn-primary.btn-wide ng-click='submitSettlement(settlement)' ng-disabled='!payRecord.pm || payRecord.amount > remainingAmount() || capNotPay'
+          | 确认结算

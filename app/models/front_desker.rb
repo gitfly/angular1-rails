@@ -1,0 +1,2 @@
+class FrontDesker < User
+end

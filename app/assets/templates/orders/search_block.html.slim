@@ -1,0 +1,82 @@
+.search-block
+  .filter-condictions.pull-left.prs
+    .btn.btn-default.btn-xs.select-date ng-click='dateOptionsChange(!showDateOptions)'
+      span
+        | {{dateScopeZh}}
+      span ng-if="params.dateScope=='all' && !params.startDate"
+        | 时间内
+      span.fui-triangle-down
+    span.mls
+      | 所开的
+    ul.dropdown-menu.row.animate-zoom-out.display-block ng-if='showDateOptions'
+      div class="btn-group" role="group" aria-label="..."
+        button.btn.btn-default[
+          type="button" ng-class="{'btn-success': params.dateScope==ds && !(params.startDate)}"
+          ng-repeat='ds in dateScopesEn track by $index'
+          ng-click='setDateScope(ds, $index)'
+        ]
+          | {{dateScopesZh[$index]}}
+
+      div.mtl
+        div.inputs.mbl
+          input.form-control[
+            ng-model='dateRange.startDate'
+            placeholder="开始日期"
+            date-picker
+          ]
+          strong.pull-left.mts.mls.mrs
+            | 到
+          input.form-control[
+            ng-model='dateRange.endDate'
+            placeholder="结束日期"
+            date-picker
+          ]
+          .clearfix
+        button.btn.btn-success.pll.prl[
+          ng-click='setDateRange(dateRange.startDate, dateRange.endDate)'
+          ng-disabled='!(dateRange.endDate || dateRange.startDate)'
+        ]
+          | 确定搜索
+  .pull-left.mrl
+
+  .header.pull-left
+    .btn.btn-default.btn-xs.pull-left.mrs
+      | {{params.type}}订单
+    div.pull-left ng-if="currentStatus && currentStatus != '所有状态'"
+      span.pull-left
+        | 中处于
+      .mls.mrs.btn.btn-default.btn-xs.pull-left
+        | {{currentStatus}} 状态
+      span.pull-left
+        | 的
+      .clearfix
+
+    div.pull-left ng-if="params.handler"
+      .mls.mrs.btn.btn-default.btn-xs.pull-left
+        | 并且分配给{{params.handler}}的
+        span.fui-cross.mls ng-click="clearParams('handler')" style='font-size: 11px !important;'
+
+    div.pull-left ng-if='queryStr && showQueryOptions'
+      span.pull-left
+        | 通过关键字
+      .btn.btn-default.btn-xs.pull-left.mrs.mls
+        | {{queryStr}}
+        span.fui-cross.mls ng-click="clearParams('queryStr')" style='font-size: 11px !important;'
+      span.pull-left
+        | 进行搜索的结果
+    span.pull-left
+      | 共有
+    .btn.btn-default.pull-left.btn-xs.mls.mrs ng-click='scrollToActiveItem()'
+      | {{currentCount}} 个
+
+  .search-input.pull-right
+    form ng-submit='queryStrChange(queryStr)'
+      input.form-control#search-orders.pull-left[
+        placeholder="输入客户姓名、电话或者订单号搜索"
+        type="search" ng-model='queryStr'
+      ]
+      button.btn.pull-left.btn-default.submit
+        span.fui-search
+        span
+          | 搜索
+    .clearfix

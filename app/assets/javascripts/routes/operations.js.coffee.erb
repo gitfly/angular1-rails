@@ -1,0 +1,20 @@
+app = window.app
+
+app.config ($stateProvider, $urlRouterProvider) ->
+
+  $stateProvider.state("activities",
+    url: '/operation/activities'
+    controller: "activitiesCtrl"
+    templateUrl: "<%= asset_path("operations/activities.html.slim") %>"
+    data: {
+      permissions: {
+        only: ["Admin"]
+      }
+    }
+  # ).state("newOrder.newCustomer",
+  #   url: "/newCustomer"
+  #   controller: "newCustomer"
+  #   templateUrl: "<%= asset_path("customers/new.html.slim") %>"
+  )
+  return
+
